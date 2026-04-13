@@ -17,6 +17,7 @@ import {
 import { useCart } from "@/components/cart-provider";
 import { Badge } from "@/components/ui/badge";
 import { SearchDialog } from "./SearchDialog";
+import { UserMenu } from "./UserMenu";
 
 export function Header() {
   const { itemCount } = useCart();
@@ -102,12 +103,7 @@ export function Header() {
             </Button>
           </SearchDialog>
           
-          <Link href="/checkout">
-            <Button variant="ghost" size="icon" className="hover:bg-primary/5 hover:text-primary transition-colors">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Account</span>
-            </Button>
-          </Link>
+          <UserMenu />
           
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative hover:bg-primary/5 hover:text-primary transition-colors">

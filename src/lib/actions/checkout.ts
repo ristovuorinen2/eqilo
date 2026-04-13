@@ -18,19 +18,26 @@ export async function createCheckoutSession(
       throw new Error("Cart is empty");
     }
 
-    // 0. Ensure Customer exists in Firestore
+    // 0. Ensure Customer exists in Firestore and has latest contact info
     const customerRef = adminDb.collection("customers").doc(userId);
     const customerDoc = await customerRef.get();
     
-    if (!customerDoc.exists && customerDetails) {
+    const customerData = {
+      id: userId,
+      email: customerDetails?.email || (customerDoc.exists ? customerDoc.data()?.email : null),
+      phone_number: customerDetails?.phone || (customerDoc.exists ? customerDoc.data()?.phone_number : null),
+      business_id: customerDetails?.businessId || (customerDoc.exists ? customerDoc.data()?.business_id : ""),
+      role: (customerDetails?.businessId || (customerDoc.exists && customerDoc.data()?.business_id)) ? "b2b_customer" : "customer",
+      updated_at: new Date(),
+    };
+
+    if (!customerDoc.exists) {
       await customerRef.set({
-        id: userId,
-        email: customerDetails.email,
-        phone_number: customerDetails.phone,
-        business_id: customerDetails.businessId || "",
-        role: customerDetails.businessId ? "b2b_customer" : "customer",
+        ...customerData,
         created_at: new Date(),
       });
+    } else {
+      await customerRef.update(customerData);
     }
 
     // Fetch products

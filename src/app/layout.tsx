@@ -3,6 +3,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { CartProvider } from "@/components/cart-provider";
+import { AuthProvider } from "@/components/auth-provider";
 import { GoogleTagManager } from '@next/third-parties/google';
 import { WhatsAppHelpdesk } from "@/components/WhatsAppHelpdesk";
 
@@ -43,10 +44,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CartProvider>
-            {children}
-            <WhatsAppHelpdesk />
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+              <WhatsAppHelpdesk />
+            </CartProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

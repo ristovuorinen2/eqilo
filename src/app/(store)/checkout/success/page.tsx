@@ -11,6 +11,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy", {
 
 async function getSession(sessionId: string) {
   try {
+    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === "sk_test_dummy") {
+      return null;
+    }
     return await stripe.checkout.sessions.retrieve(sessionId);
   } catch (e) {
     return null;

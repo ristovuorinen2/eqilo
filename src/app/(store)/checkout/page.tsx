@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCart } from "@/components/cart-provider";
+import { useAuth } from "@/components/auth-provider";
 import { useEffect, useState } from "react";
 import { getProducts } from "@/lib/actions/admin";
 import { Product } from "@/lib/types/firestore";
@@ -15,6 +16,7 @@ import { createCheckoutSession } from "@/lib/actions/checkout";
 
 export default function CheckoutPage() {
   const { items, clearCart } = useCart();
+  const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,6 +24,12 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [businessId, setBusinessId] = useState("");
+
+  useEffect(() => {
+    if (user?.email) {
+      setEmail(user.email);
+    }
+  }, [user]);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -52,9 +60,9 @@ export default function CheckoutPage() {
     setIsSubmitting(true);
     
     try {
-      // In a production app, we would handle Auth here.
-      // Passing email, phone, and businessId to create/link the customer account.
-      const res = await createCheckoutSession(email, items, {
+      // Use the authenticated user's ID if available, otherwise fallback to email as ID
+      const userId = user?.uid || email;
+      const res = await createCheckoutSession(userId, items, {
         email,
         phone,
         businessId
