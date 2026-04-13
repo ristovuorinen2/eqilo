@@ -111,6 +111,13 @@ Following modern Next.js App Router best practices, data mutations and form subm
 - **Route Handlers (External Webhooks):**
   - `POST /api/webhooks/stripe` - Handles Stripe payment success, updates order status, securely triggers the Holvi invoice generation, and uses **Resend** to send a branded order confirmation to the customer and a notification email to the admin (`johannes@hyrsky.fi`).
 
+### Consulting & Services (The Human Element)
+To build trust and provide comprehensive solutions, the platform will feature dedicated, SEO-optimized content pages highlighting the store's human side. 
+- **Store Owner & Expert:** Johannes Hyrsky. He provides personalized consulting, product installation, and technical support.
+- **Service Pages:** The site will include specific landing pages detailing these service offerings, built using information provided in external documents:
+  - **Training and Results Service:** Detailing operations managed in the field (reference: `Results service.pdf`).
+  - **Equipe Results Software:** Presenting solutions to manage equestrian shows (reference: `Equipe presentation.pdf`).
+
 ### Store UX & Frontend Components
 Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase.
 
