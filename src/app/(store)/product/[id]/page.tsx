@@ -80,14 +80,16 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
              )}
              <div className="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-xs font-mono border">SKU: {product.sku}</div>
           </div>
-          {/* Carousel placeholder for thumbnails */}
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="w-20 h-20 shrink-0 bg-muted/20 rounded-xl border border-border/50 flex items-center justify-center hover:border-primary/50 cursor-pointer transition-colors">
-                <ImageIcon className="w-6 h-6 text-muted-foreground/50" />
-              </div>
-            ))}
-          </div>
+          {/* Thumbnails */}
+          {product.image_urls && product.image_urls.length > 1 && (
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {product.image_urls.map((url, i) => (
+                <div key={i} className="w-20 h-20 shrink-0 bg-white rounded-xl border border-border/50 flex items-center justify-center hover:border-primary/50 cursor-pointer transition-colors relative overflow-hidden">
+                  <Image src={url} alt={`${product.name} thumbnail ${i + 1}`} fill className="object-cover p-2 mix-blend-multiply" sizes="80px" />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Details Column */}
