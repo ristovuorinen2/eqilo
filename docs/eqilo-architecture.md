@@ -92,7 +92,7 @@ graph TD
 ### Store UX & Frontend Components
 Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase (rather than as heavy NPM dependencies), ensuring high performance and a premium feel.
 
-- **Component Library:** `shadcn/ui` (leveraging Tailwind CSS and Radix UI primitives).
+- **Component Library:** `shadcn/ui`, built strictly on top of **Radix UI primitives**. This ensures that all interactive components (like dialogs, dropdowns, and sheets) are fully accessible, unstyled by default, and provide robust behavioral foundations for the Next.js application.
 - **Forms & Layouts:** Utilization of Shadcn's new responsive `Field`, `FieldGroup`, and `FieldSet` components to build robust, mobile-first checkout flows and user profile management screens that automatically switch between vertical and horizontal layouts based on container width.
 - **Visual Design:** 
   - **Clean & Minimalist:** High contrast layouts emphasizing product imagery.
