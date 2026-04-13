@@ -135,6 +135,11 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 
 - **Component Library:** `shadcn/ui`, built strictly on top of **Radix UI primitives**. This ensures that all interactive components (like dialogs, dropdowns, and sheets) are fully accessible, unstyled by default, and provide robust behavioral foundations for the Next.js application.
 - **Forms & Layouts:** Utilization of Shadcn's new responsive `Field`, `FieldGroup`, and `FieldSet` components to build robust, mobile-first checkout flows and user profile management screens that automatically switch between vertical and horizontal layouts based on container width.
+- **Product Discovery & Display:** We will leverage the following Shadcn components for an engaging product experience:
+  - **Card:** The foundational component for the product grid, displaying the image, title, price, and "Add to Cart" button.
+  - **Carousel:** Used for homepage hero banners and for swiping through multiple image angles on the individual Product Details Page (PDP).
+  - **Slider / Checkbox / Radio Group:** Essential for the sidebar on collection pages to filter products by price range, brand, or specifications.
+  - **Accordion:** The standard way to display collapsible product details (Specs, Shipping Info, Return Policy) on the product page without cluttering the screen.
 - **Visual Design:**
   - **Conversion-Optimized Main Page:** The storefront's landing page MUST be aggressively optimized for sales. This includes prominent hero banners, clear "Call to Action" (CTA) buttons, and curated product carousels designed to immediately funnel users into the shopping experience.
   - **Clean & Minimalist:** High contrast layouts emphasizing product imagery.
