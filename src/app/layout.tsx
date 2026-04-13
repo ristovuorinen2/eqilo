@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GoogleTagManager } from '@next/third-parties/google';
+import { WhatsAppHelpdesk } from "@/components/WhatsAppHelpdesk";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <WhatsAppHelpdesk />
         </ThemeProvider>
       </body>
     </html>
