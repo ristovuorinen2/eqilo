@@ -123,8 +123,9 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
   - **Color Palette Alignment:** The Eqilo Primary Blue (`#0055A4`) will be injected directly into the Tailwind configuration as the primary brand color, ensuring all Shadcn buttons, active states, and accents automatically align with the corporate identity without manual overrides.
   - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.
 
-### Advanced SEO & Analytics
+### Advanced SEO, Analytics & Google Merchant Center
 - **Dynamic SEO:** Leverage Next.js Server-Side Rendering (SSR) for all product pages to ensure immediate indexing by Google. Automatically generate `sitemap.xml`.
+- **Google Merchant Center:** A Next.js Route Handler (`GET /api/feed/google-merchant.xml`) will dynamically output an XML RSS 2.0 feed of all active products. This feed seamlessly links the site catalog to Google Merchant Center (https://merchants.google.com), enabling products to appear in Google Shopping tabs and dynamic search ads automatically.
 - **Social Sharing:** Implement dynamic Open Graph (OG) image generation so products look professional and engaging when shared on platforms like WhatsApp, Facebook, or LinkedIn.
 - **Conversion Tracking:** Integrate Google Analytics 4 (GA4) or Plausible to monitor the full ecommerce funnel (Product View -> Add to Cart -> Initiate Checkout -> Purchase) to optimize conversion rates.
 
