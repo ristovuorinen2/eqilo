@@ -123,13 +123,13 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 
 - **Component Library:** `shadcn/ui`, built strictly on top of **Radix UI primitives**. This ensures that all interactive components (like dialogs, dropdowns, and sheets) are fully accessible, unstyled by default, and provide robust behavioral foundations for the Next.js application.
 - **Forms & Layouts:** Utilization of Shadcn's new responsive `Field`, `FieldGroup`, and `FieldSet` components to build robust, mobile-first checkout flows and user profile management screens that automatically switch between vertical and horizontal layouts based on container width.
-- **Visual Design:** 
+- **Visual Design:**
+  - **Conversion-Optimized Main Page:** The storefront's landing page MUST be aggressively optimized for sales. This includes prominent hero banners, clear "Call to Action" (CTA) buttons, and curated product carousels designed to immediately funnel users into the shopping experience.
   - **Clean & Minimalist:** High contrast layouts emphasizing product imagery.
   - **Clear Shipping Information:** Every product detail page and cart view MUST prominently display that the standard shipping time is **1-2 weeks**.
-  - **Mobile-First UX:** Emphasize touch-friendly UI targets, bottom-sheet navigations where applicable, and highly responsive product grids optimized specifically for mobile device browsing.
+  - **Omnichannel Responsiveness (Desktop & Mobile):** While adopting a mobile-first approach (touch-friendly targets, bottom-sheet navigations), the UX MUST also provide a premium, expansive layout for Desktop users. The site is not *just* mobile; it requires high-resolution grid systems and advanced hover interactions suited for larger screens.
   - **Color Palette Alignment:** The Eqilo Primary Blue (`#0055A4`) will be injected directly into the Tailwind configuration as the primary brand color, ensuring all Shadcn buttons, active states, and accents automatically align with the corporate identity without manual overrides.
-  - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.
-- **References & Trust Signals:** The storefront will prominently feature a 'References' or 'Trusted By' section incorporating logos/icons and linking to key partners and supported events, specifically including:
+  - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.- **References & Trust Signals:** The storefront will prominently feature a 'References' or 'Trusted By' section incorporating logos/icons and linking to key partners and supported events, specifically including:
   - **AWC 2026** (https://awc2026.fi/)
   - **Equipe** (https://equipe.com/)
 
