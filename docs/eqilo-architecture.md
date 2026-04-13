@@ -46,7 +46,7 @@ graph TD
 
 ### Data Model (Firestore)
 
-**1. `users` Collection**
+**1. `customers` Collection**
 - `id` (String) - Firebase UID
 - `email` (String) - Optional if signed up via phone
 - `phone_number` (String) - Optional if signed up via email; required by couriers
