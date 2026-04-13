@@ -8,7 +8,7 @@ async function translateText(text: string, lang: 'fi' | 'sv') {
   if (!process.env.GEMINI_API_KEY) return text;
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.1-pro-preview" });
     const language = lang === 'fi' ? "Finnish" : "Swedish";
     const prompt = `Translate the following product description into professional ${language}. Keep formatting and technical terms intact where appropriate. Do not add any conversational filler. Only output the translation:\n\n${text}`;
     const result = await model.generateContent(prompt);
