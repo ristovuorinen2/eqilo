@@ -1,7 +1,7 @@
 # Eqilo.fi Ecommerce Architecture Plan
 
 ## Background & Motivation
-Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The initial product catalog will be imported from `Price List 2026 V3.0.xlsx`. The platform requires a Customer Portal for shoppers and an Admin Panel for operations, integrating modern technologies for a seamless, scalable experience. Note: Context7 documentation retrieval was bypassed due to API key limitations, relying on standard best practices for integration.
+Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The initial product catalog will be imported from `Price List 2026 V3.0.xlsx`. The platform requires a Customer Portal for shoppers and an Admin Panel for operations, integrating modern technologies for a seamless, scalable experience.
 
 ## Company Information
 - **Company Name:** Eqilo Oy
