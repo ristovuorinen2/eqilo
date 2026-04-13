@@ -109,7 +109,7 @@ Following modern Next.js App Router best practices, data mutations and form subm
   - `updateSettings(data)` - Updates global site settings (e.g., WhatsApp helpdesk number).
 
 - **Route Handlers (External Webhooks):**
-  - `POST /api/webhooks/stripe` - Handles Stripe payment success, updates order status, and securely triggers the Holvi invoice generation.
+  - `POST /api/webhooks/stripe` - Handles Stripe payment success, updates order status, securely triggers the Holvi invoice generation, and uses **Resend** to send a branded order confirmation to the customer and a notification email to the admin (`johannes@hyrsky.fi`).
 
 ### Store UX & Frontend Components
 Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase.
