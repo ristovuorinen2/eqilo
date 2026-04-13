@@ -10,7 +10,7 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 - **Phone:** +358 50 5633097
 
 ## Scope & Impact
-- **Customer Portal:** Product discovery, cart, and Stripe checkout.
+- **Customer Portal:** Product discovery, cart, mandatory account creation during the first order, and Stripe checkout.
 - **Admin Panel:** Product management (importing from Excel), order/inventory management, and customer CRM.
 - **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth) will be used for the backend data layer.
 - **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk).
@@ -43,12 +43,13 @@ graph TD
 
 **1. `users` Collection**
 - `id` (String) - Firebase UID
-- `email` (String)
+- `email` (String) - Optional if signed up via phone
+- `phone_number` (String) - Optional if signed up via email; required by couriers
 - `role` (String) - 'admin' | 'customer'
 - `stripe_customer_id` (String)
 - `shipping_address` (Object) - { line1, line2, city, postal_code, country }
 - `billing_address` (Object) - { line1, line2, city, postal_code, country }
-- `phone_number` (String) - Required by couriers
+- `crm_notes` (String) - Admin-only internal notes for CRM
 
 **2. `products` Collection**
 - `id` (String)
