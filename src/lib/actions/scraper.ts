@@ -2,12 +2,22 @@
 
 import { adminDb } from "../firebase/admin";
 import * as cheerio from "cheerio";
-import { v2 } from "@google-cloud/translate";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const translate = new v2.Translate({
-  projectId: process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "eqilo-store",
-  key: process.env.GOOGLE_TRANSLATE_API_KEY || process.env.GEMINI_API_KEY,
-});
+async function translateText(text: string, lang: 'fi' | 'sv') {
+  if (!process.env.GEMINI_API_KEY) return text;
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const language = lang === 'fi' ? "Finnish" : "Swedish";
+    const prompt = `Translate the following product description into professional ${language}. Keep formatting and technical terms intact where appropriate. Do not add any conversational filler. Only output the translation:\n\n${text}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text().trim();
+  } catch (e) {
+    console.error(`Gemini translation error for ${lang}:`, e);
+    return text;
+  }
+}
 
 export async function scrapeAndTranslateDescriptions() {
   try {
@@ -19,7 +29,7 @@ export async function scrapeAndTranslateDescriptions() {
     const urls = sitemap$("url loc").map((i, el) => sitemap$(el).text()).get();
     console.log(`Found ${urls.length} product URLs in sitemap`);
 
-    const scrapedData: Record<string, { desc: string, img: string }> = {};
+    const scrapedData: Record<string, { desc: string, img: string, boxContents: string, downloads: {name: string, url: string}[] }> = {};
 
     // Scrape all product pages from sitemap concurrently in small batches
     const BATCH_SIZE = 10;
@@ -50,7 +60,20 @@ export async function scrapeAndTranslateDescriptions() {
           let imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
                       || $('meta[property="og:image"]').attr("content")?.trim() || "";
 
-          scrapedData[pageSku] = { desc: descriptionEN.trim(), img: imageUrl };
+          // Extract Box Contents
+          const boxContents = $("#tab-box-contents").text().trim() || "";
+
+          // Extract Downloads
+          const downloads: {name: string, url: string}[] = [];
+          $("#tab-downloads a").each((_, el) => {
+            const href = $(el).attr("href");
+            const text = $(el).text().trim();
+            if (href && text) {
+              downloads.push({ name: text, url: href });
+            }
+          });
+
+          scrapedData[pageSku] = { desc: descriptionEN.trim(), img: imageUrl, boxContents, downloads };
         } catch (e) {
           console.error(`Failed to scrape ${url}`);
         }
@@ -73,26 +96,31 @@ export async function scrapeAndTranslateDescriptions() {
       const sData = scrapedData[sku];
       let descriptionEN = sData?.desc || data.description;
       let imageUrl = sData?.img || (data.image_urls && data.image_urls[0]) || null;
+      let boxContents = sData?.boxContents || data.box_contents || "";
+      let downloads = sData?.downloads || data.downloads || [];
 
+      // Check if translation is missing or needs updating (if we scraped a new English description)
       const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description;
       const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0] !== imageUrl);
+      const needsBox = boxContents && data.box_contents !== boxContents;
+      const needsDownloads = downloads.length > 0 && JSON.stringify(data.downloads) !== JSON.stringify(downloads);
 
-      if ((sData && sData.desc !== data.description) || needsTranslation || needsImage) {
-        console.log(`Updating product data for ${sku}`);
+      if ((sData && sData.desc !== data.description) || needsTranslation || needsImage || needsBox || needsDownloads) {
+        console.log(`Updating product data for ${sku}...`);
+        
         let descriptionFI = data.description_fi;
         let descriptionSE = data.description_se;
 
-        try {
-          if (!data.description_fi || data.description_fi === data.description) {
-             const fiRes: any = await translate.translate(descriptionEN || "", 'fi');
-             descriptionFI = fiRes[0];
-          }
-          if (!data.description_se || data.description_se === data.description) {
-             const seRes: any = await translate.translate(descriptionEN || "", 'sv');
-             descriptionSE = seRes[0];
-          }
-        } catch (e: any) {
-          console.error(`Translation failed for ${sku}:`, e.message);
+        // Run Gemini translation only if we haven't successfully translated it before, 
+        // or if the English description fundamentally changed.
+        if (process.env.GEMINI_API_KEY && descriptionEN && descriptionEN.length > 0 && (!descriptionFI || descriptionFI === data.description || (sData && sData.desc !== data.description))) {
+           descriptionFI = await translateText(descriptionEN, 'fi');
+           console.log(`  -> Gemini translated ${sku} to FI`);
+        }
+        
+        if (process.env.GEMINI_API_KEY && descriptionEN && descriptionEN.length > 0 && (!descriptionSE || descriptionSE === data.description || (sData && sData.desc !== data.description))) {
+           descriptionSE = await translateText(descriptionEN, 'sv');
+           console.log(`  -> Gemini translated ${sku} to SE`);
         }
 
         const updateData: any = {
@@ -101,9 +129,9 @@ export async function scrapeAndTranslateDescriptions() {
           description_se: descriptionSE || descriptionEN,
         };
 
-        if (imageUrl) {
-           updateData.image_urls = [imageUrl];
-        }
+        if (imageUrl) updateData.image_urls = [imageUrl];
+        if (boxContents) updateData.box_contents = boxContents;
+        if (downloads.length > 0) updateData.downloads = downloads;
 
         batch.update(doc.ref, updateData);
 
@@ -119,7 +147,6 @@ export async function scrapeAndTranslateDescriptions() {
     if (opCount > 0) {
       await batch.commit();
     }
-
     return { success: true, count: successCount };
   } catch (error: any) {
     console.error("Scraping failed:", error);

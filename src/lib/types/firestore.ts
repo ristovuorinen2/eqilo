@@ -30,6 +30,8 @@ export interface Product {
   description: string;
   description_fi?: string;
   description_se?: string;
+  box_contents?: string; // Content from fdstiming box-contents tab
+  downloads?: { name: string; url: string }[]; // Content from fdstiming downloads tab
   category_id: string; // Reference to `categories` collection
   price: number;
   tax_rate: number; // e.g., 25.5 for Finnish general goods

@@ -144,6 +144,32 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
               </AccordionContent>
             </AccordionItem>
 
+            {product.box_contents && (
+              <AccordionItem value="box_contents">
+                <AccordionTrigger className="text-lg font-bold">Box Contents</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                   <p className="whitespace-pre-line">{product.box_contents}</p>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
+            {product.downloads && product.downloads.length > 0 && (
+              <AccordionItem value="downloads">
+                <AccordionTrigger className="text-lg font-bold">Downloads</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                   <ul className="space-y-2">
+                     {product.downloads.map((d, idx) => (
+                       <li key={idx}>
+                         <a href={d.url} target="_blank" rel="noreferrer" className="text-primary hover:underline font-medium flex items-center gap-2">
+                           <ChevronRight className="w-4 h-4" /> {d.name}
+                         </a>
+                       </li>
+                     ))}
+                   </ul>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
             <AccordionItem value="guarantee">
               <AccordionTrigger className="text-lg font-bold">Quality Guarantee</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
