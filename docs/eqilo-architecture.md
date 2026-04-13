@@ -12,9 +12,10 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 ## Scope & Impact
 - **Customer Portal:** Product discovery, cart, and Stripe checkout.
 - **Admin Panel:** Product management (importing from Excel), order/inventory management, and customer CRM.
-- **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), GCP/Firebase (Database, Auth, Hosting).
+- **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), GCP/Firebase (Database, Auth, Hosting), WhatsApp (Helpdesk).
 - **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 - **Internationalization (i18n):** Support for Finnish (FI - Default), English (EN), and Swedish (SE).
+- **WhatsApp Helpdesk:** Integrated customer support via WhatsApp, configurable from the Admin Panel.
 
 ## Proposed Solution
 
@@ -31,6 +32,7 @@ graph TD
     Backend -->|Invoicing| Holvi[Holvi API]
     Backend -->|Product Import| Admin[Admin Uploads Excel]
     
+    Frontend -.->|WhatsApp Link/QR| WhatsAppApp[WhatsApp Application]
     Stripe -->|Webhooks| Backend
 ```
 
@@ -74,30 +76,45 @@ graph TD
 - `holvi_invoice_id` (String)
 - `created_at` (Timestamp)
 
+**4. `settings` Collection**
+- `id` (String) - Document ID (e.g., 'global')
+- `whatsapp_helpdesk_number` (String) - Configurable international phone number for the WhatsApp helpdesk link.
+
 ### API Endpoints (Next.js API Routes)
 - `POST /api/checkout/session` - Initializes Stripe Checkout session.
 - `POST /api/webhooks/stripe` - Handles Stripe payment success, updates order status, and triggers invoice.
 - `POST /api/invoices/generate` - Communicates with Holvi.fi API to generate an invoice.
 - `POST /api/admin/import-products` - Parses uploaded `Price List 2026 V3.0.xlsx` and updates product catalog.
+- `PUT /api/admin/settings` - Updates global site settings (e.g., WhatsApp helpdesk number).
+
+### WhatsApp Helpdesk Integration Flow
+- **Storefront Component:** A fixed floating chat bubble in the bottom right corner of the storefront.
+- **Design:** Stylized with the Eqilo primary blue. Includes a white WhatsApp icon, an "Always Online" green dot indicator, and clear contrast. When clicked or hovered (on desktop), it presents a `wa.me/<helpdesk_number>` link or a dynamically generated QR code (using a library like `qrcode.react`).
+- **Interaction:**
+  - **Mobile:** Tapping the button directly opens the WhatsApp app with a pre-filled greeting message.
+  - **Desktop:** Clicking redirects to WhatsApp Web, or scanning the displayed QR code with a phone opens the app.
+- **Admin Configuration:** The Admin Panel includes a "Settings" tab where admins can update the `whatsapp_helpdesk_number`. This setting is stored in the `settings` Firestore collection and fetched globally to populate the `wa.me` links.
 
 ### Color Palette & Aesthetic
 - **Primary:** Eqilo Blue (e.g., `#0055A4` - to be exacted from logo)
 - **Secondary/Background:** White (`#FFFFFF`) and Light Grays for UI depth.
+- **WhatsApp UI:** The Helpdesk bubble will utilize the primary Eqilo Blue to maintain brand consistency, alongside standard white text and the recognizable WhatsApp icon.
 - Framework: Tailwind CSS for rapid styling matching the constraints.
 
 ## Alternatives Considered
 - **Firebase Cloud Functions vs Next.js API Routes:** We chose Next.js API routes as they colocate frontend and backend logic in a single monorepo, simplifying deployment and sharing types, compared to isolated Firebase Cloud Functions.
 
 ## Implementation Plan
-1. **Phase 1: Setup & Data Modeling** - Initialize Next.js project, Firebase config, and Tailwind CSS branding. Setup Firestore schemas.
-2. **Phase 2: Admin & Catalog Import** - Build the Excel import logic (using a library like `xlsx`) to populate the `products` collection from `Price List 2026 V3.0.xlsx`. Create Admin views for product management and uploading. Include a one-time script/process to scrape product descriptions from `https://fdstiming.com/shop/` and translate them into Finnish (FI) and Swedish (SE) to populate the initial catalog.
-3. **Phase 3: Customer Portal** - Develop product listing, detail pages, and cart state management.
+1. **Phase 1: Setup & Data Modeling** - Initialize Next.js project, Firebase config, and Tailwind CSS branding. Setup Firestore schemas (including `settings`).
+2. **Phase 2: Admin & Catalog Import** - Build the Excel import logic (using a library like `xlsx`) to populate the `products` collection from `Price List 2026 V3.0.xlsx`. Create Admin views for product management, uploading, and configuring the WhatsApp Helpdesk number. Include a one-time script/process to scrape product descriptions from `https://fdstiming.com/shop/` and translate them into Finnish (FI) and Swedish (SE) to populate the initial catalog.
+3. **Phase 3: Customer Portal** - Develop product listing, detail pages, cart state management, and the global floating WhatsApp Helpdesk component.
 4. **Phase 4: Checkout & Invoicing** - Integrate Stripe Checkout. Setup webhook listeners. Integrate Holvi API for automated invoices upon payment confirmation.
 
 ## Verification & Testing
 - Unit tests for API routes (Stripe session creation, Holvi invoice generation mock).
 - E2E tests for the checkout flow (Customer -> Cart -> Stripe Test Mode -> Order Success).
 - Manual verification of product import from the Excel price list.
+- Verification of the WhatsApp link on mobile and QR code scannability on desktop.
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
