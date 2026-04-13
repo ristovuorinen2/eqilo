@@ -80,7 +80,15 @@ graph TD
 - `holvi_invoice_id` (String)
 - `created_at` (Timestamp)
 
-**4. `settings` Collection**
+**4. `carts` Collection**
+- `id` (String)
+- `user_id` (String) - Optional (if assigned to a specific customer)
+- `items` (Array of Objects) - { product_id, quantity, custom_price_override }
+- `is_public_link` (Boolean) - Allows admins to share this cart via a public URL
+- `created_at` (Timestamp)
+- `updated_at` (Timestamp)
+
+**5. `settings` Collection**
 - `id` (String) - Document ID (e.g., 'global')
 - `whatsapp_helpdesk_number` (String) - Configurable international phone number for the WhatsApp helpdesk link.
 
