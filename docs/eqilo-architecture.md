@@ -3,6 +3,12 @@
 ## Background & Motivation
 Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The initial product catalog will be imported from `Price List 2026 V3.0.xlsx`. The platform requires a Customer Portal for shoppers and an Admin Panel for operations, integrating modern technologies for a seamless, scalable experience. Note: Context7 documentation retrieval was bypassed due to API key limitations, relying on standard best practices for integration.
 
+## Company Information
+- **Company Name:** Eqilo Oy
+- **Business ID:** 3530342-3
+- **Postal Address:** Hakkapeliitantie 4, 08350 LOHJA
+- **Phone:** +358 50 5633097
+
 ## Scope & Impact
 - **Customer Portal:** Product discovery, cart, and Stripe checkout.
 - **Admin Panel:** Product management (importing from Excel), order/inventory management, and customer CRM.
