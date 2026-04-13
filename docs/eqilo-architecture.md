@@ -214,14 +214,4 @@ The Next.js App Router will follow this logical page hierarchy:
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.fication), the Google Merchant Center XML feed, and OG image generation. Deploy the WhatsApp Helpdesk floating bubble. Setup GA4 conversion tracking and the automated Abandoned Cart recovery job.
-
-## Verification & Testing
-- Unit tests for Server Actions (Stripe session creation, Holvi invoice generation mock).
-- E2E tests for the checkout flow (Customer -> Cart -> Stripe Test Mode -> Order Success).
-- Manual verification of product import from the Excel price list.
-- Verification of the WhatsApp link on mobile and QR code scannability on desktop.
-
-## Migration & Rollback
-- Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
 - Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
