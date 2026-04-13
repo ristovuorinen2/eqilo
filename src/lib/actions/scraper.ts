@@ -11,6 +11,53 @@ const translate = new v2.Translate({
 
 export async function scrapeAndTranslateDescriptions() {
   try {
+    const sitemapRes = await fetch("https://fdstiming.com/product-sitemap.xml");
+    if (!sitemapRes.ok) throw new Error("Could not fetch sitemap");
+    const sitemapXml = await sitemapRes.text();
+    const sitemap$ = cheerio.load(sitemapXml, { xmlMode: true });
+    
+    const urls = sitemap$("url loc").map((i, el) => sitemap$(el).text()).get();
+    console.log(`Found ${urls.length} product URLs in sitemap`);
+
+    const scrapedData: Record<string, { desc: string, img: string }> = {};
+
+    // Scrape all product pages from sitemap concurrently in small batches
+    const BATCH_SIZE = 10;
+    for (let i = 0; i < urls.length; i += BATCH_SIZE) {
+      const batchUrls = urls.slice(i, i + BATCH_SIZE);
+      await Promise.all(batchUrls.map(async (url) => {
+        try {
+          const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+          if (!res.ok) return;
+          const html = await res.text();
+          const $ = cheerio.load(html);
+
+          const pageSku = $(".sku").text().trim();
+          if (!pageSku || !pageSku.startsWith("FDS-")) return;
+
+          const shortDesc = $(".woocommerce-product-details__short-description").text().trim() 
+                         || $(".product-details .description").text().trim()
+                         || $('meta[property="og:description"]').attr("content")?.trim() || "";
+
+          const fullDesc = $("#tab-description").text().trim() || $(".woocommerce-Tabs-panel--description").text().trim() || "";
+          const specs = $("#tab-additional_information").text().trim() || $(".shop_attributes").text().trim() || "";
+          
+          let descriptionEN = fullDesc || shortDesc;
+          if (specs) {
+            descriptionEN += "\n\nSpecifications:\n" + specs.replace(/\n\s*\n/g, '\n').trim();
+          }
+
+          let imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
+                      || $('meta[property="og:image"]').attr("content")?.trim() || "";
+
+          scrapedData[pageSku] = { desc: descriptionEN.trim(), img: imageUrl };
+        } catch (e) {
+          console.error(`Failed to scrape ${url}`);
+        }
+      }));
+      console.log(`Scraped batch ${i / BATCH_SIZE + 1} / ${Math.ceil(urls.length / BATCH_SIZE)}`);
+    }
+
     const productsSnapshot = await adminDb.collection("products").get();
     const products = productsSnapshot.docs;
     let successCount = 0;
@@ -21,33 +68,16 @@ export async function scrapeAndTranslateDescriptions() {
     for (const doc of products) {
       const data = doc.data();
       const sku = data.sku as string;
-      
       if (!sku) continue;
 
-      const searchUrl = `https://fdstiming.com/?s=${sku}&post_type=product`;
-      
-      const res = await fetch(searchUrl);
-      if (!res.ok) continue;
-
-      const html = await res.text();
-      const $ = cheerio.load(html);
-      
-      let descriptionEN = $(".woocommerce-product-details__short-description").text().trim() 
-                       || $(".product-details .description").text().trim()
-                       || $('meta[property="og:description"]').attr("content")?.trim();
-
-      if (!descriptionEN) {
-        descriptionEN = $("#tab-description").text().trim() || data.description;
-      }
-
-      // Extract product image URL
-      let imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
-                  || $('meta[property="og:image"]').attr("content")?.trim();
+      const sData = scrapedData[sku];
+      let descriptionEN = sData?.desc || data.description;
+      let imageUrl = sData?.img || (data.image_urls && data.image_urls[0]) || null;
 
       const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description;
       const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0] !== imageUrl);
 
-      if ((descriptionEN && descriptionEN !== data.description) || needsTranslation || needsImage) {
+      if ((sData && sData.desc !== data.description) || needsTranslation || needsImage) {
         console.log(`Updating product data for ${sku}`);
         let descriptionFI = data.description_fi;
         let descriptionSE = data.description_se;
@@ -61,15 +91,14 @@ export async function scrapeAndTranslateDescriptions() {
              const seRes: any = await translate.translate(descriptionEN || "", 'sv');
              descriptionSE = seRes[0];
           }
-          console.log(`Translated ${sku}`);
-        } catch (e) {
-          console.error(`Translation failed for ${sku}:`, e);
+        } catch (e: any) {
+          console.error(`Translation failed for ${sku}:`, e.message);
         }
 
         const updateData: any = {
           description: descriptionEN,
-          description_fi: descriptionFI,
-          description_se: descriptionSE,
+          description_fi: descriptionFI || descriptionEN,
+          description_se: descriptionSE || descriptionEN,
         };
 
         if (imageUrl) {
