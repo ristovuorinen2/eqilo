@@ -176,12 +176,13 @@ The Next.js App Router will follow this logical page hierarchy:
 - **Mobile:** A native-feeling **Hamburger Menu** (built with Shadcn `Sheet` sliding from the left). This will feature bold, touch-friendly accordion lists to drill down into categories, alongside prominent links for the cart and user profile.
 
 **Page Hierarchy:**
-- `/` - **Home Page:** Hero carousel, featured categories, and conversion-optimized product highlights.
-- `/shop` - **Main Catalog:** Product listing with sidebar filtering (Slider, Checkbox, Radio Groups).
+- `/` - **Home Page:** Hero carousel, featured categories, and conversion-optimized product highlights. The homepage will prominently showcase the key advantages of FDS devices: modern/compact, cost-effective, wireless (no cables/external battery packs), weatherproof, reliable, and compatible with software like Equipe/SmarterAgility.
+- `/shop` - **Main Catalog:** Product listing focusing on agility and equestrian clubs, with sidebar filtering (Slider, Checkbox, Radio Groups).
 - `/category/[slug]` - **Category Pages:** Filtered listings with SEO-optimized category text.
 - `/product/[id]` - **Product Details Page (PDP):** Image carousel, price, 1-2 weeks shipping notice, add to cart, and accordion details.
 - `/cart` - **Shopping Cart:** Persistent cart view for reviewing items.
 - `/checkout` - **Checkout Flow:** Account creation/login and Stripe integration.
+- `/services` - **Services Overview:** Highlighting Eqilo's 20 years of expertise, offering competition consultation, technical support, equipment service, and training.
 - `/services/training-and-results` - **Service Page:** Details based on `Results service.pdf`.
 - `/services/equipe-software` - **Service Page:** Details based on `Equipe presentation.pdf`.
 - `/terms` - **E-store Terms & Conditions:** Required for checkout.
@@ -204,6 +205,16 @@ The Next.js App Router will follow this logical page hierarchy:
 3. **Phase 3: Customer Portal (Discovery & Services)** - Develop SEO-optimized category and product pages. Implement simple, native Firestore product search. Build the bespoke Service Pages highlighting Johannes Hyrsky's consulting (Training/Results Service, Equipe Software). Implement persistent carts and mobile-first, high-conversion UI/UX.
 4. **Phase 4: Checkout, Invoicing & Notifications** - Enforce mandatory account creation and E-store Terms & Conditions. Integrate Stripe Checkout (including MobilePay/Apple Pay/Google Pay and 20 € / free over 200 € Finland shipping rules). Secure the webhook to trigger Holvi invoices and Resend order confirmations (with admin notification to `johannes@hyrsky.fi`).
 5. **Phase 5: Growth, SEO & Helpdesk** - Implement Dynamic SEO (SSR, sitemap, Google Site Verification), the Google Merchant Center XML feed, and OG image generation. Deploy the WhatsApp Helpdesk floating bubble. Setup GA4 conversion tracking and the automated Abandoned Cart recovery job.
+
+## Verification & Testing
+- Unit tests for Server Actions (Stripe session creation, Holvi invoice generation mock).
+- E2E tests for the checkout flow (Customer -> Cart -> Stripe Test Mode -> Order Success).
+- Manual verification of product import from the Excel price list.
+- Verification of the WhatsApp link on mobile and QR code scannability on desktop.
+
+## Migration & Rollback
+- Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.fication), the Google Merchant Center XML feed, and OG image generation. Deploy the WhatsApp Helpdesk floating bubble. Setup GA4 conversion tracking and the automated Abandoned Cart recovery job.
 
 ## Verification & Testing
 - Unit tests for Server Actions (Stripe session creation, Holvi invoice generation mock).
