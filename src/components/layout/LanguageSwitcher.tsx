@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,9 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLanguage } from "../language-provider";
 
 export function LanguageSwitcher() {
-  const [lang, setLang] = useState("FI");
+  const { lang, setLang } = useLanguage();
 
   return (
     <DropdownMenu>
@@ -22,13 +22,13 @@ export function LanguageSwitcher() {
           </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-32">
-        <DropdownMenuItem onClick={() => setLang("FI")} className={`font-bold cursor-pointer ${lang === "FI" ? "bg-primary/10 text-primary" : ""}`}>
+        <DropdownMenuItem onClick={() => setLang("FI" as any)} className={`font-bold cursor-pointer ${lang === "FI" ? "bg-primary/10 text-primary" : ""}`}>
           Suomi (FI)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLang("EN")} className={`font-bold cursor-pointer ${lang === "EN" ? "bg-primary/10 text-primary" : ""}`}>
+        <DropdownMenuItem onClick={() => setLang("EN" as any)} className={`font-bold cursor-pointer ${lang === "EN" ? "bg-primary/10 text-primary" : ""}`}>
           English (EN)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLang("SE")} className={`font-bold cursor-pointer ${lang === "SE" ? "bg-primary/10 text-primary" : ""}`}>
+        <DropdownMenuItem onClick={() => setLang("SE" as any)} className={`font-bold cursor-pointer ${lang === "SE" ? "bg-primary/10 text-primary" : ""}`}>
           Svenska (SE)
         </DropdownMenuItem>
       </DropdownMenuContent>

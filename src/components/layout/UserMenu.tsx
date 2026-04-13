@@ -46,15 +46,6 @@ export function UserMenu() {
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [step, setStep] = useState<"input" | "otp">("input");
 
-  // Initialize Recaptcha
-  useEffect(() => {
-    if (typeof window !== "undefined" && !window.recaptchaVerifier && isLoginOpen) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "invisible",
-      });
-    }
-  }, [isLoginOpen]);
-
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -74,6 +65,11 @@ export function UserMenu() {
     e.preventDefault();
     setError("");
     try {
+      if (typeof window !== "undefined" && !window.recaptchaVerifier) {
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+          size: "invisible",
+        });
+      }
       const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, phone, appVerifier);
       setConfirmationResult(result);

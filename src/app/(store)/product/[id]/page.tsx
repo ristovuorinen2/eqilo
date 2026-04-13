@@ -17,6 +17,8 @@ import { useCart } from "@/components/cart-provider";
 import { useEffect, useState, use } from "react";
 import { getProducts } from "@/lib/actions/admin";
 
+import { LocalizedDescription } from "@/components/LocalizedDescription";
+
 export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { addItem } = useCart();
@@ -124,14 +126,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             <AccordionItem value="description">
               <AccordionTrigger className="text-lg font-bold">Description</AccordionTrigger>
               <AccordionContent className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert">
-                {product.description_fi ? (
-                  <div className="space-y-4">
-                    <p className="border-l-2 border-primary/20 pl-4">{product.description_fi}</p>
-                    <p className="text-sm opacity-80">{product.description}</p>
-                  </div>
-                ) : (
-                  <p>{product.description}</p>
-                )}
+                <LocalizedDescription product={product} />
               </AccordionContent>
             </AccordionItem>
             

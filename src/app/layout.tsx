@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { CartProvider } from "@/components/cart-provider";
 import { AuthProvider } from "@/components/auth-provider";
+import { LanguageProvider } from "@/components/language-provider";
 import { GoogleTagManager } from '@next/third-parties/google';
 import { WhatsAppHelpdesk } from "@/components/WhatsAppHelpdesk";
 
@@ -44,12 +45,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <CartProvider>
-              {children}
-              <WhatsAppHelpdesk />
-            </CartProvider>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <CartProvider>
+                {children}
+                <WhatsAppHelpdesk />
+              </CartProvider>
+            </AuthProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
