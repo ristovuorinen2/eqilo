@@ -25,7 +25,7 @@ export default function HomePage() {
                     Shop Equipment
                   </Button>
                 </Link>
-                <Link href="/services">
+                <Link href="/services" prefetch={false}>
                   <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold">
                     Our Services
                   </Button>

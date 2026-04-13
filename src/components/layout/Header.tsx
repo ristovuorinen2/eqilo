@@ -141,20 +141,20 @@ export function Header() {
                   </Link>
                   
                   <div className="space-y-4 px-2">
-                    <Link href="/shop" className="text-lg font-bold flex items-center gap-3">
+                    <Link href="/shop" className="text-lg font-bold flex items-center gap-3" prefetch={true}>
                       <div className="p-2 bg-muted rounded-lg"><ShoppingCart className="w-5 h-5 text-primary" /></div>
                       Products
                     </Link>
                     <div className="space-y-2 pt-2 border-t">
                       <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2 mb-2">Expert Services</p>
-                      <Link href="/services" className="text-md font-semibold flex items-center gap-3 px-2 py-1">Consulting Overview</Link>
-                      <Link href="/services/training-and-results" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1">Training & Results</Link>
-                      <Link href="/services/equipe-software" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1">Equipe Software</Link>
+                      <Link href="/services" className="text-md font-semibold flex items-center gap-3 px-2 py-1" prefetch={false}>Consulting Overview</Link>
+                      <Link href="/services/training-and-results" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>Training & Results</Link>
+                      <Link href="/services/equipe-software" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>Equipe Software</Link>
                     </div>
                   </div>
 
                   <div className="pt-6 border-t px-4 mt-auto">
-                    <Link href="/admin" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                    <Link href="/admin" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2" prefetch={false}>
                        <User className="w-3 h-3" /> Admin Portal
                     </Link>
                   </div>
