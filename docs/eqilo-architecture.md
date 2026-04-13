@@ -168,6 +168,19 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 - A background process will identify `carts` in Firestore that have been inactive for over 24 hours.
 - If the associated `user_id` has opted into communications, the system will trigger an automated recovery email or WhatsApp message (if applicable) and flag `abandoned_recovery_sent: true`.
 
+### Store Site/Page Structure
+The Next.js App Router will follow this logical page hierarchy:
+- `/` - **Home Page:** Hero carousel, featured categories, and conversion-optimized product highlights.
+- `/shop` - **Main Catalog:** Product listing with sidebar filtering (Slider, Checkbox, Radio Groups).
+- `/category/[slug]` - **Category Pages:** Filtered listings with SEO-optimized category text.
+- `/product/[id]` - **Product Details Page (PDP):** Image carousel, price, 1-2 weeks shipping notice, add to cart, and accordion details.
+- `/cart` - **Shopping Cart:** Persistent cart view for reviewing items.
+- `/checkout` - **Checkout Flow:** Account creation/login and Stripe integration.
+- `/services/training-and-results` - **Service Page:** Details based on `Results service.pdf`.
+- `/services/equipe-software` - **Service Page:** Details based on `Equipe presentation.pdf`.
+- `/terms` - **E-store Terms & Conditions:** Required for checkout.
+- `/admin/*` - **Admin Dashboard:** Secured routes for the CRM, product editor, and sales analytics.
+
 ### WhatsApp Helpdesk Integration Flow
 - **Storefront Component:** A fixed floating chat bubble in the bottom right corner of the storefront.
 - **Design:** Stylized with the Eqilo primary blue. Includes a white WhatsApp icon, an "Always Online" green dot indicator, and clear contrast. When clicked or hovered (on desktop), it presents a `wa.me/<helpdesk_number>` link or a dynamically generated QR code (using a library like `@lglab/react-qr-code` for deep customization like embedding the Eqilo logo).
