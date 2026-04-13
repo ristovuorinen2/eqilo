@@ -34,23 +34,35 @@ graph TD
 - `email` (String)
 - `role` (String) - 'admin' | 'customer'
 - `stripe_customer_id` (String)
+- `shipping_address` (Object) - { line1, line2, city, postal_code, country }
+- `billing_address` (Object) - { line1, line2, city, postal_code, country }
+- `phone_number` (String) - Required by couriers
 
 **2. `products` Collection**
 - `id` (String)
 - `name` (String)
 - `description` (String)
 - `price` (Number)
+- `tax_rate` (Number) - e.g., 25.5 for Finnish general goods
 - `sku` (String)
 - `fds_ref_id` (String) - ID from fdstiming.com
 - `inventory_count` (Number)
+- `is_active` (Boolean) - Allows drafting or hiding products
+- `weight` (Number) - Essential for shipping calculation
+- `dimensions` (Object) - { length, width, height }
 - `image_urls` (Array of Strings)
 
 **3. `orders` Collection**
 - `id` (String)
 - `user_id` (String)
 - `items` (Array of Objects) - { product_id, quantity, price }
-- `total_amount` (Number)
+- `subtotal` (Number) - Pre-tax amount
+- `tax_total` (Number) - Total VAT amount, required for Holvi invoicing
+- `total_amount` (Number) - Final amount including tax
+- `shipping_address` (Object) - Snapshot at the time of order
 - `status` (String) - 'pending' | 'paid' | 'shipped'
+- `tracking_number` (String)
+- `courier` (String)
 - `stripe_payment_intent` (String)
 - `holvi_invoice_id` (String)
 - `created_at` (Timestamp)
