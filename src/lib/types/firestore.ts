@@ -28,6 +28,8 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  description_fi?: string;
+  description_se?: string;
   category_id: string; // Reference to `categories` collection
   price: number;
   tax_rate: number; // e.g., 25.5 for Finnish general goods

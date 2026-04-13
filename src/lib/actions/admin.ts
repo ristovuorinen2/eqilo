@@ -20,7 +20,10 @@ export async function importProducts(formData: FormData) {
     let currentCategory = "Uncategorized";
     const products: Partial<Product>[] = [];
 
-    for (let i = 3; i < rawData.length; i++) {
+    const startIdx = rawData.findIndex(r => r[1] && String(r[1]).startsWith('FDS-'));
+    const safeStartIdx = startIdx !== -1 ? startIdx : 3;
+
+    for (let i = safeStartIdx; i < rawData.length; i++) {
       const row = rawData[i];
       if (!row || row.length === 0) continue;
 

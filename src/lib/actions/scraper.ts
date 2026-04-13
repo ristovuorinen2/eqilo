@@ -14,7 +14,8 @@ export async function scrapeAndTranslateDescriptions() {
     const products = productsSnapshot.docs;
     let successCount = 0;
 
-    const batch = adminDb.batch();
+    let batch = adminDb.batch();
+    let opCount = 0;
 
     for (const doc of products) {
       const data = doc.data();
@@ -22,13 +23,6 @@ export async function scrapeAndTranslateDescriptions() {
       
       if (!sku) continue;
 
-      // Clean SKU for URL if necessary. Assuming FDS-K10011 -> k10011 or similar.
-      // Usually FDS timing shop URLs are like fdstiming.com/product/kit-name/
-      // We will perform a simple search query or guess the URL.
-      // For simplicity in a headless script, let's search via their search endpoint if possible, 
-      // or try to fetch the shop main page and find the product link by SKU.
-      
-      // Since we don't know the exact URL structure, a robust approach is to query their search endpoint
       const searchUrl = `https://fdstiming.com/?s=${sku}&post_type=product`;
       
       const res = await fetch(searchUrl);
@@ -37,19 +31,15 @@ export async function scrapeAndTranslateDescriptions() {
       const html = await res.text();
       const $ = cheerio.load(html);
       
-      // Attempt to find the product description. 
-      // WooCommerce default often uses .woocommerce-product-details__short-description or similar.
       let descriptionEN = $(".woocommerce-product-details__short-description").text().trim() 
                        || $(".product-details .description").text().trim()
                        || $('meta[property="og:description"]').attr("content")?.trim();
 
       if (!descriptionEN) {
-        // Fallback: If search redirected to the product page
         descriptionEN = $("#tab-description").text().trim() || data.description;
       }
 
       if (descriptionEN && descriptionEN !== data.description) {
-        // Translate to FI and SE
         let descriptionFI = descriptionEN;
         let descriptionSE = descriptionEN;
 
@@ -71,10 +61,15 @@ export async function scrapeAndTranslateDescriptions() {
         });
 
         successCount++;
+        if (++opCount === 500) {
+          await batch.commit();
+          batch = adminDb.batch();
+          opCount = 0;
+        }
       }
     }
 
-    if (successCount > 0) {
+    if (opCount > 0) {
       await batch.commit();
     }
 
