@@ -12,7 +12,8 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 ## Scope & Impact
 - **Customer Portal:** Product discovery, cart, and Stripe checkout.
 - **Admin Panel:** Product management (importing from Excel), order/inventory management, and customer CRM.
-- **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), GCP/Firebase (Database, Auth, Hosting), WhatsApp (Helpdesk).
+- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth) will be used for the backend data layer.
+- **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk).
 - **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 - **Internationalization (i18n):** Support for Finnish (FI - Default), English (EN), and Swedish (SE).
 - **WhatsApp Helpdesk:** Integrated customer support via WhatsApp, configurable from the Admin Panel.
@@ -130,8 +131,8 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Vercel/Cloud Run immediate revert to previous deployments in case of critical bugs. code scannability on desktop.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs. code scannability on desktop.
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Vercel/Cloud Run immediate revert to previous deployments in case of critical bugs.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
