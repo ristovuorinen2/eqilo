@@ -67,7 +67,7 @@ export interface Order {
   courier?: string;
   stripe_payment_intent?: string;
   holvi_invoice_id?: string;
-  created_at: Date | any; // Timestamp
+  created_at: Date | import('firebase/firestore').Timestamp; // Timestamp
 }
 
 export interface CartItem {
@@ -82,8 +82,8 @@ export interface Cart {
   items: CartItem[];
   is_public_link: boolean; // Allows admins to share this cart via a public URL
   abandoned_recovery_sent: boolean; // Tracks if an automated recovery message was sent
-  created_at: Date | any; // Timestamp
-  updated_at: Date | any; // Timestamp
+  created_at: Date | import('firebase/firestore').Timestamp; // Timestamp
+  updated_at: Date | import('firebase/firestore').Timestamp; // Timestamp
 }
 
 export interface Settings {
