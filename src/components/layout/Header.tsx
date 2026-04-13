@@ -16,12 +16,13 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useCart } from "@/components/cart-provider";
 import { Badge } from "@/components/ui/badge";
+import { SearchDialog } from "./SearchDialog";
 
 export function Header() {
   const { itemCount } = useCart();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 font-sans antialiased">
       <div className="container flex h-16 items-center justify-between">
         
         <div className="flex items-center gap-6 md:gap-10">
@@ -37,7 +38,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Nav (Megamenu) */}
-          <div className="hidden md:flex">
+          <div className="hidden md:flex font-bold">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -46,18 +47,18 @@ export function Header() {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="font-bold">Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       <li className="row-span-3">
                         <NavigationMenuLink 
                           href="/services"
-                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/10 to-primary/5 p-6 no-underline outline-none focus:shadow-md border border-primary/10"
                         >
-                            <div className="mb-2 mt-4 text-lg font-medium text-primary">
+                            <div className="mb-2 mt-4 text-xl font-extrabold text-primary">
                               Eqilo Consulting
                             </div>
-                            <p className="text-sm leading-tight text-muted-foreground">
+                            <p className="text-sm leading-tight text-muted-foreground font-medium">
                               20+ years of expertise in competition and timekeeping systems.
                             </p>
                         </NavigationMenuLink>
@@ -67,9 +68,9 @@ export function Header() {
                           href="/services/training-and-results" 
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                            <div className="text-sm font-medium leading-none">Training & Results</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Field operations and training.
+                            <div className="text-sm font-bold leading-none">Training & Results</div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
+                              On-site operations and staff training.
                             </p>
                         </NavigationMenuLink>
                       </li>
@@ -78,9 +79,9 @@ export function Header() {
                           href="/services/equipe-software" 
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                            <div className="text-sm font-medium leading-none">Equipe Software</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Equestrian show management solutions.
+                            <div className="text-sm font-bold leading-none">Equipe Software</div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
+                              The standard for equestrian show management.
                             </p>
                         </NavigationMenuLink>
                       </li>
@@ -93,25 +94,27 @@ export function Header() {
         </div>
 
         {/* Action Icons */}
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="hidden sm:inline-flex">
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search products</span>
-          </Button>
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          <SearchDialog>
+            <Button variant="ghost" size="icon" className="hidden sm:inline-flex hover:bg-primary/5 hover:text-primary transition-colors">
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search products</span>
+            </Button>
+          </SearchDialog>
           
           <Link href="/checkout">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="hover:bg-primary/5 hover:text-primary transition-colors">
               <User className="h-5 w-5" />
               <span className="sr-only">Account</span>
             </Button>
           </Link>
           
           <Link href="/cart">
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative hover:bg-primary/5 hover:text-primary transition-colors">
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Cart</span>
               {itemCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] bg-primary border-2 border-background">
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] font-bold bg-primary border-2 border-background animate-in zoom-in">
                   {itemCount}
                 </Badge>
               )}
@@ -125,10 +128,10 @@ export function Header() {
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle Menu</span>
               </SheetTrigger>
-              <SheetContent side="left">
+              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <div className="flex flex-col space-y-4 mt-4">
-                  <Link href="/" className="mb-4">
+                <div className="flex flex-col space-y-6 mt-6">
+                  <Link href="/" className="mb-4 px-2">
                     <Image 
                       src="/eqilologo.jpeg" 
                       alt="Eqilo.fi Logo" 
@@ -137,12 +140,24 @@ export function Header() {
                       className="h-8 w-auto object-contain"
                     />
                   </Link>
-                  <Link href="/shop" className="text-sm font-medium">Products</Link>
-                  <Link href="/services" className="text-sm font-medium">Services</Link>
-                  <Link href="/services/training-and-results" className="text-sm text-muted-foreground ml-4">Training & Results</Link>
-                  <Link href="/services/equipe-software" className="text-sm text-muted-foreground ml-4">Equipe Software</Link>
-                  <div className="pt-4 border-t">
-                    <Link href="/admin" className="text-sm font-medium text-muted-foreground">Admin Portal</Link>
+                  
+                  <div className="space-y-4 px-2">
+                    <Link href="/shop" className="text-lg font-bold flex items-center gap-3">
+                      <div className="p-2 bg-muted rounded-lg"><ShoppingCart className="w-5 h-5 text-primary" /></div>
+                      Products
+                    </Link>
+                    <div className="space-y-2 pt-2 border-t">
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2 mb-2">Expert Services</p>
+                      <Link href="/services" className="text-md font-semibold flex items-center gap-3 px-2 py-1">Consulting Overview</Link>
+                      <Link href="/services/training-and-results" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1">Training & Results</Link>
+                      <Link href="/services/equipe-software" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1">Equipe Software</Link>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t px-4 mt-auto">
+                    <Link href="/admin" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                       <User className="w-3 h-3" /> Admin Portal
+                    </Link>
                   </div>
                 </div>
               </SheetContent>
