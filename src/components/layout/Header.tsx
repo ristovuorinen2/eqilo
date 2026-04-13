@@ -27,10 +27,8 @@ export function Header() {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link href="/shop" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Products
-                    </NavigationMenuLink>
+                  <Link href="/shop" className={navigationMenuTriggerStyle()}>
+                    Products
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
