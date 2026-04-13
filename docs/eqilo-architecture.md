@@ -89,7 +89,7 @@ graph TD
 
 ### WhatsApp Helpdesk Integration Flow
 - **Storefront Component:** A fixed floating chat bubble in the bottom right corner of the storefront.
-- **Design:** Stylized with the Eqilo primary blue. Includes a white WhatsApp icon, an "Always Online" green dot indicator, and clear contrast. When clicked or hovered (on desktop), it presents a `wa.me/<helpdesk_number>` link or a dynamically generated QR code (using a library like `qrcode.react`).
+- **Design:** Stylized with the Eqilo primary blue. Includes a white WhatsApp icon, an "Always Online" green dot indicator, and clear contrast. When clicked or hovered (on desktop), it presents a `wa.me/<helpdesk_number>` link or a dynamically generated QR code (using a library like `@lglab/react-qr-code` for deep customization like embedding the Eqilo logo).
 - **Interaction:**
   - **Mobile:** Tapping the button directly opens the WhatsApp app with a pre-filled greeting message.
   - **Desktop:** Clicking redirects to WhatsApp Web, or scanning the displayed QR code with a phone opens the app.
