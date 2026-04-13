@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart, Menu, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -19,7 +20,14 @@ export function Header() {
         
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold text-xl text-primary tracking-tight">EQILO.FI</span>
+            <Image 
+              src="/eqilologo.jpeg" 
+              alt="Eqilo.fi Logo" 
+              width={120} 
+              height={40} 
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop Nav (Megamenu) */}
@@ -110,8 +118,14 @@ export function Header() {
               <SheetContent side="left">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex flex-col space-y-4 mt-4">
-                  <Link href="/" className="text-lg font-semibold text-primary">
-                    EQILO.FI
+                  <Link href="/" className="mb-4">
+                    <Image 
+                      src="/eqilologo.jpeg" 
+                      alt="Eqilo.fi Logo" 
+                      width={120} 
+                      height={40} 
+                      className="h-8 w-auto object-contain"
+                    />
                   </Link>
                   <Link href="/shop" className="text-sm font-medium">Products</Link>
                   <Link href="/services" className="text-sm font-medium">Services</Link>
