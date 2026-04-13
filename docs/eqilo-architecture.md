@@ -129,6 +129,9 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
   - **Mobile-First UX:** Emphasize touch-friendly UI targets, bottom-sheet navigations where applicable, and highly responsive product grids optimized specifically for mobile device browsing.
   - **Color Palette Alignment:** The Eqilo Primary Blue (`#0055A4`) will be injected directly into the Tailwind configuration as the primary brand color, ensuring all Shadcn buttons, active states, and accents automatically align with the corporate identity without manual overrides.
   - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.
+- **References & Trust Signals:** The storefront will prominently feature a 'References' or 'Trusted By' section incorporating logos/icons and linking to key partners and supported events, specifically including:
+  - **AWC 2026** (https://awc2026.fi/)
+  - **Equipe** (https://equipe.com/)
 
 ### Advanced SEO, Analytics & Google Merchant Center
 - **Dynamic SEO:** Leverage Next.js Server-Side Rendering (SSR) for all product and **category pages** to ensure immediate indexing by Google. Category pages will include comprehensive SEO text fields to maximize search ranking for broad keywords. Automatically generate `sitemap.xml`. Include the Google Site Verification meta tag `<meta name="google-site-verification" content="LZj3B0ok1VW0eB_zpPPod5uAOugP2PkjrTrlLPS_Zac" />` in the root layout.
