@@ -10,15 +10,20 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 - **Phone:** +358 50 5633097
 
 ## Scope & Impact
-- **Customer Portal:** Product discovery, cart, mandatory account creation during the first order, and Stripe checkout.
+- **Customer Portal:** Product discovery, persistent carts saved to user accounts, mandatory account creation during the first order, and Stripe checkout.
 - **Admin Panel:** Product management (importing from Excel, plus a fully-featured Product Manager/Editor to modify descriptions, prices, and status), order/inventory management, comprehensive Sales Dashboard, Cart management (ability to view, edit, override prices, and generate shareable public cart links), and a built-in CRM to manage customers and their orders.
 - **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth via email or phone number) will be used for the backend data layer.
-- **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk).
+- **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk), Google Analytics 4 / Plausible (Analytics).
 - **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 - **Internationalization (i18n):** Support for Finnish (FI - Default), English (EN), and Swedish (SE).
 - **WhatsApp Helpdesk:** Integrated customer support via WhatsApp, configurable from the Admin Panel.
+- **B2B Features & VAT Validation:** Support for a `b2b_customer` role, allowing business users to input a valid Finnish Business ID (Y-tunnus) for VAT handling and specialized invoicing.
 
 ## Proposed Solution
+
+### Shipping & Pricing Rules
+- **Shipping Costs:** A flat rate of **20 €** is applied to all orders below 200 €. Orders totaling **200 € or more** automatically qualify for **free shipping**. This logic will be enforced during the Stripe checkout session creation.
+- **Localized Payments:** Through the Stripe Payment Element, the checkout will natively support **Apple Pay**, **Google Pay**, and **MobilePay** (highly preferred in Finland), alongside traditional credit cards and B2B invoice options.
 
 ### Architecture Diagram
 ```mermaid
@@ -45,7 +50,8 @@ graph TD
 - `id` (String) - Firebase UID
 - `email` (String) - Optional if signed up via phone
 - `phone_number` (String) - Optional if signed up via email; required by couriers
-- `role` (String) - 'admin' | 'customer'
+- `role` (String) - 'admin' | 'customer' | 'b2b_customer'
+- `business_id` (String) - Y-tunnus, required for 'b2b_customer'
 - `stripe_customer_id` (String)
 - `shipping_address` (Object) - { line1, line2, city, postal_code, country }
 - `billing_address` (Object) - { line1, line2, city, postal_code, country }
@@ -85,6 +91,7 @@ graph TD
 - `user_id` (String) - Optional (if assigned to a specific customer)
 - `items` (Array of Objects) - { product_id, quantity, custom_price_override }
 - `is_public_link` (Boolean) - Allows admins to share this cart via a public URL
+- `abandoned_recovery_sent` (Boolean) - Tracks if an automated recovery message was sent
 - `created_at` (Timestamp)
 - `updated_at` (Timestamp)
 
@@ -92,22 +99,38 @@ graph TD
 - `id` (String) - Document ID (e.g., 'global')
 - `whatsapp_helpdesk_number` (String) - Configurable international phone number for the WhatsApp helpdesk link.
 
-### API Endpoints (Next.js API Routes)
-- `POST /api/checkout/session` - Initializes Stripe Checkout session.
-- `POST /api/webhooks/stripe` - Handles Stripe payment success, updates order status, and triggers invoice.
-- `POST /api/invoices/generate` - Communicates with Holvi.fi API to generate an invoice.
-- `POST /api/admin/import-products` - Parses uploaded `Price List 2026 V3.0.xlsx` and updates product catalog.
-- `PUT /api/admin/settings` - Updates global site settings (e.g., WhatsApp helpdesk number).
+### API Endpoints & Server Actions (Next.js App Router)
+Following modern Next.js App Router best practices, data mutations and form submissions will be handled via **Server Actions** rather than traditional API Route Handlers. Route Handlers will be reserved exclusively for external webhooks.
+
+- **Server Actions (Internal Mutations):**
+  - `createCheckoutSession(cart)` - Initializes Stripe Checkout session securely on the server.
+  - `generateInvoice(orderId)` - Communicates with Holvi.fi API to generate an invoice.
+  - `importProducts(file)` - Parses uploaded `Price List 2026 V3.0.xlsx` and updates the product catalog in Firestore.
+  - `updateSettings(data)` - Updates global site settings (e.g., WhatsApp helpdesk number).
+
+- **Route Handlers (External Webhooks):**
+  - `POST /api/webhooks/stripe` - Handles Stripe payment success, updates order status, and securely triggers the Holvi invoice generation.
 
 ### Store UX & Frontend Components
-Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase (rather than as heavy NPM dependencies), ensuring high performance and a premium feel.
+Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase.
 
 - **Component Library:** `shadcn/ui`, built strictly on top of **Radix UI primitives**. This ensures that all interactive components (like dialogs, dropdowns, and sheets) are fully accessible, unstyled by default, and provide robust behavioral foundations for the Next.js application.
 - **Forms & Layouts:** Utilization of Shadcn's new responsive `Field`, `FieldGroup`, and `FieldSet` components to build robust, mobile-first checkout flows and user profile management screens that automatically switch between vertical and horizontal layouts based on container width.
 - **Visual Design:** 
   - **Clean & Minimalist:** High contrast layouts emphasizing product imagery.
+  - **Clear Shipping Information:** Every product detail page and cart view MUST prominently display that the standard shipping time is **1-2 weeks**.
+  - **Mobile-First UX:** Emphasize touch-friendly UI targets, bottom-sheet navigations where applicable, and highly responsive product grids optimized specifically for mobile device browsing.
   - **Color Palette Alignment:** The Eqilo Primary Blue (`#0055A4`) will be injected directly into the Tailwind configuration as the primary brand color, ensuring all Shadcn buttons, active states, and accents automatically align with the corporate identity without manual overrides.
   - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.
+
+### Advanced SEO & Analytics
+- **Dynamic SEO:** Leverage Next.js Server-Side Rendering (SSR) for all product pages to ensure immediate indexing by Google. Automatically generate `sitemap.xml`.
+- **Social Sharing:** Implement dynamic Open Graph (OG) image generation so products look professional and engaging when shared on platforms like WhatsApp, Facebook, or LinkedIn.
+- **Conversion Tracking:** Integrate Google Analytics 4 (GA4) or Plausible to monitor the full ecommerce funnel (Product View -> Add to Cart -> Initiate Checkout -> Purchase) to optimize conversion rates.
+
+### Abandoned Cart Recovery
+- A background process will identify `carts` in Firestore that have been inactive for over 24 hours.
+- If the associated `user_id` has opted into communications, the system will trigger an automated recovery email or WhatsApp message (if applicable) and flag `abandoned_recovery_sent: true`.
 
 ### WhatsApp Helpdesk Integration Flow
 - **Storefront Component:** A fixed floating chat bubble in the bottom right corner of the storefront.
@@ -117,12 +140,6 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
   - **Desktop:** Clicking redirects to WhatsApp Web, or scanning the displayed QR code with a phone opens the app.
 - **Admin Configuration:** The Admin Panel includes a "Settings" tab where admins can update the `whatsapp_helpdesk_number`. This setting is stored in the `settings` Firestore collection and fetched globally to populate the `wa.me` links.
 
-### Color Palette & Aesthetic
-- **Primary:** Eqilo Blue (e.g., `#0055A4` - to be exacted from logo)
-- **Secondary/Background:** White (`#FFFFFF`) and Light Grays for UI depth.
-- **WhatsApp UI:** The Helpdesk bubble will utilize the primary Eqilo Blue to maintain brand consistency, alongside standard white text and the recognizable WhatsApp icon.
-- Framework: Tailwind CSS for rapid styling matching the constraints.
-
 ## Alternatives Considered
 - **Firebase Cloud Functions vs Next.js Server Actions:** We chose Next.js Server Actions over isolated Firebase Cloud Functions. This modern App Router paradigm colocates frontend UI and backend mutations within a single monorepo, significantly simplifying deployment, reducing boilerplate, and seamlessly sharing TypeScript types between the client and server.
 
@@ -130,15 +147,15 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 1. **Phase 1: Setup & Data Modeling** - Initialize Next.js project, Firebase config, and Tailwind CSS branding. Setup Firestore schemas (including `settings`).
 2. **Phase 2: Admin & Catalog Import** - Build the Excel import logic (using a library like `xlsx`) to populate the `products` collection from `Price List 2026 V3.0.xlsx`. This import process will be executed **just once** to initialize the Firestore database. Create Admin views for product management, uploading, and configuring the WhatsApp Helpdesk number. Include a one-time script/process to scrape product descriptions from `https://fdstiming.com/shop/` and translate them into Finnish (FI) and Swedish (SE) to populate the initial catalog.
 3. **Phase 3: Customer Portal** - Develop product listing, detail pages, cart state management, and the global floating WhatsApp Helpdesk component.
-4. **Phase 4: Checkout & Invoicing** - Integrate Stripe Checkout. Setup webhook listeners. Integrate Holvi API for automated invoices upon payment confirmation.
+4. **Phase 4: Checkout & Invoicing** - Integrate Stripe Checkout with localized payments (MobilePay). Setup webhook listeners. Integrate Holvi API for automated invoices upon payment confirmation.
+5. **Phase 5: Marketing & Optimization** - Implement OG image generation, GA4 tracking, and the abandoned cart recovery background job.
 
 ## Verification & Testing
-- Unit tests for API routes (Stripe session creation, Holvi invoice generation mock).
+- Unit tests for Server Actions (Stripe session creation, Holvi invoice generation mock).
 - E2E tests for the checkout flow (Customer -> Cart -> Stripe Test Mode -> Order Success).
 - Manual verification of product import from the Excel price list.
 - Verification of the WhatsApp link on mobile and QR code scannability on desktop.
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.tion involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.e Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
