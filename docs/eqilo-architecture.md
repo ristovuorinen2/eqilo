@@ -89,6 +89,16 @@ graph TD
 - `POST /api/admin/import-products` - Parses uploaded `Price List 2026 V3.0.xlsx` and updates product catalog.
 - `PUT /api/admin/settings` - Updates global site settings (e.g., WhatsApp helpdesk number).
 
+### Store UX & Frontend Components
+Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase (rather than as heavy NPM dependencies), ensuring high performance and a premium feel.
+
+- **Component Library:** `shadcn/ui` (leveraging Tailwind CSS and Radix UI primitives).
+- **Forms & Layouts:** Utilization of Shadcn's new responsive `Field`, `FieldGroup`, and `FieldSet` components to build robust, mobile-first checkout flows and user profile management screens that automatically switch between vertical and horizontal layouts based on container width.
+- **Visual Design:** 
+  - **Clean & Minimalist:** High contrast layouts emphasizing product imagery.
+  - **Color Palette Alignment:** The Eqilo Primary Blue (`#0055A4`) will be injected directly into the Tailwind configuration as the primary brand color, ensuring all Shadcn buttons, active states, and accents automatically align with the corporate identity without manual overrides.
+  - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.
+
 ### WhatsApp Helpdesk Integration Flow
 - **Storefront Component:** A fixed floating chat bubble in the bottom right corner of the storefront.
 - **Design:** Stylized with the Eqilo primary blue. Includes a white WhatsApp icon, an "Always Online" green dot indicator, and clear contrast. When clicked or hovered (on desktop), it presents a `wa.me/<helpdesk_number>` link or a dynamically generated QR code (using a library like `@lglab/react-qr-code` for deep customization like embedding the Eqilo logo).
