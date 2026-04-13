@@ -140,4 +140,5 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.tion involves one-time importing from `Price List 2026 V3.0.xlsx`.
 - Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.e Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
