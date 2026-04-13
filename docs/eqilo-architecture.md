@@ -1,7 +1,9 @@
 # Eqilo.fi Ecommerce Architecture Plan
 
 ## Background & Motivation
-Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The initial product catalog will be imported from `Price List 2026 V3.0.xlsx`. The platform requires a Customer Portal for shoppers and an Admin Panel for operations, integrating modern technologies for a seamless, scalable experience.
+The Eqilo.fi webstore project aims to launch an online store focused on selling modern timekeeping devices from Swiss manufacturer FDS Timing, primarily targeting the Finnish market. The main customer groups include agility clubs and equestrian clubs, while also supporting other sports that require reliable timekeeping solutions. 
+
+The webstore will introduce FDS Timing products, with particular emphasis on expanding adoption within agility sports, where the largest growth potential is expected. In addition to product sales, the webstore will promote Eqilo’s services, including competition consultation, technical support, equipment service, and training for timekeeping/results systems. The project highlights Eqilo’s strong expertise, built on over 20 years of experience working with competitions and timekeeping systems.
 
 ## Company Information
 - **Company Name:** Eqilo Oy
@@ -9,7 +11,17 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 - **Postal Address:** Hakkapeliitantie 4, 08350 LOHJA
 - **Phone:** +358 50 5633097
 
-## Scope & Impact
+## Business Impact
+The Eqilo.fi webstore will significantly improve accessibility to modern timekeeping solutions in Finland, lowering the barrier for clubs to adopt professional-level timing technology. Expected impacts include:
+- Increased adoption of modern timekeeping technology in Finnish sports clubs.
+- Growth in agility sport timing solutions (the primary expansion area).
+- Improved event quality and professionalism across competition levels.
+- Reduced setup complexity and technical challenges for event organizers.
+- Strengthened Eqilo brand as a trusted expert in timing solutions.
+- New business opportunities through consulting, training, and service offerings.
+The webstore will serve as a foundation for long-term growth, expanding into additional sports and strengthening partnerships across Finland.
+
+## Technical Scope
 - **Customer Portal:** Product discovery, simple product search (utilizing native Firestore composite indexes and search limits, without external services), persistent carts saved to user accounts, mandatory account creation during the first order, Stripe checkout, and a dedicated **E-store Terms & Conditions** page which users must explicitly accept before completing a purchase.
 - **Admin Panel:** Product management (importing from Excel, plus a fully-featured Product Manager/Editor to modify descriptions, prices, and status), order/inventory management, comprehensive Sales Dashboard, Cart management (ability to view, edit, override prices, and generate shareable public cart links), and a built-in CRM to manage customers and their orders.
 - **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth via email or phone number) will be used for the backend data layer.
