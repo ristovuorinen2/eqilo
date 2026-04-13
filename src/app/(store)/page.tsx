@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Battery, Wifi, ShieldCheck, MonitorPlay } from "lucide-react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 export default function HomePage() {
   return (
@@ -31,10 +32,26 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            {/* Visual placeholder for the hero */}
-            <div className="mx-auto aspect-video overflow-hidden rounded-xl bg-muted/20 object-cover sm:w-full lg:aspect-square flex items-center justify-center">
-               <span className="text-primary-foreground/50 font-medium">Hero Image (FDS Timing Kit)</span>
+            
+            {/* Visual Carousel for the hero */}
+            <div className="mx-auto w-full max-w-lg aspect-video lg:aspect-square flex items-center justify-center">
+              <Carousel className="w-full h-full" opts={{ loop: true }}>
+                <CarouselContent className="h-full">
+                  {[1, 2, 3].map((index) => (
+                    <CarouselItem key={index} className="h-full">
+                      <div className="w-full h-full bg-muted/20 rounded-xl border border-primary-foreground/10 flex items-center justify-center">
+                        <span className="text-primary-foreground/50 font-medium">Hero Slide {index}</span>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="hidden sm:block">
+                  <CarouselPrevious className="left-4 bg-background/20 text-primary-foreground hover:bg-background/40 hover:text-primary-foreground border-none" />
+                  <CarouselNext className="right-4 bg-background/20 text-primary-foreground hover:bg-background/40 hover:text-primary-foreground border-none" />
+                </div>
+              </Carousel>
             </div>
+            
           </div>
         </div>
       </section>
