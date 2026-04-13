@@ -8,10 +8,29 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy", {
   apiVersion: "2025-02-24.acacia" as any,
 });
 
-export async function createCheckoutSession(userId: string, cartItems: CartItem[]) {
+export async function createCheckoutSession(
+  userId: string, 
+  cartItems: CartItem[], 
+  customerDetails?: { email: string; phone: string; businessId?: string }
+) {
   try {
     if (!cartItems.length) {
       throw new Error("Cart is empty");
+    }
+
+    // 0. Ensure Customer exists in Firestore
+    const customerRef = adminDb.collection("customers").doc(userId);
+    const customerDoc = await customerRef.get();
+    
+    if (!customerDoc.exists && customerDetails) {
+      await customerRef.set({
+        id: userId,
+        email: customerDetails.email,
+        phone_number: customerDetails.phone,
+        business_id: customerDetails.businessId || "",
+        role: customerDetails.businessId ? "b2b_customer" : "customer",
+        created_at: new Date(),
+      });
     }
 
     // Fetch products

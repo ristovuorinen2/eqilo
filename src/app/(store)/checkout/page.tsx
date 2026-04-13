@@ -44,18 +44,30 @@ export default function CheckoutPage() {
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed) return;
-    if (!email || !phone) return;
+    if (!email || !phone) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
     setIsSubmitting(true);
     
-    // In a production app, we would handle Auth here.
-    // For this prototype, we'll pass a dummy userId or the email.
-    const res = await createCheckoutSession(email, items);
-    
-    if (res.success && res.url) {
-      window.location.href = res.url;
-    } else {
-      alert("Error creating checkout session: " + res.error);
+    try {
+      // In a production app, we would handle Auth here.
+      // Passing email, phone, and businessId to create/link the customer account.
+      const res = await createCheckoutSession(email, items, {
+        email,
+        phone,
+        businessId
+      });
+      
+      if (res.success && res.url) {
+        window.location.href = res.url;
+      } else {
+        alert("Error creating checkout session: " + res.error);
+        setIsSubmitting(false);
+      }
+    } catch (err: any) {
+      alert("An unexpected error occurred: " + err.message);
       setIsSubmitting(false);
     }
   };
