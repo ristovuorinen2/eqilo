@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { CartItem } from "@/lib/types/firestore";
+import { useAuth } from "./auth-provider";
+import { syncUserCart, fetchUserCart } from "@/lib/actions/cart";
 
 interface CartContextType {
   items: CartItem[];
@@ -15,28 +17,47 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load from localStorage on mount
+  // Initial load
   useEffect(() => {
-    const savedCart = localStorage.getItem("eqilo-cart");
-    if (savedCart) {
-      try {
-        setItems(JSON.parse(savedCart));
-      } catch (e) {
-        console.error("Failed to parse cart", e);
+    async function loadCart() {
+      // If user logs in, fetch their cart from Firestore
+      if (user) {
+        const res = await fetchUserCart(user.uid);
+        if (res.success && res.items && res.items.length > 0) {
+          // Merge local items with fetched items, or just use fetched
+          setItems(res.items);
+        } else {
+           // Fallback to local storage if no firestore cart
+           const savedCart = localStorage.getItem("eqilo-cart");
+           if (savedCart) {
+             try { setItems(JSON.parse(savedCart)); } catch (e) {}
+           }
+        }
+      } else {
+        const savedCart = localStorage.getItem("eqilo-cart");
+        if (savedCart) {
+          try { setItems(JSON.parse(savedCart)); } catch (e) {}
+        }
       }
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
-  }, []);
+    loadCart();
+  }, [user]);
 
-  // Save to localStorage on change
+  // Sync to localStorage and Firestore
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem("eqilo-cart", JSON.stringify(items));
+      // Debounce or sync directly if user is logged in
+      if (user) {
+        syncUserCart(user.uid, items).catch(e => console.error("Sync failed", e));
+      }
     }
-  }, [items, isLoaded]);
+  }, [items, isLoaded, user]);
 
   const addItem = (productId: string, quantity = 1) => {
     setItems((prev) => {

@@ -17,6 +17,7 @@ import { Product } from "@/lib/types/firestore";
 
 export function SearchDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
   const [products, setProducts] = React.useState<Product[]>([]);
   const router = useRouter();
 
@@ -32,15 +33,19 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
   }, []);
 
   React.useEffect(() => {
-    if (open) {
+    if (open && products.length === 0) {
       getProducts().then(setProducts);
     }
-  }, [open]);
+  }, [open, products.length]);
 
   const onSelect = (id: string) => {
     setOpen(false);
     router.push(`/product/${id}`);
   };
+
+  const filteredProducts = query 
+    ? products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || p.sku.toLowerCase().includes(query.toLowerCase()))
+    : products.slice(0, 10); // Show max 10 initially
 
   return (
     <>
@@ -48,12 +53,16 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
         {children}
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <Command>
-          <CommandInput placeholder="Search equipment by name or SKU... (⌘K)" />
+        <Command shouldFilter={false}>
+          <CommandInput 
+            placeholder="Search equipment by name or SKU... (⌘K)" 
+            value={query}
+            onValueChange={setQuery}
+          />
           <CommandList className="max-h-[400px]">
             <CommandEmpty>No equipment found matching your search.</CommandEmpty>
-            <CommandGroup heading="Equipment Catalog">
-              {products.map((product) => (
+            <CommandGroup heading={query ? "Search Results" : "Suggested Equipment"}>
+              {filteredProducts.map((product) => (
                 <CommandItem
                   key={product.id}
                   value={`${product.name} ${product.sku}`}
