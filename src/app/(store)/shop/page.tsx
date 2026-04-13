@@ -17,6 +17,7 @@ export default function ShopPage() {
   const { addItem } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
     async function fetchProducts() {
@@ -27,10 +28,14 @@ export default function ShopPage() {
     fetchProducts();
   }, []);
 
-  const activeProducts = products.filter(p => p.is_active);
+  const activeProducts = products.filter(p => {
+    const isActive = p.is_active;
+    const matchesCategory = selectedCategory === "all" || p.category_id === selectedCategory;
+    return isActive && matchesCategory;
+  });
 
-  // Group by category to build basic filters
-  const categories = Array.from(new Set(activeProducts.map(p => p.category_id)));
+  // Group by category to build basic filters from ALL active products
+  const categories = Array.from(new Set(products.filter(p => p.is_active).map(p => p.category_id)));
 
   if (loading) {
     return (
@@ -50,7 +55,12 @@ export default function ShopPage() {
             <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-primary">
               <Tag className="w-5 h-5" /> Categories
             </h3>
-            <RadioGroup defaultValue="all" className="space-y-3">
+            <RadioGroup 
+              defaultValue="all" 
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+              className="space-y-3"
+            >
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="all" id="all" className="border-primary/50 text-primary" />
                 <Label htmlFor="all" className="cursor-pointer font-medium">All Equipment</Label>
