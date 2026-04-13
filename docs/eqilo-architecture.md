@@ -11,8 +11,8 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 
 ## Scope & Impact
 - **Customer Portal:** Product discovery, cart, mandatory account creation during the first order, and Stripe checkout.
-- **Admin Panel:** Product management (importing from Excel), order/inventory management, and customer CRM.
-- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth) will be used for the backend data layer.
+- **Admin Panel:** Product management (importing from Excel), order/inventory management, and a built-in CRM to manage customers and their orders.
+- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth via email or phone number) will be used for the backend data layer.
 - **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk).
 - **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 - **Internationalization (i18n):** Support for Finnish (FI - Default), English (EN), and Swedish (SE).
