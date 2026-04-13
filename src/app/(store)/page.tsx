@@ -1,9 +1,14 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Battery, Wifi, ShieldCheck, MonitorPlay, Timer } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { useLanguage } from "@/components/language-provider";
 
 export default function HomePage() {
+  const { t } = useLanguage();
+
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -13,21 +18,21 @@ export default function HomePage() {
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Modern Timekeeping Solutions for Professionals
+                  {t("home.hero.title")}
                 </h1>
                 <p className="max-w-[600px] text-primary-foreground/80 md:text-xl">
-                  Eqilo.fi brings Swiss-engineered FDS Timing technology to Finnish agility and equestrian clubs. Wireless, weatherproof, and seamlessly integrated.
+                  {t("home.hero.subtitle")}
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row mt-4">
                 <Link href="/shop">
                   <Button size="lg" variant="secondary" className="w-full sm:w-auto font-semibold">
-                    Shop Equipment
+                    {t("home.hero.shop")}
                   </Button>
                 </Link>
                 <Link href="/services" prefetch={false}>
                   <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold">
-                    Our Services
+                    {t("home.hero.services")}
                   </Button>
                 </Link>
               </div>

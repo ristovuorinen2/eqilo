@@ -13,8 +13,11 @@ import { useCart } from "@/components/cart-provider";
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/types/firestore";
 
+import { useLanguage } from "@/components/language-provider";
+
 export default function ShopPage() {
   const { addItem } = useCart();
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -79,7 +82,7 @@ export default function ShopPage() {
         <div className="flex-1">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b">
             <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">All Equipment</h1>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">{t("shop.all_equipment")}</h1>
               <p className="text-muted-foreground mt-2">Professional timekeeping solutions for clubs.</p>
             </div>
             <div className="mt-4 md:mt-0 text-sm font-medium bg-muted px-3 py-1 rounded-full border border-border">
@@ -103,7 +106,7 @@ export default function ShopPage() {
                     ) : (
                       <>
                         <PackageOpen className="w-16 h-16 text-primary/30 group-hover:text-primary/50 transition-colors mb-4" />
-                        <span className="text-muted-foreground text-xs font-mono bg-background/50 px-2 py-1 rounded border">SKU: {product.sku}</span>
+                        <span className="text-muted-foreground text-xs font-mono bg-background/50 px-2 py-1 rounded border">{t("product.sku")}: {product.sku}</span>
                       </>
                     )}
                   </div>
@@ -116,7 +119,7 @@ export default function ShopPage() {
                 </Link>
                 <CardFooter className="p-5 pt-0 mt-auto flex flex-col items-start gap-4">
                   <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100 w-fit">
-                    <Clock className="w-3.5 h-3.5" /> Standard Shipping: 1-2 Weeks
+                    <Clock className="w-3.5 h-3.5" /> {t("product.standard_shipping")}
                   </div>
                   <div className="w-full flex items-center justify-between mt-1">
                     <div className="font-extrabold text-2xl tracking-tight text-foreground">€{product.price.toFixed(2)}</div>
@@ -124,7 +127,7 @@ export default function ShopPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2 w-full mt-2">
                     <Link href={`/product/${product.id}`} className="w-full">
-                      <Button variant="outline" className="w-full font-semibold">Details</Button>
+                      <Button variant="outline" className="w-full font-semibold">{t("shop.view_details")}</Button>
                     </Link>
                     <Button 
                       className="w-full font-bold" 
