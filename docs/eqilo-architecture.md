@@ -7,7 +7,7 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 - **Customer Portal:** Product discovery, cart, and Stripe checkout.
 - **Admin Panel:** Product management (importing from Excel), order/inventory management, and customer CRM.
 - **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), GCP/Firebase (Database, Auth, Hosting).
-- **Aesthetics:** Blue and white branding to match the Eqilo logo.
+- **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 
 ## Proposed Solution
 
