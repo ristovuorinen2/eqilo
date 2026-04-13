@@ -168,8 +168,14 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 - A background process will identify `carts` in Firestore that have been inactive for over 24 hours.
 - If the associated `user_id` has opted into communications, the system will trigger an automated recovery email or WhatsApp message (if applicable) and flag `abandoned_recovery_sent: true`.
 
-### Store Site/Page Structure
+### Store Site/Page Structure & Global Navigation
 The Next.js App Router will follow this logical page hierarchy:
+
+**Global Navigation Strategy:**
+- **Desktop (Web):** A robust **Megamenu** (built with Shadcn `NavigationMenu`) will anchor the top of the screen. This allows for deep categorization (e.g., Equipment -> Saddles -> Brands) and rich content links (e.g., prominently featuring the Training and Equipe Software services) without overwhelming the user with a massive dropdown.
+- **Mobile:** A native-feeling **Hamburger Menu** (built with Shadcn `Sheet` sliding from the left). This will feature bold, touch-friendly accordion lists to drill down into categories, alongside prominent links for the cart and user profile.
+
+**Page Hierarchy:**
 - `/` - **Home Page:** Hero carousel, featured categories, and conversion-optimized product highlights.
 - `/shop` - **Main Catalog:** Product listing with sidebar filtering (Slider, Checkbox, Radio Groups).
 - `/category/[slug]` - **Category Pages:** Filtered listings with SEO-optimized category text.
