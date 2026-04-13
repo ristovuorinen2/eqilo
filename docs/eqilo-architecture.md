@@ -23,7 +23,8 @@ Eqilo is launching its Finnish branch (eqilo.fi) with a new ecommerce site. The 
 ```mermaid
 graph TD
     Client[Customer/Admin Browser] -->|Next.js App Router| Frontend[Next.js Frontend]
-    Frontend -->|Next.js API Routes| Backend[Backend APIs]
+    Frontend -->|Next.js Server Actions| Backend[Backend Logic]
+    Frontend -->|Webhooks| API[API Route Handlers]
     
     Backend -->|Auth| FirebaseAuth[Firebase Authentication]
     Backend -->|Data| Firestore[Firestore Database]
@@ -33,7 +34,8 @@ graph TD
     Backend -->|Product Import| Admin[Admin Uploads Excel]
     
     Frontend -.->|WhatsApp Link/QR| WhatsAppApp[WhatsApp Application]
-    Stripe -->|Webhooks| Backend
+    Stripe -->|Webhooks| API
+    API --> Backend
 ```
 
 ### Data Model (Firestore)
@@ -102,7 +104,7 @@ graph TD
 - Framework: Tailwind CSS for rapid styling matching the constraints.
 
 ## Alternatives Considered
-- **Firebase Cloud Functions vs Next.js API Routes:** We chose Next.js API routes as they colocate frontend and backend logic in a single monorepo, simplifying deployment and sharing types, compared to isolated Firebase Cloud Functions.
+- **Firebase Cloud Functions vs Next.js Server Actions:** We chose Next.js Server Actions over isolated Firebase Cloud Functions. This modern App Router paradigm colocates frontend UI and backend mutations within a single monorepo, significantly simplifying deployment, reducing boilerplate, and seamlessly sharing TypeScript types between the client and server.
 
 ## Implementation Plan
 1. **Phase 1: Setup & Data Modeling** - Initialize Next.js project, Firebase config, and Tailwind CSS branding. Setup Firestore schemas (including `settings`).
@@ -115,6 +117,10 @@ graph TD
 - E2E tests for the checkout flow (Customer -> Cart -> Stripe Test Mode -> Order Success).
 - Manual verification of product import from the Excel price list.
 - Verification of the WhatsApp link on mobile and QR code scannability on desktop.
+
+## Migration & Rollback
+- Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Vercel/Cloud Run immediate revert to previous deployments in case of critical bugs. code scannability on desktop.
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
