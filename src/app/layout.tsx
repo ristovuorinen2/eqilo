@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { CartProvider } from "@/components/cart-provider";
 import { GoogleTagManager } from '@next/third-parties/google';
 import { WhatsAppHelpdesk } from "@/components/WhatsAppHelpdesk";
 
@@ -42,8 +43,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <WhatsAppHelpdesk />
+          <CartProvider>
+            {children}
+            <WhatsAppHelpdesk />
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>

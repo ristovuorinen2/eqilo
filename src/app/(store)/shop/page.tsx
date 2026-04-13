@@ -1,20 +1,43 @@
+"use client";
+
 import { getProducts } from "@/lib/actions/admin";
 import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { PackageOpen, Clock, Tag } from "lucide-react";
+import { PackageOpen, Clock, Tag, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/components/cart-provider";
+import { useEffect, useState } from "react";
+import { Product } from "@/lib/types/firestore";
 
-export const dynamic = "force-dynamic";
+export default function ShopPage() {
+  const { addItem } = useCart();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function ShopPage() {
-  const products = await getProducts();
+  useEffect(() => {
+    async function fetchProducts() {
+      const data = await getProducts();
+      setProducts(data);
+      setLoading(false);
+    }
+    fetchProducts();
+  }, []);
+
   const activeProducts = products.filter(p => p.is_active);
 
   // Group by category to build basic filters
   const categories = Array.from(new Set(activeProducts.map(p => p.category_id)));
+
+  if (loading) {
+    return (
+      <div className="container py-20 text-center">
+        <p className="text-muted-foreground animate-pulse font-medium">Loading professional equipment...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10 md:py-16">
@@ -77,9 +100,21 @@ export default async function ShopPage() {
                     <div className="font-extrabold text-2xl tracking-tight text-foreground">€{product.price.toFixed(2)}</div>
                     <Badge variant="outline" className="font-semibold border-primary/20 bg-primary/5 text-primary">In Stock</Badge>
                   </div>
-                  <Link href={`/product/${product.id}`} className="w-full">
-                    <Button className="w-full font-semibold mt-2 group-hover:bg-primary/90 transition-colors">View Details</Button>
-                  </Link>
+                  <div className="grid grid-cols-2 gap-2 w-full mt-2">
+                    <Link href={`/product/${product.id}`} className="w-full">
+                      <Button variant="outline" className="w-full font-semibold">Details</Button>
+                    </Link>
+                    <Button 
+                      className="w-full font-bold" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addItem(product.id);
+                      }}
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Add
+                    </Button>
+                  </div>
                 </CardFooter>
               </Card>
             ))}

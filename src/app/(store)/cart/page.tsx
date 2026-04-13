@@ -1,18 +1,64 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, ArrowRight, Truck, PackageOpen } from "lucide-react";
+import { ShoppingCart, ArrowRight, Truck, PackageOpen, Trash2, Plus, Minus } from "lucide-react";
 import Link from "next/link";
+import { useCart } from "@/components/cart-provider";
+import { useEffect, useState } from "react";
+import { getProducts } from "@/lib/actions/admin";
+import { Product } from "@/lib/types/firestore";
 
 export default function CartPage() {
-  // In a real implementation, this would read from Context/Cookie and fetch from Firestore
-  const isCartEmpty = true;
+  const { items, removeItem, updateQuantity, clearCart } = useCart();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const data = await getProducts();
+      setProducts(data);
+      setLoading(false);
+    }
+    fetchProducts();
+  }, []);
+
+  const cartItems = items.map(item => {
+    const product = products.find(p => p.id === item.product_id);
+    return {
+      ...item,
+      product
+    };
+  }).filter(item => item.product !== undefined);
+
+  const subtotal = cartItems.reduce((acc, item) => {
+    return acc + (item.product!.price * item.quantity);
+  }, 0);
+
+  const shipping = subtotal >= 200 ? 0 : 20;
+  const total = subtotal + shipping;
+
+  if (loading) {
+    return (
+      <div className="container py-20 text-center">
+        <p className="text-muted-foreground animate-pulse font-medium">Updating your cart...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10 md:py-16 max-w-6xl">
-      <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-10 text-foreground">Shopping Cart</h1>
+      <div className="flex justify-between items-end mb-10">
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground">Shopping Cart</h1>
+        {cartItems.length > 0 && (
+          <Button variant="ghost" size="sm" onClick={clearCart} className="text-muted-foreground hover:text-destructive">
+            Clear All
+          </Button>
+        )}
+      </div>
 
-      {isCartEmpty ? (
+      {cartItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 px-4 text-center border border-border/50 rounded-2xl bg-muted/10 shadow-sm">
           <div className="p-6 bg-primary/5 rounded-full mb-6 border border-primary/10 shadow-sm">
             <ShoppingCart className="w-16 h-16 text-primary/60" />
@@ -31,26 +77,81 @@ export default function CartPage() {
       ) : (
         <div className="grid gap-10 lg:grid-cols-3 items-start">
           <div className="lg:col-span-2 space-y-6">
-            {/* Cart Items Placeholder */}
-            <Card className="border-border/50 shadow-sm">
+            {/* Cart Items */}
+            <Card className="border-border/50 shadow-sm overflow-hidden">
               <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
-                <CardTitle className="text-xl font-bold">Equipment List</CardTitle>
+                <CardTitle className="text-xl font-bold">Equipment List ({cartItems.length} items)</CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="flex flex-col items-center justify-center py-10 opacity-60">
-                  <PackageOpen className="w-12 h-12 text-muted-foreground mb-4" />
-                  <p className="font-medium text-muted-foreground">Placeholder for active cart items...</p>
+              <CardContent className="p-0">
+                <div className="divide-y divide-border/50">
+                  {cartItems.map((item) => (
+                    <div key={item.product_id} className="p-6 flex gap-6 items-start">
+                      <div className="w-20 h-20 bg-muted rounded-xl flex items-center justify-center shrink-0 border border-border/50">
+                        <PackageOpen className="w-8 h-8 text-primary/30" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start gap-4">
+                          <div>
+                            <Link href={`/product/${item.product_id}`} className="font-bold text-lg hover:text-primary transition-colors line-clamp-1">
+                              {item.product!.name}
+                            </Link>
+                            <p className="text-xs text-muted-foreground font-mono mt-1">SKU: {item.product!.sku}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-lg">€{(item.product!.price * item.quantity).toFixed(2)}</p>
+                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} each</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between mt-6">
+                          <div className="flex items-center border rounded-lg bg-background shadow-sm">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 rounded-r-none"
+                              onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
+                            >
+                              <Minus className="w-3 h-3" />
+                            </Button>
+                            <span className="w-10 text-center font-bold text-sm">{item.quantity}</span>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 rounded-l-none"
+                              onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
+                            >
+                              <Plus className="w-3 h-3" />
+                            </Button>
+                          </div>
+                          
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="text-muted-foreground hover:text-destructive hover:bg-destructive/5"
+                            onClick={() => removeItem(item.product_id)}
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
 
             {/* Cart Trust Signals */}
-            <div className="flex items-start gap-4 p-5 border border-emerald-200 rounded-xl bg-emerald-50 shadow-sm">
-              <Truck className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+            <div className={`flex items-start gap-4 p-5 border rounded-xl shadow-sm ${subtotal >= 200 ? 'border-emerald-200 bg-emerald-50' : 'border-primary/20 bg-primary/5'}`}>
+              <Truck className={`w-6 h-6 shrink-0 mt-0.5 ${subtotal >= 200 ? 'text-emerald-600' : 'text-primary'}`} />
               <div>
-                <p className="font-bold text-emerald-800">Standard Shipping: 1-2 Weeks</p>
-                <p className="text-sm text-emerald-700/80 mt-1 leading-relaxed font-medium">
-                  Products are shipped directly to Finland. Free shipping automatically applied to all orders over 200 €.
+                <p className={`font-bold ${subtotal >= 200 ? 'text-emerald-800' : 'text-primary'}`}>
+                  {subtotal >= 200 ? 'Free Shipping Applied!' : 'Free Shipping at €200.00'}
+                </p>
+                <p className={`text-sm mt-1 leading-relaxed font-medium ${subtotal >= 200 ? 'text-emerald-700/80' : 'text-muted-foreground'}`}>
+                  {subtotal >= 200 
+                    ? 'Your order qualifies for free standard shipping to Finland.' 
+                    : `Add €${(200 - subtotal).toFixed(2)} more to qualify for free shipping. Standard delivery 1-2 weeks.`}
                 </p>
               </div>
             </div>
@@ -65,16 +166,19 @@ export default function CartPage() {
               <CardContent className="space-y-6 pt-6">
                 <div className="flex justify-between text-muted-foreground">
                   <span className="font-medium">Subtotal</span>
-                  <span className="text-foreground">€0.00</span>
+                  <span className="text-foreground font-bold">€{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span className="font-medium">Shipping (Finland)</span>
-                  <span className="text-sm">Calculated at checkout</span>
+                  <span className={`font-bold ${shipping === 0 ? 'text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100' : 'text-foreground'}`}>
+                    {shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`}
+                  </span>
                 </div>
                 <div className="flex justify-between font-extrabold text-3xl pt-4 border-t border-border/50 mt-4 text-foreground">
                   <span>Total</span>
-                  <span>€0.00</span>
+                  <span>€{total.toFixed(2)}</span>
                 </div>
+                <p className="text-xs text-muted-foreground text-right">Includes 25.5% VAT</p>
               </CardContent>
               <CardFooter className="bg-muted/30 pt-6 border-t border-border/50">
                 <Link href="/checkout" className="w-full">

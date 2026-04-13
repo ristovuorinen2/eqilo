@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart, Menu, Search, User } from "lucide-react";
@@ -12,8 +14,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
+import { useCart } from "@/components/cart-provider";
+import { Badge } from "@/components/ui/badge";
 
 export function Header() {
+  const { itemCount } = useCart();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -104,7 +110,11 @@ export function Header() {
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Cart</span>
-              {/* Optional badge for cart count could go here */}
+              {itemCount > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] bg-primary border-2 border-background">
+                  {itemCount}
+                </Badge>
+              )}
             </Button>
           </Link>
 

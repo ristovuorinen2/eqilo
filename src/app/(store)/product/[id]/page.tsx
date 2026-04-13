@@ -1,3 +1,5 @@
+"use client";
+
 import { adminDb } from "@/lib/firebase/admin";
 import { Product } from "@/lib/types/firestore";
 import { notFound } from "next/navigation";
@@ -10,18 +12,36 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
+import { useCart } from "@/components/cart-provider";
+import { useEffect, useState, use } from "react";
+import { getProducts } from "@/lib/actions/admin";
 
-export const dynamic = "force-dynamic";
+export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
+  const { addItem } = useCart();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
 
-async function getProduct(id: string): Promise<Product | null> {
-  const doc = await adminDb.collection("products").doc(id).get();
-  if (!doc.exists) return null;
-  return { ...doc.data(), id: doc.id } as Product;
-}
+  useEffect(() => {
+    async function fetchProduct() {
+      // In a real client context, we'd use a client-safe fetcher, 
+      // but since we already have getProducts in admin actions, 
+      // let's use that or a specific getProduct action.
+      const products = await getProducts();
+      const p = products.find(prod => prod.id === resolvedParams.id);
+      setProduct(p || null);
+      setLoading(false);
+    }
+    fetchProduct();
+  }, [resolvedParams.id]);
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = await params;
-  const product = await getProduct(resolvedParams.id);
+  if (loading) {
+    return (
+      <div className="container py-20 text-center">
+        <p className="text-muted-foreground animate-pulse font-medium">Loading equipment details...</p>
+      </div>
+    );
+  }
 
   if (!product || !product.is_active) {
     notFound();
@@ -74,13 +94,17 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           </div>
 
           <div className="space-y-4 mb-10">
-            <Button size="lg" className="w-full text-lg h-14 font-bold shadow-md hover:shadow-lg transition-all">
+            <Button 
+              size="lg" 
+              className="w-full text-lg h-14 font-bold shadow-md hover:shadow-lg transition-all"
+              onClick={() => addItem(product.id)}
+            >
               <ShoppingCart className="mr-2 w-5 h-5" />
               Add to Cart
             </Button>
           </div>
 
-          <Accordion defaultValue="description" className="w-full">
+          <Accordion type="single" collapsible defaultValue="description" className="w-full">
             <AccordionItem value="description">
               <AccordionTrigger className="text-lg font-bold">Description</AccordionTrigger>
               <AccordionContent className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert">
