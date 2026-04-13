@@ -148,7 +148,7 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 1. **Phase 1: Setup & Data Modeling** - Initialize Next.js project, Firebase config, and Tailwind CSS branding. Setup Firestore schemas (including `settings`).
 2. **Phase 2: Admin & Catalog Import** - Build the Excel import logic (using a library like `xlsx`) to populate the `products` collection from `Price List 2026 V3.0.xlsx`. This import process will be executed **just once** to initialize the Firestore database. Create Admin views for product management, uploading, and configuring the WhatsApp Helpdesk number. Include a one-time script/process to scrape product descriptions from `https://fdstiming.com/shop/` and translate them into Finnish (FI) and Swedish (SE) to populate the initial catalog.
 3. **Phase 3: Customer Portal** - Develop product listing, detail pages, cart state management, and the global floating WhatsApp Helpdesk component.
-4. **Phase 4: Checkout & Invoicing** - Integrate Stripe Checkout with localized payments (MobilePay). Setup webhook listeners. Integrate Holvi API for automated invoices upon payment confirmation.
+4. **Phase 4: Checkout & Invoicing** - Integrate Stripe Checkout with localized payments (MobilePay). Setup webhook listeners. Integrate Holvi API for automated invoices and **Resend** for automated branded order confirmation emails upon payment confirmation.
 5. **Phase 5: Marketing & Optimization** - Implement OG image generation, GA4 tracking, and the abandoned cart recovery background job.
 
 ## Verification & Testing
@@ -159,4 +159,4 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.revert to a previous secure Docker image revision in case of critical bugs.recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
