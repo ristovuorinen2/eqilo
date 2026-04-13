@@ -22,8 +22,7 @@ export async function POST(req: Request) {
     if (endpointSecret) {
       event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
     } else {
-      // If no secret is set, we bypass signature verification (FOR DEV ONLY - DANGEROUS)
-      event = JSON.parse(body) as Stripe.Event;
+      throw new Error("Webhook secret is missing");
     }
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);

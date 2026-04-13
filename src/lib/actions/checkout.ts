@@ -16,6 +16,7 @@ export async function createCheckoutSession(userId: string, cartItems: CartItem[
 
     // Fetch products
     let subtotal = 0;
+    let tax_total = 0;
     const line_items: any[] = [];
     const orderItems: any[] = [];
 
@@ -29,6 +30,8 @@ export async function createCheckoutSession(userId: string, cartItems: CartItem[
       const unitPrice = item.custom_price_override ?? product.price;
       
       subtotal += unitPrice * item.quantity;
+      tax_total += (unitPrice * item.quantity) * (product.tax_rate / 100);
+
       orderItems.push({
         product_id: product.id,
         quantity: item.quantity,
@@ -41,7 +44,7 @@ export async function createCheckoutSession(userId: string, cartItems: CartItem[
           product_data: {
             name: product.name,
             description: product.description,
-            images: product.image_urls.length > 0 ? [product.image_urls[0]] : undefined,
+            images: product.image_urls?.length > 0 ? [product.image_urls[0]] : undefined,
           },
           unit_amount: Math.round(unitPrice * 100), // Stripe expects cents
         },
@@ -59,7 +62,7 @@ export async function createCheckoutSession(userId: string, cartItems: CartItem[
       user_id: userId,
       items: orderItems,
       subtotal: subtotal,
-      tax_total: subtotal * 0.255, // Approximating 25.5% VAT 
+      tax_total: tax_total, 
       total_amount: subtotal + (shippingCost / 100),
       status: "pending",
       created_at: new Date(),

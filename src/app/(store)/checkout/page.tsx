@@ -117,7 +117,9 @@ export default function CheckoutPage() {
                 </p>
                 <form action={async () => { 
                   "use server"; 
-                  // In reality, this calls createCheckoutSession
+                  // In a real implementation this would fetch actual user and cart items
+                  // const res = await createCheckoutSession(userId, cartItems);
+                  // if (res.success && res.url) redirect(res.url);
                   console.log("Redirecting to stripe..."); 
                 }}>
                   <Button className="w-full" size="lg" type="submit">
