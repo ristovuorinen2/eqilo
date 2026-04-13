@@ -5,14 +5,22 @@ import { adminDb } from "@/lib/firebase/admin";
 import { Resend } from "resend";
 import { getOrderConfirmationEmailHtml, getAdminNotificationEmailHtml } from "@/lib/emails";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy", {
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
   apiVersion: "2025-02-24.acacia" as any,
-});
+}) : null;
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 
 export async function POST(req: Request) {
-  const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy_key_to_pass_build");
+  if (!stripe) {
+    return new NextResponse("Stripe not configured", { status: 500 });
+  }
+  const resendApiKey = process.env.RESEND_API_KEY;
+  if (!resendApiKey) {
+    throw new Error("RESEND_API_KEY is not defined in the environment.");
+  }
+  const resend = new Resend(resendApiKey);
   const body = await req.text();
   const headersList = await headers();
   const signature = headersList.get("stripe-signature") as string;

@@ -5,13 +5,15 @@ import Link from "next/link";
 import { Stripe } from "stripe";
 import { notFound } from "next/navigation";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy", {
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
   apiVersion: "2025-02-24.acacia" as any,
-});
+}) : null;
 
 async function getSession(sessionId: string) {
   try {
-    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === "sk_test_dummy") {
+    if (!stripe) {
+      console.warn("Stripe is not initialized.");
       return null;
     }
     return await stripe.checkout.sessions.retrieve(sessionId);

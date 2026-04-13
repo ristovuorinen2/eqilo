@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
 import { Resend } from 'resend';
 
-// Setup Resend
-const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy');
+const resendApiKey = process.env.RESEND_API_KEY;
 
 export async function GET(request: Request) {
   try {
+    if (!resendApiKey) {
+      throw new Error("RESEND_API_KEY is not defined in the environment.");
+    }
+    const resend = new Resend(resendApiKey);
     // 1. Verify authorization header to prevent public triggering
     const authHeader = request.headers.get('authorization');
     if (authHeader !== `Bearer ${process.env.CRON_SECRET || 'dev_secret'}`) {

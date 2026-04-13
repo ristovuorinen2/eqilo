@@ -4,9 +4,10 @@ import { adminDb } from "../firebase/admin";
 import { Stripe } from "stripe";
 import { CartItem, Product, Order } from "../types/firestore";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy", {
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
   apiVersion: "2025-02-24.acacia" as any,
-});
+}) : null;
 
 export async function createCheckoutSession(
   userId: string, 
@@ -14,6 +15,9 @@ export async function createCheckoutSession(
   customerDetails?: { email: string; phone: string; businessId?: string }
 ) {
   try {
+    if (!stripe) {
+      throw new Error("Stripe is not configured in this environment.");
+    }
     if (!cartItems.length) {
       throw new Error("Cart is empty");
     }
