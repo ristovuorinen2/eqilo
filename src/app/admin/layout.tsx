@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { AdminGuard } from "@/components/admin/AdminGuard";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -28,7 +29,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-muted/20 font-sans antialiased">
+    <AdminGuard>
+      <div className="flex min-h-screen bg-muted/20 font-sans antialiased">
       {/* Sidebar */}
       <aside className="w-72 border-r bg-white flex flex-col sticky top-0 h-screen shadow-sm">
         <div className="p-8 border-b">
@@ -127,5 +129,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </main>
     </div>
+    </AdminGuard>
   );
 }

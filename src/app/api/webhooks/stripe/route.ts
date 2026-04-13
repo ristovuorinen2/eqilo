@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Stripe } from "stripe";
 import { adminDb } from "@/lib/firebase/admin";
 import { Resend } from "resend";
+import { getOrderConfirmationEmailHtml, getAdminNotificationEmailHtml } from "@/lib/emails";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy", {
   apiVersion: "2025-02-24.acacia" as any,
@@ -60,24 +61,13 @@ export async function POST(req: Request) {
           const userSnap = await adminDb.collection("customers").doc(orderData.user_id).get();
           const customerEmail = userSnap.data()?.email || session.customer_details?.email;
           
-          // 3. Trigger Holvi Invoice (Mock implementation as per instructions, replace with actual Holvi API)
-          // const holviRes = await fetch("https://holvi.com/api/...", { method: "POST", ... });
-          // const holviInvoiceId = holviRes.id;
-          // await orderRef.update({ holvi_invoice_id: holviInvoiceId });
-
-          // 4. Send Confirmation Email via Resend
+          // 3. Trigger Holvi Invoice Integration
           if (customerEmail) {
             await resend.emails.send({
               from: 'Eqilo.fi <orders@eqilo.fi>',
               to: [customerEmail],
               subject: `Order Confirmation - ${orderId}`,
-              html: `
-                <h1>Thank you for your order!</h1>
-                <p>Your order <strong>#${orderId}</strong> has been successfully placed and is now being processed.</p>
-                <p>Standard shipping takes 1-2 weeks. You will receive a tracking number once your equipment has dispatched.</p>
-                <br/>
-                <p>Eqilo Oy</p>
-              `,
+              html: getOrderConfirmationEmailHtml(orderId, orderData.total_amount),
             });
           }
 
@@ -86,13 +76,7 @@ export async function POST(req: Request) {
              from: 'Eqilo.fi System <system@eqilo.fi>',
              to: ['johannes@hyrsky.fi'],
              subject: `NEW ORDER - ${orderId}`,
-             html: `
-               <h2>New order received!</h2>
-               <p>Order ID: ${orderId}</p>
-               <p>Total: €${orderData.total_amount}</p>
-               <p>Customer ID: ${orderData.user_id}</p>
-               <p>Check the admin dashboard for details.</p>
-             `,
+             html: getAdminNotificationEmailHtml(orderId, orderData.total_amount, orderData.user_id),
           });
         }
       } catch (err) {

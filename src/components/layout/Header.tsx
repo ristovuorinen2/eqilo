@@ -18,6 +18,7 @@ import { useCart } from "@/components/cart-provider";
 import { Badge } from "@/components/ui/badge";
 import { SearchDialog } from "./SearchDialog";
 import { UserMenu } from "./UserMenu";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
   const { itemCount } = useCart();
@@ -96,6 +97,8 @@ export function Header() {
 
         {/* Action Icons */}
         <div className="flex items-center space-x-2 sm:space-x-4">
+          <LanguageSwitcher />
+          
           <SearchDialog>
             <Button variant="ghost" size="icon" className="hidden sm:inline-flex hover:bg-primary/5 hover:text-primary transition-colors">
               <Search className="h-5 w-5" />
