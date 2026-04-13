@@ -129,7 +129,29 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
   - **Clear Shipping Information:** Every product detail page and cart view MUST prominently display that the standard shipping time is **1-2 weeks**.
   - **Omnichannel Responsiveness (Desktop & Mobile):** While adopting a mobile-first approach (touch-friendly targets, bottom-sheet navigations), the UX MUST also provide a premium, expansive layout for Desktop users. The site is not *just* mobile; it requires high-resolution grid systems and advanced hover interactions suited for larger screens.
   - **Color Palette Alignment:** The Eqilo Primary Blue (`#0055A4`) will be injected directly into the Tailwind configuration as the primary brand color, ensuring all Shadcn buttons, active states, and accents automatically align with the corporate identity without manual overrides.
-  - **Comprehensive Theming Strategy:** As recommended by Shadcn UI best practices, we will use a CSS variable-driven theming architecture (`globals.css`). We will map Eqilo's brand colors to semantic variables (e.g., `--primary`, `--background`, `--muted`). This avoids hardcoding Tailwind colors (like `bg-blue-500`) and instead uses semantic classes (`bg-primary`). Furthermore, we will integrate `next-themes` with a `ThemeProvider` in the root layout to seamlessly support dynamic **Light and Dark Modes**, preserving brand fidelity across user preferences.
+  - **Comprehensive Theming Strategy:** As recommended by Shadcn UI best practices, we will use a CSS variable-driven theming architecture (`globals.css`). We will map Eqilo's brand colors to semantic variables (e.g., `--primary`, `--background`, `--muted`). This avoids hardcoding Tailwind colors (like `bg-blue-500`) and instead uses semantic classes (`bg-primary`). Example structure:
+    ```css
+    @layer base {
+      :root {
+        --background: 0 0% 100%; /* Pure White */
+        --foreground: 222.2 84% 4.9%; /* Very dark gray for text */
+        
+        /* The Eqilo Deep Blue */
+        --primary: 211 100% 35%; /* Adjust HSL to match the exact hex of your logo */
+        --primary-foreground: 210 40% 98%; /* White text on blue buttons */
+        
+        /* Secondary elements (light grays/blues for backgrounds) */
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+
+        /* Standard subtle borders */
+        --border: 214.3 31.8% 91.4%;
+        
+        --radius: 0.5rem; /* Slight rounding to match the shield logo curves */
+      }
+    }
+    ```
+    Furthermore, we will integrate `next-themes` with a `ThemeProvider` in the root layout to seamlessly support dynamic **Light and Dark Modes**, preserving brand fidelity across user preferences.
   - **Shopping Cart:** A slide-out responsive cart drawer (utilizing Shadcn `Sheet`) for frictionless review of items before proceeding to the Stripe checkout page.
 - **Partners & Trust Signals:** The storefront will prominently feature a 'Partners' section incorporating logos/icons and linking to key partners and supported events, specifically including:
   - **AWC 2026** (https://awc2026.fi/)
