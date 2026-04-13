@@ -2,6 +2,7 @@
 
 import { getProducts } from "@/lib/actions/admin";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -80,10 +81,21 @@ export default function ShopPage() {
             {activeProducts.map((product) => (
               <Card key={product.id} className="flex flex-col overflow-hidden transition-all hover:shadow-lg border-border/50 hover:border-primary/30 group">
                 <Link href={`/product/${product.id}`} className="flex-1 flex flex-col">
-                  <div className="aspect-square bg-muted/30 flex flex-col items-center justify-center p-6 relative group-hover:bg-muted/50 transition-colors">
-                    {/* Placeholder for image */}
-                    <PackageOpen className="w-16 h-16 text-primary/30 group-hover:text-primary/50 transition-colors mb-4" />
-                    <span className="text-muted-foreground text-xs font-mono bg-background/50 px-2 py-1 rounded border">SKU: {product.sku}</span>
+                  <div className="aspect-square bg-muted/30 flex flex-col items-center justify-center p-6 relative group-hover:bg-muted/50 transition-colors bg-white">
+                    {product.image_urls && product.image_urls.length > 0 ? (
+                      <Image 
+                        src={product.image_urls[0]} 
+                        alt={product.name} 
+                        fill 
+                        className="object-contain p-4 mix-blend-multiply" 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <>
+                        <PackageOpen className="w-16 h-16 text-primary/30 group-hover:text-primary/50 transition-colors mb-4" />
+                        <span className="text-muted-foreground text-xs font-mono bg-background/50 px-2 py-1 rounded border">SKU: {product.sku}</span>
+                      </>
+                    )}
                   </div>
                   <CardHeader className="p-5 pb-2 flex-1">
                     <div className="flex justify-between items-start gap-2 mb-2">

@@ -5,6 +5,7 @@ import { Product } from "@/lib/types/firestore";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Truck, ShieldCheck, ChevronRight, PackageOpen, ImageIcon } from "lucide-react";
+import Image from "next/image";
 import {
   Accordion,
   AccordionContent,
@@ -61,9 +62,22 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
       <div className="grid gap-10 md:grid-cols-2 lg:gap-16 items-start">
         {/* Images Column */}
         <div className="space-y-4 sticky top-24">
-          <div className="aspect-square bg-muted/30 rounded-2xl flex flex-col items-center justify-center border border-border/50 shadow-sm relative overflow-hidden">
-             <PackageOpen className="w-24 h-24 text-primary/20 mb-4" />
-             <span className="text-muted-foreground font-medium text-sm">Product Image Pending</span>
+          <div className="aspect-square bg-muted/30 rounded-2xl flex flex-col items-center justify-center border border-border/50 shadow-sm relative overflow-hidden bg-white">
+             {product.image_urls && product.image_urls.length > 0 ? (
+               <Image 
+                 src={product.image_urls[0]} 
+                 alt={product.name} 
+                 fill 
+                 className="object-contain p-8 mix-blend-multiply" 
+                 priority
+                 sizes="(max-width: 768px) 100vw, 50vw"
+               />
+             ) : (
+               <>
+                 <PackageOpen className="w-24 h-24 text-primary/20 mb-4" />
+                 <span className="text-muted-foreground font-medium text-sm">Product Image Pending</span>
+               </>
+             )}
              <div className="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-xs font-mono border">SKU: {product.sku}</div>
           </div>
           {/* Carousel placeholder for thumbnails */}
@@ -104,7 +118,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             </Button>
           </div>
 
-          <Accordion type="single" collapsible defaultValue="description" className="w-full">
+          <Accordion className="w-full">
             <AccordionItem value="description">
               <AccordionTrigger className="text-lg font-bold">Description</AccordionTrigger>
               <AccordionContent className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert">

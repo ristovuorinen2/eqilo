@@ -5,7 +5,8 @@ import * as cheerio from "cheerio";
 import { v2 } from "@google-cloud/translate";
 
 const translate = new v2.Translate({
-  projectId: process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  projectId: process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "eqilo-store",
+  key: process.env.GOOGLE_TRANSLATE_API_KEY || process.env.GEMINI_API_KEY,
 });
 
 export async function scrapeAndTranslateDescriptions() {
@@ -39,26 +40,43 @@ export async function scrapeAndTranslateDescriptions() {
         descriptionEN = $("#tab-description").text().trim() || data.description;
       }
 
-      if (descriptionEN && descriptionEN !== data.description) {
-        let descriptionFI = descriptionEN;
-        let descriptionSE = descriptionEN;
+      // Extract product image URL
+      let imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
+                  || $('meta[property="og:image"]').attr("content")?.trim();
+
+      const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description;
+      const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0] !== imageUrl);
+
+      if ((descriptionEN && descriptionEN !== data.description) || needsTranslation || needsImage) {
+        console.log(`Updating product data for ${sku}`);
+        let descriptionFI = data.description_fi;
+        let descriptionSE = data.description_se;
 
         try {
-          if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-             const [fiTranslation] = await translate.translate(descriptionEN, 'fi');
-             const [seTranslation] = await translate.translate(descriptionEN, 'sv');
-             descriptionFI = fiTranslation;
-             descriptionSE = seTranslation;
+          if (!data.description_fi || data.description_fi === data.description) {
+             const fiRes: any = await translate.translate(descriptionEN || "", 'fi');
+             descriptionFI = fiRes[0];
           }
+          if (!data.description_se || data.description_se === data.description) {
+             const seRes: any = await translate.translate(descriptionEN || "", 'sv');
+             descriptionSE = seRes[0];
+          }
+          console.log(`Translated ${sku}`);
         } catch (e) {
           console.error(`Translation failed for ${sku}:`, e);
         }
 
-        batch.update(doc.ref, {
+        const updateData: any = {
           description: descriptionEN,
           description_fi: descriptionFI,
           description_se: descriptionSE,
-        });
+        };
+
+        if (imageUrl) {
+           updateData.image_urls = [imageUrl];
+        }
+
+        batch.update(doc.ref, updateData);
 
         successCount++;
         if (++opCount === 500) {
