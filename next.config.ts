@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['pdfmake'],
-  },
+  serverExternalPackages: ['pdfmake'],
   images: {
     remotePatterns: [
       {
