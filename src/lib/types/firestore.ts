@@ -24,6 +24,15 @@ export interface ProductDimensions {
   height: number;
 }
 
+export interface BundleOption {
+  id: string;
+  component_product_id: string;
+  name: string;
+  base_quantity: number;
+  is_optional: boolean;
+  extra_price?: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -42,6 +51,8 @@ export interface Product {
   weight?: number; // Essential for shipping calculation
   dimensions?: ProductDimensions;
   image_urls: string[];
+  is_bundle?: boolean;
+  bundle_options?: BundleOption[];
 }
 
 export interface Category {
@@ -78,6 +89,8 @@ export interface CartItem {
   product_id: string;
   quantity: number;
   custom_price_override?: number;
+  selected_bundle_options?: string[]; // IDs of selected BundleOptions
+  product?: Product; // Local helper for UI mapping
 }
 
 export interface Cart {

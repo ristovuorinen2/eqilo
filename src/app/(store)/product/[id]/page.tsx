@@ -1,10 +1,8 @@
 "use client";
 
-import { adminDb } from "@/lib/firebase/admin";
 import { Product } from "@/lib/types/firestore";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Truck, ShieldCheck, ChevronRight, PackageOpen, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import {
   Accordion,
@@ -16,10 +14,20 @@ import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { useEffect, useState, use } from "react";
 import { getProducts } from "@/lib/actions/admin";
-
 import { LocalizedDescription } from "@/components/LocalizedDescription";
-
 import { useLanguage } from "@/components/language-provider";
+import { 
+  ShoppingCart, 
+  Truck, 
+  ShieldCheck, 
+  ChevronRight, 
+  PackageOpen, 
+  ImageIcon, 
+  CheckCircle2, 
+  Plus, 
+  Minus 
+} from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -27,19 +35,32 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
   const { t } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedBundleOptions, setSelectedBundleOptions] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchProduct() {
-      // In a real client context, we'd use a client-safe fetcher, 
-      // but since we already have getProducts in admin actions, 
-      // let's use that or a specific getProduct action.
       const products = await getProducts();
       const p = products.find(prod => prod.id === resolvedParams.id);
-      setProduct(p || null);
+      if (p) {
+        setProduct(p);
+        if (p.is_bundle && p.bundle_options) {
+           setSelectedBundleOptions(p.bundle_options.filter(o => !o.is_optional).map(o => o.id));
+        }
+      }
       setLoading(false);
     }
     fetchProduct();
   }, [resolvedParams.id]);
+
+  const toggleOption = (id: string) => {
+    setSelectedBundleOptions(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const totalPrice = product 
+    ? product.price + (product.bundle_options?.filter(o => selectedBundleOptions.includes(o.id)).reduce((acc, o) => acc + (o.extra_price || 0), 0) || 0)
+    : 0;
 
   if (loading) {
     return (
@@ -102,7 +123,39 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-foreground">{product.name}</h1>
           <p className="text-muted-foreground mb-6 font-mono text-sm bg-muted/50 w-fit px-2 py-1 rounded">{t("product.sku")}: {product.sku}</p>
           
-          <div className="text-4xl font-extrabold mb-8 tracking-tight">€{product.price.toFixed(2)} <span className="text-sm font-medium text-muted-foreground ml-2">{t("product.incl_vat")} {product.tax_rate}%</span></div>
+          <div className="text-4xl font-extrabold mb-8 tracking-tight">€{totalPrice.toFixed(2)} <span className="text-sm font-medium text-muted-foreground ml-2">{t("product.incl_vat")} {product.tax_rate}%</span></div>
+
+          {product.is_bundle && product.bundle_options && (
+            <div className="mb-8 p-6 bg-muted/30 rounded-2xl border border-border/50">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <PackageOpen className="w-5 h-5 text-primary" />
+                Customize Your Kit
+              </h3>
+              <div className="space-y-4">
+                {product.bundle_options.map((option) => (
+                  <div key={option.id} className="flex items-center justify-between p-3 bg-background rounded-xl border border-border/50 hover:border-primary/30 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <Checkbox 
+                        id={option.id} 
+                        checked={selectedBundleOptions.includes(option.id)}
+                        disabled={!option.is_optional}
+                        onCheckedChange={() => toggleOption(option.id)}
+                      />
+                      <label htmlFor={option.id} className="text-sm font-bold cursor-pointer flex flex-col">
+                        <span>{option.name}</span>
+                        {option.base_quantity > 1 && <span className="text-xs text-muted-foreground font-medium">Quantity: {option.base_quantity}</span>}
+                      </label>
+                    </div>
+                    {option.extra_price && option.extra_price > 0 && (
+                      <span className="text-xs font-extrabold text-primary">
+                        +€{option.extra_price.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-8 flex items-start gap-4 shadow-sm">
             <Truck className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
@@ -118,7 +171,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             <Button 
               size="lg" 
               className="w-full text-lg h-14 font-bold shadow-md hover:shadow-lg transition-all"
-              onClick={() => addItem(product.id)}
+              onClick={() => addItem(product.id, 1, selectedBundleOptions)}
             >
               <ShoppingCart className="mr-2 w-5 h-5" />
               {t("product.add_to_cart")}

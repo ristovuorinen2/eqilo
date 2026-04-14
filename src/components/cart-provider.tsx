@@ -7,7 +7,7 @@ import { syncUserCart, fetchUserCart } from "@/lib/actions/cart";
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (productId: string, quantity?: number) => void;
+  addItem: (productId: string, quantity?: number, bundleOptions?: string[]) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -59,17 +59,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, isLoaded, user]);
 
-  const addItem = (productId: string, quantity = 1) => {
+  const addItem = (productId: string, quantity = 1, bundleOptions?: string[]) => {
     setItems((prev) => {
-      const existing = prev.find((item) => item.product_id === productId);
+      const existing = prev.find((item) => 
+        item.product_id === productId && 
+        JSON.stringify(item.selected_bundle_options || []) === JSON.stringify(bundleOptions || [])
+      );
       if (existing) {
         return prev.map((item) =>
-          item.product_id === productId
+          item.product_id === productId && 
+          JSON.stringify(item.selected_bundle_options || []) === JSON.stringify(bundleOptions || [])
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { product_id: productId, quantity }];
+      return [...prev, { product_id: productId, quantity, selected_bundle_options: bundleOptions }];
     });
   };
 
