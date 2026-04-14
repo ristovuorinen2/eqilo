@@ -36,26 +36,30 @@ async function translateText(text: string, lang: 'fi' | 'sv') {
   }
 }
 
-async function uploadImageFromUrl(url: string, sku: string): Promise<string | null> {
+async function uploadFileFromUrl(url: string, sku: string, folder: "images" | "downloads"): Promise<string | null> {
   try {
     const res = await fetch(url);
     if (!res.ok) return null;
     const buffer = Buffer.from(await res.arrayBuffer());
-    const fileName = `products/${sku}/${path.basename(new URL(url).pathname)}`;
+    const baseName = path.basename(new URL(url).pathname);
+    const fileName = `products/${sku}/${folder}/${baseName}`;
     const bucket = adminStorage.bucket();
     const file = bucket.file(fileName);
     
     await file.save(buffer, {
-      metadata: { contentType: res.headers.get("content-type") || "image/jpeg" },
+      metadata: { contentType: res.headers.get("content-type") || "application/octet-stream" },
       public: true,
     });
 
-    // Construct public URL
     return `https://storage.googleapis.com/${bucket.name}/${fileName}`;
   } catch (e) {
-    console.error(`Failed to upload image for ${sku}:`, e);
+    console.error(`Failed to upload ${folder} for ${sku}:`, e);
     return null;
   }
+}
+
+async function uploadImageFromUrl(url: string, sku: string): Promise<string | null> {
+  return uploadFileFromUrl(url, sku, "images");
 }
 
 import path from "path";
@@ -145,8 +149,9 @@ export async function scrapeAndTranslateDescriptions() {
       const needsDownloads = downloads.length > 0 && JSON.stringify(data.downloads) !== JSON.stringify(downloads);
       const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description || (data.description.length > 200 && (data.description_fi?.length || 0) < 100);
       const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0].includes("fdstiming.com"));
+      const needsDownloadsMigration = downloads.some(d => d.url.includes("fdstiming.com"));
 
-      if ((sData && sData.desc !== data.description) || needsTranslation || needsImage || needsBox || needsDownloads) {
+      if ((sData && sData.desc !== data.description) || needsTranslation || needsImage || needsBox || needsDownloads || needsDownloadsMigration) {
         console.log(`Updating product data for ${sku}...`);
         
         let descriptionFI = data.description_fi;
@@ -173,15 +178,34 @@ export async function scrapeAndTranslateDescriptions() {
            }
         }
 
+        let finalDownloads = data.downloads || [];
+        if (downloads.length > 0) {
+           const internalDownloads: { name: string; url: string }[] = [];
+           for (const d of downloads) {
+             if (d.url.includes("fdstiming.com")) {
+               console.log(`  -> Downloading file ${d.name} for ${sku}...`);
+               const internalUrl = await uploadFileFromUrl(d.url, sku, "downloads");
+               if (internalUrl) {
+                 internalDownloads.push({ name: d.name, url: internalUrl });
+               } else {
+                 internalDownloads.push(d);
+               }
+             } else {
+               internalDownloads.push(d);
+             }
+           }
+           finalDownloads = internalDownloads;
+        }
+
         const updateData: any = {
           description: descriptionEN,
           description_fi: descriptionFI || descriptionEN,
           description_se: descriptionSE || descriptionEN,
           image_urls: finalImageUrls,
+          downloads: finalDownloads,
         };
 
         if (boxContents) updateData.box_contents = boxContents;
-        if (downloads.length > 0) updateData.downloads = downloads;
 
         batch.update(doc.ref, updateData);
 

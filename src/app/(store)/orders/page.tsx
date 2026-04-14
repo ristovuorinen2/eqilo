@@ -138,6 +138,18 @@ export default function OrdersPage() {
                            </div>
                          ))}
                       </div>
+                      
+                      {order.tax_breakdown && order.tax_breakdown.length > 0 && (
+                        <div className="pt-4 mt-4 border-t border-dashed">
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Tax Breakdown</p>
+                          {order.tax_breakdown.map((tax, idx) => (
+                            <div key={idx} className="flex justify-between text-xs font-medium">
+                               <span className="text-muted-foreground">{tax.label}</span>
+                               <span>€{tax.amount.toFixed(2)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-4">

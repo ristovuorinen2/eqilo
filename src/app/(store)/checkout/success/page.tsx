@@ -4,6 +4,8 @@ import { CheckCircle2, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Stripe } from "stripe";
 import { notFound } from "next/navigation";
+import { adminDb } from "@/lib/firebase/admin";
+import { Order } from "@/lib/types/firestore";
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
@@ -20,6 +22,12 @@ async function getSession(sessionId: string) {
   } catch (e) {
     return null;
   }
+}
+
+async function getOrder(orderId: string): Promise<Order | null> {
+  const doc = await adminDb.collection("orders").doc(orderId).get();
+  if (doc.exists) return { ...doc.data(), id: doc.id } as Order;
+  return null;
 }
 
 export default async function CheckoutSuccessPage({
@@ -47,6 +55,9 @@ export default async function CheckoutSuccessPage({
     );
   }
 
+  const orderId = session.metadata?.orderId;
+  const order = orderId ? await getOrder(orderId) : null;
+
   return (
     <div className="container py-20 max-w-2xl mx-auto">
       <Card className="border-emerald-100 bg-emerald-50/30 overflow-hidden">
@@ -66,8 +77,21 @@ export default async function CheckoutSuccessPage({
           <div className="bg-white border rounded-xl p-6 shadow-sm">
             <div className="flex justify-between text-sm text-muted-foreground mb-4 pb-4 border-b">
               <span>Order Reference</span>
-              <span className="font-mono text-foreground font-bold">{session.metadata?.orderId || "N/A"}</span>
+              <span className="font-mono text-foreground font-bold">{orderId || "N/A"}</span>
             </div>
+            
+            {order && order.tax_breakdown && order.tax_breakdown.length > 0 && (
+              <div className="space-y-2 mb-4 pb-4 border-b">
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Tax Breakdown</p>
+                {order.tax_breakdown.map((tax, idx) => (
+                  <div key={idx} className="flex justify-between text-xs font-medium">
+                    <span className="text-muted-foreground">{tax.label}</span>
+                    <span>€{tax.amount.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="flex justify-between text-sm text-muted-foreground">
               <span>Status</span>
               <span className="text-emerald-600 font-bold uppercase tracking-wider">{session.payment_status === 'paid' ? 'Paid' : 'Pending'}</span>

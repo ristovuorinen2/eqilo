@@ -75,6 +75,11 @@ export interface Order {
   items: OrderItem[];
   subtotal: number; // Pre-tax amount
   tax_total: number; // Total VAT amount, required for Holvi invoicing
+  tax_breakdown: {
+    rate: number;
+    amount: number;
+    label: string;
+  }[];
   total_amount: number; // Final amount including tax
   shipping_address: Address; // Snapshot at the time of order
   status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered';

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { onIdTokenChanged, User } from "firebase/auth";
+import { onIdTokenChanged, User, signInAnonymously } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 import { createSession, removeSession } from "@/lib/actions/auth";
 
@@ -21,6 +21,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (user) => {
+      if (!user) {
+        // If no user is logged in (even anonymously), trigger anonymous sign in
+        try {
+          await signInAnonymously(auth);
+          return; // Let the next onIdTokenChanged handle the new user
+        } catch (e) {
+          console.error("Anonymous sign-in failed:", e);
+        }
+      }
+
       setUser(user);
       
       if (user) {

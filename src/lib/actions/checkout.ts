@@ -53,6 +53,7 @@ export async function createCheckoutSession(
     // Fetch products
     let subtotal = 0;
     let tax_total = 0;
+    const tax_map: Record<number, number> = {};
     const line_items: any[] = [];
     const orderItems: any[] = [];
 
@@ -64,9 +65,13 @@ export async function createCheckoutSession(
       
       const product = productDoc.data() as Product;
       const unitPrice = item.custom_price_override ?? product.price;
+      const itemTax = (unitPrice * item.quantity) * (product.tax_rate / 100);
       
       subtotal += unitPrice * item.quantity;
-      tax_total += (unitPrice * item.quantity) * (product.tax_rate / 100);
+      tax_total += itemTax;
+
+      // Accumulate tax by rate
+      tax_map[product.tax_rate] = (tax_map[product.tax_rate] || 0) + itemTax;
 
       orderItems.push({
         product_id: product.id,
@@ -88,6 +93,12 @@ export async function createCheckoutSession(
       });
     }
 
+    const tax_breakdown = Object.entries(tax_map).map(([rate, amount]) => ({
+      rate: Number(rate),
+      amount: amount,
+      label: `VAT ${rate}%`,
+    }));
+
     // 20 € shipping if < 200 €, otherwise free
     const shippingCost = subtotal < 200 ? 2000 : 0; // In cents
     
@@ -99,6 +110,7 @@ export async function createCheckoutSession(
       items: orderItems,
       subtotal: subtotal,
       tax_total: tax_total, 
+      tax_breakdown: tax_breakdown,
       total_amount: subtotal + (shippingCost / 100),
       status: "pending",
       created_at: new Date(),
