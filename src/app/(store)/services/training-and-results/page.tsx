@@ -14,6 +14,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/components/language-provider";
 
 export default function TrainingAndResultsPage() {
@@ -80,13 +81,18 @@ export default function TrainingAndResultsPage() {
            </Card>
         </div>
 
-        <section className="bg-muted/50 rounded-3xl p-8 md:p-12 border border-border/50 flex flex-col md:flex-row items-center justify-between gap-8">
-           <div className="space-y-2">
-              <h3 className="text-2xl font-bold">Tarvitsetko asiantuntijaa tapahtumaasi?</h3>
-              <p className="text-muted-foreground">Johannes Hyrsky ja Eqilon tiimi ovat valmiina auttamaan.</p>
+        <section className="bg-muted/30 rounded-3xl p-8 md:p-12 border border-border/50 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+           <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-xl relative">
+                 <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="(max-width: 768px) 96px, 128px" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">Tarvitsetko asiantuntijaa tapahtumaasi?</h3>
+                <p className="text-muted-foreground text-lg">Johannes Hyrsky ja Eqilon tiimi ovat valmiina auttamaan.</p>
+              </div>
            </div>
-           <Link href="/shop">
-             <Button size="lg" className="h-14 px-8 font-bold text-lg">
+           <Link href="/shop" className="w-full md:w-auto">
+             <Button size="lg" className="w-full md:w-auto h-14 px-8 font-bold text-lg shadow-md hover:scale-105 transition-transform">
                 Ota Yhteyttä <ArrowRight className="ml-2 w-5 h-5" />
              </Button>
            </Link>
@@ -155,13 +161,18 @@ export default function TrainingAndResultsPage() {
          </Card>
       </div>
 
-      <section className="bg-muted/50 rounded-3xl p-8 md:p-12 border border-border/50 flex flex-col md:flex-row items-center justify-between gap-8">
-         <div className="space-y-2">
-            <h3 className="text-2xl font-bold">Need an expert for your event?</h3>
-            <p className="text-muted-foreground">Johannes Hyrsky and the Eqilo team are ready to help.</p>
+      <section className="bg-muted/30 rounded-3xl p-8 md:p-12 border border-border/50 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+         <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-xl relative">
+               <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="(max-width: 768px) 96px, 128px" />
+            </div>
+            <div className="space-y-2">
+               <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">Need an expert for your event?</h3>
+               <p className="text-muted-foreground text-lg">Johannes Hyrsky and the Eqilo team are ready to help.</p>
+            </div>
          </div>
-         <Link href="/shop">
-           <Button size="lg" className="h-14 px-8 font-bold text-lg">
+         <Link href="/shop" className="w-full md:w-auto">
+           <Button size="lg" className="w-full md:w-auto h-14 px-8 font-bold text-lg shadow-md hover:scale-105 transition-transform">
               Contact Us <ArrowRight className="ml-2 w-5 h-5" />
            </Button>
          </Link>

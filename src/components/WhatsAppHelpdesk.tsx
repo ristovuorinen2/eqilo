@@ -6,6 +6,7 @@ import { ReactQRCode } from "@lglab/react-qr-code";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { useLanguage } from "./language-provider";
+import Image from "next/image";
 
 // In a real implementation, this would be fetched from the global settings collection
 const DEFAULT_WHATSAPP_NUMBER = "+358505633097"; 
@@ -42,16 +43,16 @@ export function WhatsAppHelpdesk() {
           {/* Chat Header */}
           <div className="bg-[#25D366] p-4 text-white flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <MessageCircle className="w-5 h-5 text-white" />
+              <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative border-2 border-white/20 shadow-sm">
+                <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="44px" />
               </div>
               <div>
                 <h3 className="font-bold text-md leading-tight">
-                  Eqilo Helpdesk
+                  Johannes / Eqilo
                 </h3>
-                <p className="text-xs text-white/80 font-medium flex items-center gap-1.5 mt-0.5">
+                <p className="text-xs text-white/90 font-medium flex items-center gap-1.5 mt-0.5">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  {lang === "FI" ? "Vastaamme tyypillisesti nopeasti" : lang === "SE" ? "Vi svarar oftast snabbt" : "Typically replies quickly"}
+                  {lang === "FI" ? "Paikalla" : lang === "SE" ? "Online" : "Online"}
                 </p>
               </div>
             </div>
@@ -61,9 +62,10 @@ export function WhatsAppHelpdesk() {
           </div>
 
           {/* Chat Content */}
-          <div className="p-6 bg-slate-50/50 flex flex-col items-center border-b border-border/50">
-            <div className="bg-white p-4 text-sm text-slate-700 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100 self-start mb-6 max-w-[85%]">
-              {lang === "FI" ? "Hei! Miten voimme auttaa sinua tänään?" : lang === "SE" ? "Hej! Hur kan vi hjälpa dig idag?" : "Hi there! How can we help you today?"}
+          <div className="p-6 bg-slate-50/50 flex flex-col items-center border-b border-border/50 relative">
+            <div className="bg-white p-4 text-sm text-slate-700 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100 self-start mb-6 max-w-[85%] leading-relaxed relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-white border-l border-t border-slate-100 transform -skew-y-12" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%)' }}></div>
+              {lang === "FI" ? "Moi! Miten voin auttaa sinua tänään ajanottolaitteisiin liittyen?" : lang === "SE" ? "Hej! Hur kan jag hjälpa dig med tidtagningsutrustning idag?" : "Hi! How can I help you with timekeeping equipment today?"}
             </div>
 
             <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
@@ -85,7 +87,7 @@ export function WhatsAppHelpdesk() {
               rel="noreferrer"
               className="w-full"
             >
-              <Button className="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-bold shadow-sm group">
+              <Button className="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-bold shadow-sm group h-12">
                 <Send className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                 {t("whatsapp.web_link") || (lang === "FI" ? "Avaa WhatsApp Web" : lang === "SE" ? "Öppna WhatsApp Web" : "Open WhatsApp Web")}
               </Button>
@@ -96,26 +98,26 @@ export function WhatsAppHelpdesk() {
 
       <button
         onClick={handleInteraction}
-        className="group relative flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 border-2 border-white"
+        className="group relative flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-300 border-[3px] border-white overflow-hidden p-0"
         aria-label="Open WhatsApp Helpdesk"
       >
         {isOpen && !isMobile ? (
           <X className="w-6 h-6" />
         ) : (
-          <MessageCircle className="w-6 h-6" />
+          <Image src="/johannes.jpeg" alt="Johannes" fill className="object-cover" sizes="64px" />
         )}
         
         {/* Always Online Indicator */}
         {(!isOpen || isMobile) && (
-          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+          <span className="absolute -top-1 -right-1 flex h-4 w-4 z-10">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white"></span>
           </span>
         )}
         
         {/* Tooltip for desktop */}
-        <span className="absolute right-full mr-4 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden md:block whitespace-nowrap pointer-events-none shadow-lg">
-          {t("whatsapp.chat") || (lang === "FI" ? "Kysy asiantuntijalta" : lang === "SE" ? "Fråga en expert" : "Ask an expert")}
+        <span className="absolute right-full mr-4 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden md:block whitespace-nowrap pointer-events-none shadow-lg z-10">
+          {t("whatsapp.chat") || (lang === "FI" ? "Kysy Johannekselta" : lang === "SE" ? "Fråga Johannes" : "Ask Johannes")}
         </span>
       </button>
     </div>
