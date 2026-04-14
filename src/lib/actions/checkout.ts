@@ -86,7 +86,7 @@ export async function createCheckoutSession(
           currency: "eur",
           product_data: {
             name: product.name,
-            description: product.description,
+            description: product.description ? product.description.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().substring(0, 500) : undefined,
             images: product.image_urls?.length > 0 ? [product.image_urls[0]] : undefined,
           },
           unit_amount: Math.round(unitPrice * 100), // Stripe expects cents
