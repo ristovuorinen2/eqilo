@@ -1,8 +1,9 @@
 "use server";
 import { adminDb, adminAuth } from "../firebase/admin";
 import * as xlsx from "xlsx";
-import { Product } from "../types/firestore";
+import { Product, Category } from "../types/firestore";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 async function checkAdmin() {
   try {
@@ -100,13 +101,91 @@ export async function importProducts(formData: FormData) {
 
 export async function getProducts(): Promise<Product[]> {
   try {
-    // Basic auth check can be added here if catalog should be private
-    // For Eqilo, the catalog is public but the admin view uses this for management.
-    // We'll leave it public for the storefront but could restrict it if needed.
     const snapshot = await adminDb.collection("products").get();
     return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
+  }
+}
+
+export async function upsertProduct(id: string | null, data: Partial<Product>) {
+  try {
+    const isAdmin = await checkAdmin();
+    if (!isAdmin) throw new Error("Unauthorized");
+
+    const productsRef = adminDb.collection("products");
+    if (id) {
+      await productsRef.doc(id).update({ ...data, updated_at: new Date() });
+    } else {
+      const newDoc = productsRef.doc();
+      await newDoc.set({ 
+        ...data, 
+        id: newDoc.id,
+        created_at: new Date(),
+        updated_at: new Date() 
+      });
+    }
+    revalidatePath("/admin/products");
+    revalidatePath("/shop");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deleteProduct(id: string) {
+  try {
+    const isAdmin = await checkAdmin();
+    if (!isAdmin) throw new Error("Unauthorized");
+    await adminDb.collection("products").doc(id).delete();
+    revalidatePath("/admin/products");
+    revalidatePath("/shop");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function getCategories(): Promise<Category[]> {
+  try {
+    const snapshot = await adminDb.collection("categories").get();
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Category);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
+}
+
+export async function upsertCategory(id: string | null, data: Partial<Category>) {
+  try {
+    const isAdmin = await checkAdmin();
+    if (!isAdmin) throw new Error("Unauthorized");
+
+    const categoriesRef = adminDb.collection("categories");
+    if (id) {
+      await categoriesRef.doc(id).update(data);
+    } else {
+      const newDoc = categoriesRef.doc();
+      await newDoc.set({ ...data, id: newDoc.id });
+    }
+    revalidatePath("/admin/categories");
+    revalidatePath("/shop");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deleteCategory(id: string) {
+  try {
+    const isAdmin = await checkAdmin();
+    if (!isAdmin) throw new Error("Unauthorized");
+    await adminDb.collection("categories").doc(id).delete();
+    revalidatePath("/admin/categories");
+    revalidatePath("/shop");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }
