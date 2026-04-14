@@ -1,8 +1,5 @@
 "use client";
 
-import { getProducts } from "@/lib/actions/admin";
-import Link from "next/link";
-import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,24 +9,26 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/components/cart-provider";
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/types/firestore";
-
-import { useLanguage } from "@/components/language-provider";
 import { LocalizedDescription } from "@/components/LocalizedDescription";
+import { useLanguage } from "@/components/language-provider";
+import { getProducts } from "@/lib/actions/admin";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function ShopPage() {
   const { addItem } = useCart();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function loadProducts() {
       const data = await getProducts();
       setProducts(data);
       setLoading(false);
     }
-    fetchProducts();
+    loadProducts();
   }, []);
 
   const activeProducts = products.filter(p => {
@@ -38,13 +37,14 @@ export default function ShopPage() {
     return isActive && matchesCategory;
   });
 
-  // Group by category to build basic filters from ALL active products
   const categories = Array.from(new Set(products.filter(p => p.is_active).map(p => p.category_id)));
 
   if (loading) {
     return (
       <div className="container py-20 text-center">
-        <p className="text-muted-foreground animate-pulse font-medium">Loading professional equipment...</p>
+        <p className="text-muted-foreground animate-pulse font-medium">
+          {lang === "FI" ? "Ladataan ammattilaitteita..." : lang === "SE" ? "Laddar professionell utrustning..." : "Loading professional equipment..."}
+        </p>
       </div>
     );
   }
@@ -57,7 +57,7 @@ export default function ShopPage() {
         <aside className="w-full md:w-64 shrink-0 space-y-8 sticky top-24">
           <div className="border border-border/50 rounded-xl p-6 bg-card/50 shadow-sm">
             <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-primary">
-              <Tag className="w-5 h-5" /> Categories
+              <Tag className="w-5 h-5" /> {t("shop.categories")}
             </h3>
             <RadioGroup 
               defaultValue="all" 
@@ -67,7 +67,7 @@ export default function ShopPage() {
             >
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="all" id="all" className="border-primary/50 text-primary" />
-                <Label htmlFor="all" className="cursor-pointer font-medium">All Equipment</Label>
+                <Label htmlFor="all" className="cursor-pointer font-medium">{t("shop.all_equipment")}</Label>
               </div>
               {categories.map((cat) => (
                 <div key={cat} className="flex items-center space-x-3">
@@ -87,7 +87,7 @@ export default function ShopPage() {
               <p className="text-muted-foreground mt-2">Professional timekeeping solutions for clubs.</p>
             </div>
             <div className="mt-4 md:mt-0 text-sm font-medium bg-muted px-3 py-1 rounded-full border border-border">
-              {activeProducts.length} items found
+              {activeProducts.length} {t("shop.items_found")}
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export default function ShopPage() {
                   </div>
                   <div className="w-full flex items-center justify-between mt-1">
                     <div className="font-extrabold text-2xl tracking-tight text-foreground">€{product.price.toFixed(2)}</div>
-                    <Badge variant="outline" className="font-semibold border-primary/20 bg-primary/5 text-primary">In Stock</Badge>
+                    <Badge variant="outline" className="font-semibold border-primary/20 bg-primary/5 text-primary">{t("shop.in_stock")}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 w-full mt-2">
                     <Link href={`/product/${product.id}`} className="w-full">
@@ -141,7 +141,7 @@ export default function ShopPage() {
                       }}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
-                      Add
+                      {t("shop.add")}
                     </Button>
                   </div>
                 </CardFooter>

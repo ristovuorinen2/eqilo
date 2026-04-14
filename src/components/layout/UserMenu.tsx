@@ -1,8 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { User, LogOut, Settings, LayoutDashboard, Mail, Phone, ShieldCheck } from "lucide-react";
-import Link from "next/link";
 import { useAuth } from "@/components/auth-provider";
 import { auth } from "@/lib/firebase/client";
 import { 
@@ -13,7 +10,18 @@ import {
   signInWithPhoneNumber,
   ConfirmationResult
 } from "firebase/auth";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { 
+  User, 
+  LogOut, 
+  LayoutDashboard, 
+  Settings, 
+  ShieldCheck, 
+  Mail, 
+  Phone,
+  CheckCircle,
+  ShoppingCart
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +42,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
 
 export function UserMenu() {
@@ -82,16 +91,15 @@ export function UserMenu() {
     }
   };
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
+  const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (!confirmationResult) return;
     try {
-      if (confirmationResult) {
-        await confirmationResult.confirm(otp);
-        setIsLoginOpen(false);
-      }
+      await confirmationResult.confirm(otp);
+      setIsLoginOpen(false);
     } catch (err: any) {
-      setError("Invalid code. Please try again.");
+      setError(err.message);
     }
   };
 
@@ -101,167 +109,169 @@ export function UserMenu() {
 
   if (loading) return <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />;
 
-  if (!user) {
+  // If user is logged in (and NOT anonymous)
+  if (user && !user.isAnonymous) {
     return (
-      <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-        <DialogTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/5 hover:text-primary h-9 w-9">
-            <User className="h-5 w-5" />
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <div id="recaptcha-container"></div>
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">{isRegister ? t("auth.register") : t("auth.login")}</DialogTitle>
-            <DialogDescription className="text-base">
-              {isRegister 
-                ? "Join Eqilo.fi to manage your professional equipment." 
-                : "Sign in to access your orders and saved carts."}
-            </DialogDescription>
-          </DialogHeader>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="relative h-9 w-9 rounded-full border border-primary/10 hover:bg-primary/5 transition-colors flex items-center justify-center">
+            <div className="flex items-center justify-center w-full h-full bg-primary/10 text-primary rounded-full font-extrabold text-xs">
+              {user.email?.charAt(0).toUpperCase() || user.phoneNumber?.slice(-2) || <User className="h-4 w-4" />}
+            </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-64 p-2 shadow-lg border border-primary/10" align="end">
+          <DropdownMenuLabel className="font-normal p-2">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-bold leading-none text-foreground flex items-center gap-2">
+                {t("nav.profile")} <ShieldCheck className="w-3 h-3 text-primary" />
+              </p>
+              <p className="text-xs leading-none text-muted-foreground truncate">
+                {user.email || user.phoneNumber}
+              </p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator className="opacity-50" />
+          <DropdownMenuItem className="p-0 focus:bg-primary/5">
+            <Link href="/admin" className="flex items-center w-full font-medium p-2 cursor-pointer">
+              <LayoutDashboard className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span>{t("nav.admin")}</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="p-0 focus:bg-primary/5">
+            <Link href="/orders" className="flex items-center w-full font-medium p-2 cursor-pointer">
+              <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
+              <span>{t("nav.my_orders")}</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className="opacity-50" />
+          <DropdownMenuItem onClick={handleSignOut} className="p-2 text-destructive focus:text-destructive focus:bg-destructive/5 cursor-pointer font-bold">
+            <LogOut className="mr-3 h-4 w-4" />
+            <span>{t("nav.logout")}</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  // Handle Login / Anonymous State
+  return (
+    <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+      <DialogTrigger>
+        <Button variant="ghost" size="icon" className="hover:bg-primary/5 hover:text-primary transition-colors">
+          <User className="h-5 w-5" />
+          <span className="sr-only">{t("nav.login")}</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0 shadow-2xl">
+        <div className="bg-primary p-6 text-primary-foreground text-center">
+           <ShieldCheck className="w-12 h-12 mx-auto mb-4 opacity-80" />
+           <DialogTitle className="text-2xl font-bold mb-2">
+             {isRegister ? t("auth.register_title") : t("auth.login_title")}
+           </DialogTitle>
+           <DialogDescription className="text-primary-foreground/80">
+             {isRegister ? "Join Eqilo.fi to manage your professional equipment." : "Sign in to access your orders and saved carts."}
+           </DialogDescription>
+        </div>
+        
+        <div className="p-6 bg-background">
+          {error && <p className="text-sm text-destructive font-bold mb-4 bg-destructive/10 p-3 rounded-md border border-destructive/20">{error}</p>}
           
-          <Tabs defaultValue="email" className="w-full mt-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="email" className="flex items-center gap-2">
-                <Mail className="w-4 h-4" /> {t("auth.email")}
-              </TabsTrigger>
-              <TabsTrigger value="phone" className="flex items-center gap-2">
-                <Phone className="w-4 h-4" /> {t("auth.phone")}
-              </TabsTrigger>
+          <Tabs defaultValue="email" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="phone" className="font-bold"><Phone className="w-4 h-4 mr-2" /> {t("auth.phone")}</TabsTrigger>
+              <TabsTrigger value="email" className="font-bold"><Mail className="w-4 h-4 mr-2" /> {t("auth.email")}</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="email">
-              <form onSubmit={handleEmailAuth} className="space-y-4 pt-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">{t("auth.email")}</Label>
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    placeholder="name@example.fi" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">{t("auth.password")}</Label>
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                {error && <p className="text-sm text-destructive font-medium bg-destructive/10 p-2 rounded">{error}</p>}
-                <Button type="submit" className="w-full font-bold h-11">
-                  {isRegister ? t("auth.register") : t("auth.login")}
-                </Button>
-              </form>
-            </TabsContent>
-
             <TabsContent value="phone">
               {step === "input" ? (
-                <form onSubmit={handlePhoneSignIn} className="space-y-4 pt-4">
+                <form onSubmit={handlePhoneSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="phone">{t("auth.phone")}</Label>
-                    <Input 
-                      id="phone" 
-                      type="tel" 
-                      placeholder="+358 40 123 4567" 
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+358 50 123 4567"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       required
+                      className="h-12 text-lg font-medium"
                     />
-                    <p className="text-xs text-muted-foreground">We'll send you a secure login code via SMS.</p>
+                    <p className="text-xs text-muted-foreground mt-1">Include country code (e.g., +358).</p>
                   </div>
-                  {error && <p className="text-sm text-destructive font-medium bg-destructive/10 p-2 rounded">{error}</p>}
-                  <Button type="submit" className="w-full font-bold h-11">
+                  <div id="recaptcha-container"></div>
+                  <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
                     {t("auth.send_code")}
                   </Button>
                 </form>
               ) : (
-                <form onSubmit={handleVerifyOtp} className="space-y-4 pt-4">
+                <form onSubmit={handleVerifyCode} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="otp">Verification Code</Label>
-                    <Input 
-                      id="otp" 
-                      type="text" 
-                      placeholder="123456" 
+                    <Label htmlFor="otp">{t("auth.sms_code")}</Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      placeholder="123456"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                       required
+                      className="h-12 text-lg font-mono tracking-widest text-center"
+                      maxLength={6}
                     />
                   </div>
-                  {error && <p className="text-sm text-destructive font-medium bg-destructive/10 p-2 rounded">{error}</p>}
-                  <Button type="submit" className="w-full font-bold h-11">
+                  <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
                     {t("auth.verify")}
                   </Button>
-                  <button 
-                    type="button" 
-                    onClick={() => setStep("input")}
-                    className="text-sm text-muted-foreground hover:text-primary w-full text-center"
-                  >
-                    Back to phone number
-                  </button>
+                  <Button variant="ghost" className="w-full" onClick={() => setStep("input")}>
+                    Back
+                  </Button>
                 </form>
               )}
             </TabsContent>
+            
+            <TabsContent value="email">
+              <form onSubmit={handleEmailAuth} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">{t("auth.email")}</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.fi"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="h-12"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">{t("auth.password")}</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="h-12"
+                  />
+                </div>
+                <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
+                  {isRegister ? t("auth.register") : t("auth.login")}
+                </Button>
+                
+                <div className="text-center mt-4 border-t pt-4">
+                  <Button 
+                    variant="link" 
+                    className="text-sm font-semibold text-muted-foreground hover:text-primary" 
+                    type="button" 
+                    onClick={() => setIsRegister(!isRegister)}
+                  >
+                    {isRegister ? t("auth.already_have_account") : t("auth.need_account")}
+                  </Button>
+                </div>
+              </form>
+            </TabsContent>
           </Tabs>
-
-          <div className="text-center mt-6 pt-6 border-t">
-            <button 
-              type="button"
-              onClick={() => {
-                setIsRegister(!isRegister);
-                setError("");
-              }}
-              className="text-sm font-medium text-primary hover:underline"
-            >
-              {isRegister ? "Already have an account? Sign in" : "Don't have an account? Create one"}
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="relative h-9 w-9 rounded-full border border-primary/10 hover:bg-primary/5 transition-colors flex items-center justify-center">
-          <div className="flex items-center justify-center w-full h-full bg-primary/10 text-primary rounded-full font-extrabold text-xs">
-            {user.email?.charAt(0).toUpperCase() || user.phoneNumber?.slice(-2) || <User className="h-4 w-4" />}
-          </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-64 p-2 shadow-lg border border-primary/10" align="end">
-        <DropdownMenuLabel className="font-normal p-2">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-bold leading-none text-foreground flex items-center gap-2">
-              {t("nav.profile")} <ShieldCheck className="w-3 h-3 text-primary" />
-            </p>
-            <p className="text-xs leading-none text-muted-foreground truncate">
-              {user.email || user.phoneNumber}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator className="opacity-50" />
-        <DropdownMenuItem className="p-0 focus:bg-primary/5">
-          <Link href="/admin" className="flex items-center w-full font-medium p-2 cursor-pointer">
-            <LayoutDashboard className="mr-3 h-4 w-4 text-muted-foreground" />
-            <span>{t("nav.admin")}</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="p-0 focus:bg-primary/5">
-          <Link href="/orders" className="flex items-center w-full font-medium p-2 cursor-pointer">
-            <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
-            <span>{t("nav.my_orders")}</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="opacity-50" />
-        <DropdownMenuItem onClick={handleSignOut} className="p-2 text-destructive focus:text-destructive focus:bg-destructive/5 cursor-pointer font-bold">
-          <LogOut className="mr-3 h-4 w-4" />
-          <span>{t("nav.logout")}</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

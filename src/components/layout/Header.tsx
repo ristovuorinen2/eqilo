@@ -48,11 +48,11 @@ export function Header() {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <Link href="/shop" className={navigationMenuTriggerStyle()}>
-                    Products
+                    {t("nav.products")}
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="font-bold">Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="font-bold">{t("nav.services")}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       <li className="row-span-3">
@@ -61,7 +61,7 @@ export function Header() {
                           className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary/10 to-primary/5 p-6 no-underline outline-none focus:shadow-md border border-primary/10"
                         >
                             <div className="mb-2 mt-4 text-xl font-extrabold text-primary">
-                              Eqilo Consulting
+                              {t("nav.consulting")}
                             </div>
                             <p className="text-sm leading-tight text-muted-foreground font-medium">
                               20+ years of expertise in competition and timekeeping systems.
@@ -73,7 +73,7 @@ export function Header() {
                           href="/services/training-and-results" 
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                            <div className="text-sm font-bold leading-none">Training & Results</div>
+                            <div className="text-sm font-bold leading-none">{t("nav.training")}</div>
                             <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
                               On-site operations and staff training.
                             </p>
@@ -84,7 +84,7 @@ export function Header() {
                           href="/services/equipe-software" 
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                         >
-                            <div className="text-sm font-bold leading-none">Equipe Software</div>
+                            <div className="text-sm font-bold leading-none">{t("nav.equipe")}</div>
                             <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
                               The standard for equestrian show management.
                             </p>
@@ -114,7 +114,7 @@ export function Header() {
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative hover:bg-primary/5 hover:text-primary transition-colors">
               <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Cart</span>
+              <span className="sr-only">{t("nav.cart")}</span>
               {itemCount > 0 && (
                 <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] font-bold bg-primary border-2 border-background animate-in zoom-in">
                   {itemCount}
@@ -146,19 +146,19 @@ export function Header() {
                   <div className="space-y-4 px-2">
                     <Link href="/shop" className="text-lg font-bold flex items-center gap-3" prefetch={true}>
                       <div className="p-2 bg-muted rounded-lg"><ShoppingCart className="w-5 h-5 text-primary" /></div>
-                      Products
+                      {t("nav.products")}
                     </Link>
                     <div className="space-y-2 pt-2 border-t">
-                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2 mb-2">Expert Services</p>
-                      <Link href="/services" className="text-md font-semibold flex items-center gap-3 px-2 py-1" prefetch={false}>Consulting Overview</Link>
-                      <Link href="/services/training-and-results" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>Training & Results</Link>
-                      <Link href="/services/equipe-software" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>Equipe Software</Link>
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2 mb-2">{t("nav.services")}</p>
+                      <Link href="/services" className="text-md font-semibold flex items-center gap-3 px-2 py-1" prefetch={false}>{t("nav.consulting")}</Link>
+                      <Link href="/services/training-and-results" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>{t("nav.training")}</Link>
+                      <Link href="/services/equipe-software" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>{t("nav.equipe")}</Link>
                     </div>
                   </div>
 
                   <div className="pt-6 border-t px-4 mt-auto">
                     <Link href="/admin" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2" prefetch={false}>
-                       <User className="w-3 h-3" /> Admin Portal
+                       <User className="w-3 h-3" /> {t("nav.admin")}
                     </Link>
                   </div>
                 </div>

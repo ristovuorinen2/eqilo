@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const statuses = [
   { id: 'paid', label: 'Paid', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -25,8 +26,6 @@ const statuses = [
   { id: 'shipped', label: 'Shipped', icon: Truck, color: 'text-purple-600', bg: 'bg-purple-50' },
   { id: 'delivered', label: 'Delivered', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
 ];
-
-import { Button } from "@/components/ui/button";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -63,7 +62,7 @@ export default function OrdersPage() {
           <h2 className="text-xl font-bold mb-2">No orders found</h2>
           <p className="text-muted-foreground mb-6">You haven't placed any orders yet.</p>
           <Link href="/shop">
-             <Button>Start Shopping</Button>
+             <Button>{t("cart.browse")}</Button>
           </Link>
         </div>
       ) : (

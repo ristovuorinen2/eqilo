@@ -5,6 +5,7 @@ import { MessageCircle, X } from "lucide-react";
 import { ReactQRCode } from "@lglab/react-qr-code";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
+import { useLanguage } from "./language-provider";
 
 // In a real implementation, this would be fetched from the global settings collection
 const DEFAULT_WHATSAPP_NUMBER = "+358505633097"; 
@@ -12,6 +13,7 @@ const DEFAULT_WHATSAPP_NUMBER = "+358505633097";
 export function WhatsAppHelpdesk() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
+  const { t, lang } = useLanguage();
 
   useEffect(() => {
     // Check if device is mobile
@@ -39,8 +41,12 @@ export function WhatsAppHelpdesk() {
         <Card className="p-6 shadow-xl border-primary/20 bg-background w-80 animate-in slide-in-from-bottom-5">
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="font-bold text-lg text-foreground">Scan to Chat</h3>
-              <p className="text-sm text-muted-foreground">Scan with your phone to open WhatsApp.</p>
+              <h3 className="font-bold text-lg text-foreground">
+                {lang === "FI" ? "Skannaa ja keskustele" : lang === "SE" ? "Skanna och chatta" : "Scan to Chat"}
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                {lang === "FI" ? "Avaa WhatsApp skannaamalla koodi puhelimellasi." : lang === "SE" ? "Skanna koden med din telefon för att öppna WhatsApp." : "Scan with your phone to open WhatsApp."}
+              </p>
             </div>
             <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="-mt-2 -mr-2">
               <X className="w-4 h-4" />
@@ -59,7 +65,7 @@ export function WhatsAppHelpdesk() {
               rel="noreferrer"
               className="text-sm text-primary hover:underline font-medium"
             >
-              Or click here for WhatsApp Web
+              {lang === "FI" ? "Tai klikkaa tästä WhatsApp Webiin" : lang === "SE" ? "Eller klicka här för WhatsApp Web" : "Or click here for WhatsApp Web"}
             </a>
           </div>
         </Card>
@@ -80,7 +86,7 @@ export function WhatsAppHelpdesk() {
         
         {/* Tooltip for desktop */}
         <span className="absolute right-full mr-4 bg-foreground text-background px-3 py-1.5 rounded text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity hidden md:block whitespace-nowrap pointer-events-none">
-          Need help? Chat with us!
+          {t("whatsapp.chat")}
         </span>
       </button>
     </div>

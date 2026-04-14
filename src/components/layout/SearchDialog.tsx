@@ -14,12 +14,14 @@ import {
 import { useRouter } from "next/navigation";
 import { getProducts } from "@/lib/actions/admin";
 import { Product } from "@/lib/types/firestore";
+import { useLanguage } from "../language-provider";
 
 export function SearchDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [products, setProducts] = React.useState<Product[]>([]);
   const router = useRouter();
+  const { t } = useLanguage();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -55,13 +57,13 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
       <CommandDialog open={open} onOpenChange={setOpen}>
         <Command shouldFilter={false}>
           <CommandInput 
-            placeholder="Search equipment by name or SKU... (⌘K)" 
+            placeholder={t("search.placeholder")} 
             value={query}
             onValueChange={setQuery}
           />
           <CommandList className="max-h-[400px]">
-            <CommandEmpty>No equipment found matching your search.</CommandEmpty>
-            <CommandGroup heading={query ? "Search Results" : "Suggested Equipment"}>
+            <CommandEmpty>{t("search.no_results")}</CommandEmpty>
+            <CommandGroup heading={query ? t("search.results") : t("search.suggested")}>
               {filteredProducts.map((product) => (
                 <CommandItem
                   key={product.id}
@@ -69,14 +71,18 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                   onSelect={() => onSelect(product.id)}
                   className="flex items-center gap-3 p-3 cursor-pointer"
                 >
-                  <div className="w-8 h-8 rounded bg-muted flex items-center justify-center shrink-0 border">
-                    <Search className="w-4 h-4 text-muted-foreground" />
+                  <div className="w-10 h-10 bg-muted rounded flex items-center justify-center shrink-0 border border-border/50">
+                    {product.image_urls?.[0] ? (
+                      <img src={product.image_urls[0]} alt="" className="w-full h-full object-contain p-1" />
+                    ) : (
+                      <Search className="h-4 w-4 text-muted-foreground" />
+                    )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold truncate text-sm">{product.name}</p>
-                    <p className="text-[10px] text-muted-foreground font-mono">SKU: {product.sku}</p>
+                  <div className="flex-1 overflow-hidden">
+                    <p className="font-bold text-sm truncate">{product.name}</p>
+                    <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
                   </div>
-                  <div className="font-bold text-sm">
+                  <div className="text-sm font-extrabold text-primary">
                     €{product.price.toFixed(2)}
                   </div>
                 </CommandItem>

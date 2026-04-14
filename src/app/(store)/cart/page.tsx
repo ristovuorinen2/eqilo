@@ -1,10 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, ArrowRight, Truck, PackageOpen, Trash2, Plus, Minus } from "lucide-react";
-import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
 import { useEffect, useState } from "react";
 import { getProducts } from "@/lib/actions/admin";
@@ -12,10 +7,15 @@ import { Product } from "@/lib/types/firestore";
 
 import { useLanguage } from "@/components/language-provider";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart, ArrowRight, Minus, Plus, Trash2, PackageOpen, Truck } from "lucide-react";
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart } = useCart();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,23 +30,19 @@ export default function CartPage() {
 
   const cartItems = items.map(item => {
     const product = products.find(p => p.id === item.product_id);
-    return {
-      ...item,
-      product
-    };
+    return { ...item, product };
   }).filter(item => item.product !== undefined);
 
-  const subtotal = cartItems.reduce((acc, item) => {
-    return acc + (item.product!.price * item.quantity);
-  }, 0);
-
+  const subtotal = cartItems.reduce((acc, item) => acc + (item.product!.price * item.quantity), 0);
   const shipping = subtotal >= 200 ? 0 : 20;
   const total = subtotal + shipping;
 
   if (loading) {
     return (
       <div className="container py-20 text-center">
-        <p className="text-muted-foreground animate-pulse font-medium">Updating your cart...</p>
+        <p className="text-muted-foreground animate-pulse font-medium">
+          {lang === "FI" ? "Päivitetään ostoskoria..." : lang === "SE" ? "Uppdaterar kundvagnen..." : "Updating your cart..."}
+        </p>
       </div>
     );
   }
@@ -54,10 +50,10 @@ export default function CartPage() {
   return (
     <div className="container py-10 md:py-16 max-w-6xl">
       <div className="flex justify-between items-end mb-10">
-        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground">Shopping Cart</h1>
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground">{t("cart.title")}</h1>
         {cartItems.length > 0 && (
           <Button variant="ghost" size="sm" onClick={clearCart} className="text-muted-foreground hover:text-destructive">
-            Clear All
+            {lang === "FI" ? "Tyhjennä" : lang === "SE" ? "Rensa" : "Clear All"}
           </Button>
         )}
       </div>
@@ -67,13 +63,13 @@ export default function CartPage() {
           <div className="p-6 bg-primary/5 rounded-full mb-6 border border-primary/10 shadow-sm">
             <ShoppingCart className="w-16 h-16 text-primary/60" />
           </div>
-          <h2 className="text-3xl font-extrabold mb-3 tracking-tight">Your cart is empty</h2>
+          <h2 className="text-3xl font-extrabold mb-3 tracking-tight">{t("cart.empty")}</h2>
           <p className="text-muted-foreground max-w-md mx-auto mb-8 text-lg">
-            Looks like you haven't added any FDS Timing equipment to your cart yet.
+            {t("cart.empty_sub")}
           </p>
           <Link href="/shop">
             <Button size="lg" className="h-14 px-8 text-lg font-bold shadow-md hover:shadow-lg transition-all group">
-              Browse Equipment
+              {t("cart.browse")}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
@@ -81,7 +77,6 @@ export default function CartPage() {
       ) : (
         <div className="grid gap-10 lg:grid-cols-3 items-start">
           <div className="lg:col-span-2 space-y-6">
-            {/* Cart Items */}
             <Card className="border-border/50 shadow-sm overflow-hidden">
               <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
                 <CardTitle className="text-xl font-bold">{t("cart.title")} ({cartItems.length})</CardTitle>
@@ -107,7 +102,7 @@ export default function CartPage() {
                           </div>
                           <div className="text-right">
                             <p className="font-bold text-lg">€{(item.product!.price * item.quantity).toFixed(2)}</p>
-                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} / kpl</p>
+                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} / {lang === "FI" ? "kpl" : lang === "SE" ? "st" : "each"}</p>
                           </div>
                         </div>
                         
@@ -116,30 +111,30 @@ export default function CartPage() {
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 rounded-r-none"
+                              className="h-9 w-9 rounded-r-none hover:bg-muted"
                               onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
                             >
-                              <Minus className="w-3 h-3" />
+                              <Minus className="h-3 w-3" />
                             </Button>
                             <span className="w-10 text-center font-bold text-sm">{item.quantity}</span>
                             <Button 
                               variant="ghost" 
                               size="icon" 
-                              className="h-8 w-8 rounded-l-none"
+                              className="h-9 w-9 rounded-l-none hover:bg-muted"
                               onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
                             >
-                              <Plus className="w-3 h-3" />
+                              <Plus className="h-3 w-3" />
                             </Button>
                           </div>
                           
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="text-muted-foreground hover:text-destructive hover:bg-destructive/5"
+                            className="text-muted-foreground hover:text-destructive hover:bg-destructive/5 font-bold gap-2"
                             onClick={() => removeItem(item.product_id)}
                           >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Remove
+                            <Trash2 className="h-4 w-4" />
+                            {t("cart.remove")}
                           </Button>
                         </div>
                       </div>
@@ -153,52 +148,44 @@ export default function CartPage() {
             <div className={`flex items-start gap-4 p-5 border rounded-xl shadow-sm ${subtotal >= 200 ? 'border-emerald-200 bg-emerald-50' : 'border-primary/20 bg-primary/5'}`}>
               <Truck className={`w-6 h-6 shrink-0 mt-0.5 ${subtotal >= 200 ? 'text-emerald-600' : 'text-primary'}`} />
               <div>
-                <p className={`font-bold ${subtotal >= 200 ? 'text-emerald-800' : 'text-primary'}`}>
-                  {subtotal >= 200 ? 'Free Shipping Applied!' : 'Free Shipping at €200.00'}
-                </p>
-                <p className={`text-sm mt-1 leading-relaxed font-medium ${subtotal >= 200 ? 'text-emerald-700/80' : 'text-muted-foreground'}`}>
-                  {subtotal >= 200 
-                    ? 'Your order qualifies for free standard shipping to Finland.' 
-                    : `Add €${(200 - subtotal).toFixed(2)} more to qualify for free shipping. Standard delivery 1-2 weeks.`}
+                <h4 className={`font-bold ${subtotal >= 200 ? 'text-emerald-800' : 'text-primary'}`}>{t("product.standard_shipping")}</h4>
+                <p className={`text-sm mt-1 font-medium ${subtotal >= 200 ? 'text-emerald-700/80' : 'text-muted-foreground'}`}>
+                  {t("product.shipping_details")}
                 </p>
               </div>
             </div>
           </div>
 
-          <div>
-            <Card className="sticky top-24 border-primary/20 shadow-lg overflow-hidden">
-              <div className="h-2 w-full bg-primary"></div>
-              <CardHeader className="bg-muted/10 pb-4">
-                <CardTitle className="text-2xl font-bold">Order Summary</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6 pt-6">
-                <div className="flex justify-between text-muted-foreground">
-                  <span className="font-medium">Subtotal</span>
-                  <span className="text-foreground font-bold">€{subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <span className="font-medium">Shipping (Finland)</span>
-                  <span className={`font-bold ${shipping === 0 ? 'text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100' : 'text-foreground'}`}>
-                    {shipping === 0 ? 'Free' : `€${shipping.toFixed(2)}`}
-                  </span>
-                </div>
-                <div className="flex justify-between font-extrabold text-3xl pt-4 border-t border-border/50 mt-4 text-foreground">
-                  <span>Total</span>
-                  <span>€{total.toFixed(2)}</span>
-                </div>
-                <p className="text-xs text-muted-foreground text-right">Includes 25.5% VAT</p>
-              </CardContent>
-              <CardFooter className="bg-muted/30 border-t border-border/50 pt-6 flex flex-col gap-3">
-                <Link href="/checkout" className="w-full">
-                  <Button size="lg" className="w-full text-lg h-14 font-bold shadow-md hover:shadow-lg transition-all group">
-                    {t("cart.checkout")}
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <QuoteDialog />
-              </CardFooter>
-            </Card>
-          </div>
+          {/* Order Summary */}
+          <Card className="sticky top-24 border-border/50 shadow-sm">
+            <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
+              <CardTitle className="text-xl font-bold">{t("cart.summary")}</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="flex justify-between text-muted-foreground font-medium">
+                <span>{t("cart.subtotal")}</span>
+                <span>€{subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-muted-foreground font-medium">
+                <span>{t("cart.shipping")}</span>
+                <span>{shipping === 0 ? (lang === "FI" ? "Ilmainen" : lang === "SE" ? "Gratis" : "Free") : `€${shipping.toFixed(2)}`}</span>
+              </div>
+              <Separator className="my-4 border-border/50" />
+              <div className="flex justify-between font-extrabold text-2xl tracking-tight text-foreground">
+                <span>{t("cart.total")}</span>
+                <span>€{total.toFixed(2)}</span>
+              </div>
+            </CardContent>
+            <CardFooter className="bg-muted/30 border-t border-border/50 pt-6 flex flex-col gap-3">
+              <Link href="/checkout" className="w-full">
+                <Button size="lg" className="w-full text-lg h-14 font-bold shadow-md hover:shadow-lg transition-all group">
+                  {t("cart.checkout")}
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <QuoteDialog />
+            </CardFooter>
+          </Card>
         </div>
       )}
     </div>

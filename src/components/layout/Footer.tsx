@@ -13,8 +13,8 @@ export function Footer() {
           
           <div className="space-y-4">
             <h3 className="text-lg font-bold tracking-tight text-primary">EQILO.FI</h3>
-            <p className="text-sm text-muted-foreground">
-              {t("footer.company_desc") || "Modern timekeeping devices from Swiss manufacturer FDS Timing. Eqilo provides over 20 years of expertise to Finnish agility and equestrian clubs."}
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t("footer.company_desc")}
             </p>
           </div>
 
@@ -22,10 +22,10 @@ export function Footer() {
             <h4 className="font-semibold">{t("footer.company")}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>Eqilo Oy</li>
-              <li>Y-Tunnus: 3530342-3</li>
+              <li>{t("footer.business_id")}: 3530342-3</li>
               <li>Hakkapeliitantie 4</li>
               <li>08350 LOHJA</li>
-              <li>+358 50 5633097</li>
+              <li><a href="tel:+358505633097" className="hover:text-primary transition-colors">+358 50 5633097</a></li>
             </ul>
           </div>
 
@@ -39,7 +39,7 @@ export function Footer() {
                 <Link href="/services" className="text-muted-foreground hover:text-foreground">{t("nav.services")}</Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground">{t("footer.terms")}</Link>
+                <Link href="/terms" className="text-muted-foreground hover:text-foreground">{t("nav.terms")}</Link>
               </li>
             </ul>
           </div>
@@ -61,7 +61,7 @@ export function Footer() {
         </div>
         
         <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Eqilo Oy. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Eqilo Oy. {t("footer.rights")}</p>
           <div className="flex gap-4">
             <span className="font-medium text-primary">{t("product.standard_shipping")}</span>
           </div>

@@ -34,8 +34,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Architecture & Features
 - **Fully Localized:** Custom `LanguageProvider` managing FI, EN, and SE states across the UI and database seamlessly.
-- **Deep Web Scraper:** A custom Node.js script (`src/lib/actions/scraper.ts`) that ingests the FDS Timing XML Sitemap, extracts high-res product imagery, specifications, box contents, and downloads, and uses **Gemini 3.1 Pro** to translate descriptions dynamically into Finnish and Swedish.
-- **Admin Panel:** Native protected `/admin` route for uploading the original `Price List 2026 V3.0.xlsx` to seed the database, managing live customer carts, and viewing CRM data.
-- **Persistent Carts:** Users' shopping carts are synced from `localStorage` directly to a Firestore collection, allowing cross-device shopping and admin recovery.
+- **Deep Web Scraper:** A custom Node.js script that ingests the FDS Timing XML Sitemap, extracts and **locally hosts** all product imagery and technical documentation in Firebase Storage, and uses **Gemini 3.1 Pro** for professional HTML-formatted technical translations.
+- **Anonymous Auth:** Automatic anonymous sign-in ensures every visitor has a persistent session and cart from their first second on the site.
+- **Admin Panel:** Full CRUD management for products and categories, including inventory tracking and VAT-compliant order management.
+- **Financial Compliance:** Detailed tax breakdown by VAT rate stored in orders and displayed in customer receipts.
 
 See `docs/eqilo-architecture.md` for the full technical specifications, data models, and business logic.
