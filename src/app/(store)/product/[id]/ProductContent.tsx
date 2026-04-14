@@ -26,6 +26,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 import { SEOContent as ProductSEO } from "@/components/seo/ProductSEO";
+import { LocalizedSpecifications } from "@/components/LocalizedSpecifications";
 
 interface ProductContentProps {
   product: Product;
@@ -162,7 +163,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
             </Button>
           </div>
 
-          <Accordion className="w-full" defaultValue={["description"]}>
+          <Accordion className="w-full" defaultValue={["description", "specs"]}>
             <AccordionItem value="description" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.description")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-sm leading-relaxed prose prose-sm dark:prose-invert font-medium">
@@ -173,14 +174,25 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
             <AccordionItem value="specs" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.specs")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground font-medium">
-                <div className="flex justify-between py-3 border-b border-border/50 text-sm">
-                  <span className="font-bold text-foreground uppercase tracking-wider text-[10px]">{t("product.weight")}</span>
-                  <span>{product.weight ? `${product.weight} kg` : "N/A"}</span>
-                </div>
-                <div className="flex justify-between py-3 border-b border-border/50 text-sm">
-                  <span className="font-bold text-foreground uppercase tracking-wider text-[10px]">{t("product.category")}</span>
-                  <span className="capitalize">{t(`category.${product.category_id}`) !== `category.${product.category_id}` ? t(`category.${product.category_id}`) : product.category_id.replace(/-/g, ' ')}</span>
-                </div>
+                {product.specifications || product.specifications_fi || product.specifications_se ? (
+                  <div className="pt-2">
+                    <LocalizedSpecifications product={product} />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex justify-between py-3 border-b border-border/50 text-sm">
+                      <span className="font-bold text-foreground uppercase tracking-wider text-[10px]">{t("product.weight")}</span>
+                      <span>{product.weight ? `${product.weight} kg` : "N/A"}</span>
+                    </div>
+                    <div className="flex justify-between py-3 border-b border-border/50 text-sm">
+                      <span className="font-bold text-foreground uppercase tracking-wider text-[10px]">{t("product.category")}</span>
+                      <span className="capitalize">{t(`category.${product.category_id}`) !== `category.${product.category_id}` ? t(`category.${product.category_id}`) : product.category_id.replace(/-/g, ' ')}</span>
+                    </div>
+                    <div className="pt-4 prose prose-sm dark:prose-invert">
+                       <p className="text-xs italic text-muted-foreground">More specifications listed in the description.</p>
+                    </div>
+                  </>
+                )}
               </AccordionContent>
             </AccordionItem>
 

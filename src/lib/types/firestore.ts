@@ -39,6 +39,9 @@ export interface Product {
   description: string;
   description_fi?: string;
   description_se?: string;
+  specifications?: string;
+  specifications_fi?: string;
+  specifications_se?: string;
   box_contents?: string; // Content from fdstiming box-contents tab
   downloads?: { name: string; url: string }[]; // Content from fdstiming downloads tab
   category_id: string; // Reference to `categories` collection
