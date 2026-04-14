@@ -32,7 +32,7 @@ export default function TermsPage() {
 
         <section className="mb-12">
           <h2 className="text-2xl font-bold">5. Palautusoikeus</h2>
-          <p>Kuluttaja-asiakkailla on Suomen kuluttajansuojalain mukainen 14 vuorokauden vaihto- ja palautusoikeus. Palautettavan tuotteen on oltava käyttämätön ja alkuperäisessä pakkauksessaan.</p>
+          <p>Kuluttaja-asiakkailla on Suomen kuluttajansuojalain mukainen 14 vuorokauden vaihto- ja palautusoikeus. Palautettavan tuotteen on oltava käyttämätön, myyntikuntoinen ja alkuperäisessä pakkauksessaan. Jos haluat palauttaa tuotteen, ota meihin ensin yhteyttä ohjeiden saamiseksi. Palautuksesta aiheutuvista toimituskuluista vastaa asiakas, ellei tuote ole ollut viallinen tai väärin toimitettu. Räätälöidyillä tai erikoistilatuilla tuotteilla (esim. ohjelmistolisenssit) ei ole palautusoikeutta.</p>
         </section>
 
         <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
@@ -70,8 +70,8 @@ export default function TermsPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold">5. Ångerrätt</h2>
-          <p>Konsumentkunder har 14 dagars bytes- och returrätt i enlighet med den finska konsumentskyddslagen. Den returnerade produkten måste vara oanvänd och i sin originalförpackning.</p>
+          <h2 className="text-2xl font-bold">5. Ångerrätt och returpolicy</h2>
+          <p>Konsumentkunder har 14 dagars bytes- och returrätt i enlighet med den finska konsumentskyddslagen. Den returnerade produkten måste vara oanvänd, i säljbart skick och i sin originalförpackning. Om du vill returnera en produkt, vänligen kontakta oss först för att få instruktioner. Kunden ansvarar för returfraktkostnaderna, såvida inte produkten var defekt eller felaktigt levererad. Skräddarsydda eller specialbeställda produkter (t.ex. programvarulicenser) har ingen returrätt.</p>
         </section>
 
         <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
@@ -109,8 +109,8 @@ export default function TermsPage() {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold">5. Right of Return</h2>
-        <p>Consumer customers have a 14-day right of exchange and return in accordance with the Finnish Consumer Protection Act. The returned product must be unused and in its original packaging.</p>
+        <h2 className="text-2xl font-bold">5. Right of Return & Refund Policy</h2>
+        <p>Consumer customers have a 14-day right of exchange and return in accordance with the Finnish Consumer Protection Act. The returned product must be unused, in salable condition, and in its original packaging. If you wish to return a product, please contact us first to receive instructions. The customer is responsible for the return shipping costs, unless the product was defective or incorrectly delivered. Customized or special-ordered products (e.g., software licenses) do not have a right of return.</p>
       </section>
 
       <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
