@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Product } from "@/lib/types/firestore";
 
 import { useLanguage } from "@/components/language-provider";
+import { LocalizedDescription } from "@/components/LocalizedDescription";
 
 export default function ShopPage() {
   const { addItem } = useCart();
@@ -71,7 +72,7 @@ export default function ShopPage() {
               {categories.map((cat) => (
                 <div key={cat} className="flex items-center space-x-3">
                   <RadioGroupItem value={cat} id={cat} className="border-primary/50 text-primary" />
-                  <Label htmlFor={cat} className="capitalize cursor-pointer hover:text-primary transition-colors">{cat.replace(/-/g, ' ')}</Label>
+                  <Label htmlFor={cat} className="capitalize cursor-pointer hover:text-primary transition-colors">{t(`category.${cat}`) !== `category.${cat}` ? t(`category.${cat}`) : cat.replace(/-/g, ' ')}</Label>
                 </div>
               ))}
             </RadioGroup>
@@ -112,9 +113,12 @@ export default function ShopPage() {
                   </div>
                   <CardHeader className="p-5 pb-2 flex-1">
                     <div className="flex justify-between items-start gap-2 mb-2">
-                      <p className="text-xs font-bold uppercase tracking-wider text-primary">{product.category_id.replace(/-/g, ' ')}</p>
+                      <p className="text-xs font-bold uppercase tracking-wider text-primary">{t(`category.${product.category_id}`) !== `category.${product.category_id}` ? t(`category.${product.category_id}`) : product.category_id.replace(/-/g, ' ')}</p>
                     </div>
                     <CardTitle className="text-lg leading-snug font-bold group-hover:text-primary transition-colors">{product.name}</CardTitle>
+                    <div className="text-xs text-muted-foreground line-clamp-2 mt-2 leading-relaxed">
+                      <LocalizedDescription product={product} />
+                    </div>
                   </CardHeader>
                 </Link>
                 <CardFooter className="p-5 pt-0 mt-auto flex flex-col items-start gap-4">

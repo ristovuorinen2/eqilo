@@ -10,8 +10,11 @@ import { useEffect, useState } from "react";
 import { getProducts } from "@/lib/actions/admin";
 import { Product } from "@/lib/types/firestore";
 
+import { useLanguage } from "@/components/language-provider";
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart } = useCart();
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -80,14 +83,18 @@ export default function CartPage() {
             {/* Cart Items */}
             <Card className="border-border/50 shadow-sm overflow-hidden">
               <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
-                <CardTitle className="text-xl font-bold">Equipment List ({cartItems.length} items)</CardTitle>
+                <CardTitle className="text-xl font-bold">{t("cart.title")} ({cartItems.length})</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="divide-y divide-border/50">
                   {cartItems.map((item) => (
                     <div key={item.product_id} className="p-6 flex gap-6 items-start">
-                      <div className="w-20 h-20 bg-muted rounded-xl flex items-center justify-center shrink-0 border border-border/50">
-                        <PackageOpen className="w-8 h-8 text-primary/30" />
+                      <div className="w-20 h-20 bg-muted rounded-xl flex items-center justify-center shrink-0 border border-border/50 relative overflow-hidden">
+                        {item.product!.image_urls && item.product!.image_urls.length > 0 ? (
+                           <img src={item.product!.image_urls[0]} alt={item.product!.name} className="object-contain w-full h-full p-2 mix-blend-multiply" />
+                        ) : (
+                          <PackageOpen className="w-8 h-8 text-primary/30" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start gap-4">
@@ -95,11 +102,11 @@ export default function CartPage() {
                             <Link href={`/product/${item.product_id}`} className="font-bold text-lg hover:text-primary transition-colors line-clamp-1">
                               {item.product!.name}
                             </Link>
-                            <p className="text-xs text-muted-foreground font-mono mt-1">SKU: {item.product!.sku}</p>
+                            <p className="text-xs text-muted-foreground font-mono mt-1">{t("product.sku")}: {item.product!.sku}</p>
                           </div>
                           <div className="text-right">
                             <p className="font-bold text-lg">€{(item.product!.price * item.quantity).toFixed(2)}</p>
-                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} each</p>
+                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} / kpl</p>
                           </div>
                         </div>
                         

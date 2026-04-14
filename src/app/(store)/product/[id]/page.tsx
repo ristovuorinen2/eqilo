@@ -142,7 +142,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 </div>
                 <div className="flex justify-between py-3 border-b border-border/50">
                   <span className="font-medium text-foreground">{t("product.category")}</span>
-                  <span className="capitalize">{product.category_id.replace(/-/g, ' ')}</span>
+                  <span className="capitalize">{t(`category.${product.category_id}`) !== `category.${product.category_id}` ? t(`category.${product.category_id}`) : product.category_id.replace(/-/g, ' ')}</span>
                 </div>
               </AccordionContent>
             </AccordionItem>
