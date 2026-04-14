@@ -41,6 +41,7 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.orderId;
+    const lang = (session.metadata?.lang || "FI") as "FI" | "EN" | "SE";
 
     if (orderId) {
       // 1. Update order status in Firestore
@@ -71,11 +72,15 @@ export async function POST(req: Request) {
           
           // 3. Trigger Holvi Invoice Integration
           if (customerEmail) {
+            const subject = lang === "FI" ? `Tilausvahvistus - ${orderId}` : 
+                            lang === "SE" ? `Orderbekräftelse - ${orderId}` : 
+                            `Order Confirmation - ${orderId}`;
+
             await resend.emails.send({
               from: 'Eqilo.fi <orders@eqilo.fi>',
               to: [customerEmail],
-              subject: `Order Confirmation - ${orderId}`,
-              html: getOrderConfirmationEmailHtml(orderId, orderData.total_amount),
+              subject: subject,
+              html: getOrderConfirmationEmailHtml(orderId, orderData.total_amount, lang),
             });
           }
 

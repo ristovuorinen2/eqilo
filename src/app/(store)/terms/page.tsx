@@ -3,11 +3,11 @@
 import { useLanguage } from "@/components/language-provider";
 
 export default function TermsPage() {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
 
   if (lang === "FI") {
     return (
-      <div className="container py-10 md:py-16 max-w-4xl prose prose-sm md:prose-base dark:prose-invert mx-auto">
+      <div className="container py-10 md:py-16 max-w-4xl prose prose-sm md:prose-base dark:prose-invert mx-auto text-foreground">
         <h1 className="text-4xl font-extrabold tracking-tight mb-8">Käyttöehdot</h1>
         <p className="text-muted-foreground italic mb-10">Viimeksi päivitetty: 13. huhtikuuta 2026</p>
 
@@ -45,8 +45,48 @@ export default function TermsPage() {
     );
   }
 
+  if (lang === "SE") {
+    return (
+      <div className="container py-10 md:py-16 max-w-4xl prose prose-sm md:prose-base dark:prose-invert mx-auto text-foreground">
+        <h1 className="text-4xl font-extrabold tracking-tight mb-8">Villkor</h1>
+        <p className="text-muted-foreground italic mb-10">Senast uppdaterad: 13 april 2026</p>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold">1. Allmänt</h2>
+          <p>Dessa villkor gäller för det kommersiella förhållandet mellan Eqilo Oy ("Eqilo") och dess kunder. Eqilo förbehåller sig rätten att ensidigt ändra dessa villkor utan föregående meddelande.</p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold">2. Priser och produkter</h2>
+          <p>Produktpriserna inkluderar tillämplig mervärdesskatt (25,5 % allmän sats om inget annat anges). Priserna inkluderar inte leveranskostnader om inget annat anges. Eqilo förbehåller sig rätten att annullera en beställning om priset på produkten i webbutiken har varit uppenbart felaktigt.</p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold">3. Leverans</h2>
+          <p>Vi levererar i huvudsak produkter till Finland. Standardleveranstiden för FDS Timing-enheter är 1-2 veckor. Leveransavgiften är 20 € för beställningar under 200 €, och gratis för beställningar över 200 €.</p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold">4. Betalningsmetoder</h2>
+          <p>Vi använder betaltjänsten Stripe. Du kan betala med bank- och kreditkort, Apple Pay, Google Pay och MobilePay. För företagskunder är det möjligt att erbjuda ett faktureringsalternativ enligt ett separat avtal (FO-nummer krävs).</p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold">5. Ångerrätt</h2>
+          <p>Konsumentkunder har 14 dagars bytes- och returrätt i enlighet med den finska konsumentskyddslagen. Den returnerade produkten måste vara oanvänd och i sin originalförpackning.</p>
+        </section>
+
+        <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
+          <h3 className="text-lg font-bold mb-2">Har du frågor?</h3>
+          <p className="text-sm text-muted-foreground mb-4">Vår kundtjänst hjälper gärna till med alla avtalsfrågor.</p>
+          <p className="font-bold text-primary">+358 50 5633097</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container py-10 md:py-16 max-w-4xl prose prose-sm md:prose-base dark:prose-invert mx-auto">
+    <div className="container py-10 md:py-16 max-w-4xl prose prose-sm md:prose-base dark:prose-invert mx-auto text-foreground">
       <h1 className="text-4xl font-extrabold tracking-tight mb-8">Terms & Conditions</h1>
       <p className="text-muted-foreground italic mb-10">Last updated: April 13, 2026</p>
 

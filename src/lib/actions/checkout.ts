@@ -13,7 +13,8 @@ const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
 export async function createCheckoutSession(
   userId: string, 
   cartItems: CartItem[], 
-  customerDetails?: { email: string; phone: string; businessId?: string }
+  customerDetails?: { email: string; phone: string; businessId?: string },
+  lang: string = "FI"
 ) {
   try {
     const session = await verifySession();
@@ -133,6 +134,7 @@ export async function createCheckoutSession(
       client_reference_id: userId,
       metadata: {
         orderId: orderRef.id,
+        lang: lang,
       },
       shipping_address_collection: {
         allowed_countries: ["FI"], // Restrict shipping to Finland

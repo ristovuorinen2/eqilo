@@ -84,16 +84,16 @@ export default function TrainingAndResultsPage() {
         <section className="bg-muted/30 rounded-3xl p-8 md:p-12 border border-border/50 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
            <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-xl relative">
-                 <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="(max-width: 768px) 96px, 128px" />
+                 <Image src="/johannes.jpeg" alt={t("home.quote.author")} fill className="object-cover" sizes="(max-width: 768px) 96px, 128px" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">Tarvitsetko asiantuntijaa tapahtumaasi?</h3>
-                <p className="text-muted-foreground text-lg">Johannes Hyrsky ja Eqilon tiimi ovat valmiina auttamaan.</p>
+                <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">{t("home.services.expert_cta")}</h3>
+                <p className="text-muted-foreground text-lg">{t("home.services.expert_desc")}</p>
               </div>
            </div>
            <a href="https://wa.me/358505633097" target="_blank" rel="noreferrer" className="w-full md:w-auto">
              <Button size="lg" className="w-full md:w-auto h-14 px-8 font-bold text-lg shadow-md hover:scale-105 transition-transform">
-                Ota Yhteyttä <ArrowRight className="ml-2 w-5 h-5" />
+                {t("nav.contact_us")} <ArrowRight className="ml-2 w-5 h-5" />
              </Button>
            </a>
         </section>
@@ -164,16 +164,16 @@ export default function TrainingAndResultsPage() {
       <section className="bg-muted/30 rounded-3xl p-8 md:p-12 border border-border/50 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
          <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-xl relative">
-               <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="(max-width: 768px) 96px, 128px" />
+               <Image src="/johannes.jpeg" alt={t("home.quote.author")} fill className="object-cover" sizes="(max-width: 768px) 96px, 128px" />
             </div>
             <div className="space-y-2">
-               <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">Need an expert for your event?</h3>
-               <p className="text-muted-foreground text-lg">Johannes Hyrsky and the Eqilo team are ready to help.</p>
+               <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">{t("home.services.expert_cta")}</h3>
+               <p className="text-muted-foreground text-lg">{t("home.services.expert_desc")}</p>
             </div>
          </div>
          <a href="https://wa.me/358505633097" target="_blank" rel="noreferrer" className="w-full md:w-auto">
            <Button size="lg" className="w-full md:w-auto h-14 px-8 font-bold text-lg shadow-md hover:scale-105 transition-transform">
-              Contact Us <ArrowRight className="ml-2 w-5 h-5" />
+              {t("nav.contact_us")} <ArrowRight className="ml-2 w-5 h-5" />
            </Button>
          </a>
       </section>

@@ -1,4 +1,34 @@
-export function getOrderConfirmationEmailHtml(orderId: string, totalAmount: string | number) {
+export function getOrderConfirmationEmailHtml(orderId: string, totalAmount: string | number, lang: "FI" | "EN" | "SE" = "FI") {
+  const content = {
+    FI: {
+      title: "Tilaus vahvistettu!",
+      p1: `Kiitos ostoksestasi Eqilolta. Tilauksesi <strong>#${orderId}</strong> on vastaanotettu ja se on nyt käsittelyssä.`,
+      ref: "Tilausviite:",
+      total: "Yhteensä:",
+      delivery: "FDS Timing -laitteiden vakiotoimitusaika on <strong>1-2 viikkoa</strong>. Saat erillisen ilmoituksen seurantatunnuksella, kun laitteistosi on lähetetty.",
+      questions: "Jos sinulla on kysyttävää, vastaa tähän sähköpostiin tai ota yhteyttä WhatsApp-asiakaspalveluumme.",
+      regards: "Ystävällisin terveisin,<br/><strong>Eqilo-tiimi</strong>"
+    },
+    EN: {
+      title: "Order Confirmed!",
+      p1: `Thank you for your purchase from Eqilo. Your order <strong>#${orderId}</strong> has been successfully placed and is now being processed.`,
+      ref: "Order Reference:",
+      total: "Total Amount:",
+      delivery: "Standard delivery for FDS Timing equipment is <strong>1-2 weeks</strong>. You will receive a separate notification with a tracking number once your equipment has been dispatched.",
+      questions: "If you have any questions, feel free to reply to this email or contact us via our WhatsApp Helpdesk.",
+      regards: "Best regards,<br/><strong>The Eqilo Team</strong>"
+    },
+    SE: {
+      title: "Order bekräftad!",
+      p1: `Tack för ditt köp från Eqilo. Din beställning <strong>#${orderId}</strong> har tagits emot och behandlas nu.`,
+      ref: "Orderreferens:",
+      total: "Totalbelopp:",
+      delivery: "Standardleveranstid för FDS Timing-utrustning är <strong>1-2 veckor</strong>. Du kommer att få ett separat meddelande med ett spårningsnummer när din utrustning har skickats.",
+      questions: "Om du har några frågor är du välkommen att svara på detta e-postmeddelande eller kontakta oss via vår WhatsApp-kundtjänst.",
+      regards: "Med vänliga hälsningar,<br/><strong>Eqilo-teamet</strong>"
+    }
+  }[lang];
+
   return `
     <!DOCTYPE html>
     <html>
@@ -24,24 +54,24 @@ export function getOrderConfirmationEmailHtml(orderId: string, totalAmount: stri
             <h1>EQILO.FI</h1>
           </div>
           <div class="content">
-            <h2>Order Confirmed!</h2>
-            <p>Thank you for your purchase from Eqilo. Your order <strong>#${orderId}</strong> has been successfully placed and is now being processed.</p>
+            <h2>${content.title}</h2>
+            <p>${content.p1}</p>
             
             <div class="order-details">
               <div class="order-row">
-                <span>Order Reference:</span>
+                <span>${content.ref}</span>
                 <span class="highlight">${orderId}</span>
               </div>
               <div class="order-row">
-                <span>Total Amount:</span>
+                <span>${content.total}</span>
                 <span class="highlight">${Number(totalAmount).toFixed(2).replace('.', ',')} €</span>
               </div>
             </div>
 
-            <p>Standard delivery for FDS Timing equipment is <strong>1-2 weeks</strong>. You will receive a separate notification with a tracking number once your equipment has been dispatched.</p>
-            <p>If you have any questions, feel free to reply to this email or contact us via our WhatsApp Helpdesk.</p>
+            <p>${content.delivery}</p>
+            <p>${content.questions}</p>
             
-            <p style="margin-top: 30px;">Best regards,<br/><strong>The Eqilo Team</strong></p>
+            <p style="margin-top: 30px;">${content.regards}</p>
           </div>
           <div class="footer">
             Eqilo Oy | Business ID: 3530342-3 | Hakkapeliitantie 4, 08350 LOHJA

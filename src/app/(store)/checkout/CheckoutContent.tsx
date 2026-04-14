@@ -22,7 +22,7 @@ interface CheckoutContentProps {
 export default function CheckoutContent({ products }: CheckoutContentProps) {
   const { items } = useCart();
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -60,7 +60,7 @@ export default function CheckoutContent({ products }: CheckoutContentProps) {
     if (!details.acceptTerms) return;
 
     setIsSubmitting(true);
-    const res = await createCheckoutSession(user.uid, items, details);
+    const res = await createCheckoutSession(user.uid, items, details, lang);
     if (res.success && res.url) {
       window.location.href = res.url;
     } else {

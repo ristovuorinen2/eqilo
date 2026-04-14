@@ -226,7 +226,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
               </p>
               <div className="flex items-center gap-4 pt-6 border-t w-full">
                 <div className="rounded-full w-14 h-14 bg-primary/10 flex items-center justify-center shadow-inner relative overflow-hidden shrink-0 border-2 border-primary/20">
-                  <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="56px" />
+                  <Image src="/johannes.jpeg" alt={t("home.quote.author")} fill className="object-cover" sizes="56px" />
                 </div>
                 <div>
                   <h4 className="font-bold text-lg">{t("home.quote.author")}</h4>

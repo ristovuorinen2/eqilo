@@ -52,7 +52,7 @@ export function WhatsAppHelpdesk() {
                 </h3>
                 <p className="text-xs text-white/90 font-medium flex items-center gap-1.5 mt-0.5">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  {lang === "FI" ? "Paikalla" : lang === "SE" ? "Online" : "Online"}
+                  {t("whatsapp.online")}
                 </p>
               </div>
             </div>
@@ -65,7 +65,7 @@ export function WhatsAppHelpdesk() {
           <div className="p-6 bg-slate-50/50 flex flex-col items-center border-b border-border/50 relative">
             <div className="bg-white p-4 text-sm text-slate-700 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100 self-start mb-6 max-w-[85%] leading-relaxed relative">
               <div className="absolute -left-2 top-0 w-4 h-4 bg-white border-l border-t border-slate-100 transform -skew-y-12" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%)' }}></div>
-              {lang === "FI" ? "Moi! Miten voin auttaa sinua tänään ajanottolaitteisiin liittyen?" : lang === "SE" ? "Hej! Hur kan jag hjälpa dig med tidtagningsutrustning idag?" : "Hi! How can I help you with timekeeping equipment today?"}
+              {t("whatsapp.welcome")}
             </div>
 
             <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
@@ -75,7 +75,7 @@ export function WhatsAppHelpdesk() {
               />
             </div>
             <p className="text-xs text-muted-foreground mt-4 text-center px-4 font-medium leading-relaxed">
-              {lang === "FI" ? "Avaa WhatsApp skannaamalla koodi puhelimellasi." : lang === "SE" ? "Skanna koden med din telefon för att öppna WhatsApp." : "Scan with your phone to open WhatsApp."}
+              {t("whatsapp.scan_desc")}
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export function WhatsAppHelpdesk() {
             >
               <Button className="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-bold shadow-sm group h-12">
                 <Send className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
-                {t("whatsapp.web_link") || (lang === "FI" ? "Avaa WhatsApp Web" : lang === "SE" ? "Öppna WhatsApp Web" : "Open WhatsApp Web")}
+                {t("whatsapp.web_link")}
               </Button>
             </a>
           </div>
@@ -117,7 +117,7 @@ export function WhatsAppHelpdesk() {
         
         {/* Tooltip for desktop */}
         <span className="absolute right-full mr-4 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity hidden md:block whitespace-nowrap pointer-events-none shadow-lg z-10">
-          {t("whatsapp.chat") || (lang === "FI" ? "Kysy Johannekselta" : lang === "SE" ? "Fråga Johannes" : "Ask Johannes")}
+          {t("whatsapp.ask_johannes")}
         </span>
       </button>
     </div>
