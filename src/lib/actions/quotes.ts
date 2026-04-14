@@ -6,7 +6,6 @@ import { CartItem, Product } from "../types/firestore";
 import { adminDb } from "../firebase/admin";
 import { Resend } from "resend";
 import path from "path";
-import fs from "fs";
 import { formatPrice } from "@/lib/utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -30,19 +29,24 @@ export async function generateQuote(
   try {
     // 1. Fetch full product details
     const products: (Product & { quantity: number })[] = [];
-    let subtotal = 0;
+    let grossTotal = 0;
+    let vatTotal = 0;
 
     for (const item of cartItems) {
       const doc = await adminDb.collection("products").doc(item.product_id).get();
       if (doc.exists) {
         const data = doc.data() as Product;
         products.push({ ...data, quantity: item.quantity });
-        subtotal += data.price * item.quantity;
+        const itemGross = data.price * item.quantity;
+        const itemTaxRate = data.tax_rate || 25.5;
+        const itemTax = itemGross - (itemGross / (1 + (itemTaxRate / 100)));
+        grossTotal += itemGross;
+        vatTotal += itemTax;
       }
     }
 
-    const vat = subtotal * 0.255;
-    const total = subtotal + vat;
+    const subtotal = grossTotal - vatTotal;
+    const total = grossTotal;
 
     // 2. Define PDF Document
     const printer = new PdfPrinter(fonts);
@@ -109,7 +113,7 @@ export async function generateQuote(
             widths: ["*", "auto"],
             body: [
               ["Subtotal (0% VAT)", { text: `${formatPrice(subtotal)} €`, alignment: "right" }],
-              ["VAT (25.5%)", { text: `${formatPrice(vat)} €`, alignment: "right" }],
+              ["VAT (25.5%)", { text: `${formatPrice(vatTotal)} €`, alignment: "right" }],
               [
                 { text: "GRAND TOTAL", bold: true, fontSize: 14 },
                 { text: `${formatPrice(total)} €`, bold: true, fontSize: 14, alignment: "right" },
@@ -164,11 +168,11 @@ export async function generateQuote(
 
         resolve({ success: true, pdf: base64 });
       });
-      pdfDoc.on("error", (err: any) => reject({ success: false, error: err.message }));
+      pdfDoc.on("error", (err: Error) => reject({ success: false, error: err.message }));
       pdfDoc.end();
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Quote generation failed:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
   }
 }

@@ -1,11 +1,9 @@
 "use client";
 
-import { adminDb } from "@/lib/firebase/admin";
 import { Product } from "@/lib/types/firestore";
 import { LocalizedDescription } from "@/components/LocalizedDescription";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PackageOpen, Clock, ShoppingCart } from "lucide-react";
@@ -105,7 +103,10 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                     <Clock className="w-3.5 h-3.5" /> {t("product.standard_shipping")}
                   </div>
                   <div className="w-full flex items-center justify-between mt-1">
-                    <div className="font-extrabold text-2xl tracking-tight text-foreground">{formatPrice(product.price)} €</div>
+                    <div className="font-extrabold text-2xl tracking-tight text-foreground flex items-baseline gap-1">
+                      {formatPrice(product.price)} €
+                      <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{t("product.incl_vat")} {product.tax_rate || 25.5}%</span>
+                    </div>
                     <Badge variant="outline" className="font-semibold border-primary/20 bg-primary/5 text-primary">{t("shop.in_stock")}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 w-full mt-2">

@@ -104,7 +104,7 @@ export async function scrapeAndTranslateDescriptions() {
             descriptionEN += "\n\n<h3>Specifications</h3>\n" + specs;
           }
 
-          let imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
+          const imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
                       || $('meta[property="og:image"]').attr("content")?.trim() || "";
 
           // Extract Box Contents
@@ -141,10 +141,10 @@ export async function scrapeAndTranslateDescriptions() {
       if (!sku) continue;
 
       const sData = scrapedData[sku];
-      let descriptionEN = sData?.desc || data.description;
-      let imageUrl = sData?.img || (data.image_urls && data.image_urls[0]) || null;
-      let boxContents = sData?.boxContents || data.box_contents || "";
-      let downloads = sData?.downloads || data.downloads || [];
+      const descriptionEN = sData?.desc || data.description;
+      const imageUrl = sData?.img || (data.image_urls && data.image_urls[0]) || null;
+      const boxContents = sData?.boxContents || data.box_contents || "";
+      const downloads = sData?.downloads || data.downloads || [];
 
       // Check if translation is missing or needs updating (if we scraped a new English description)
       const needsBox = boxContents && data.box_contents !== boxContents;

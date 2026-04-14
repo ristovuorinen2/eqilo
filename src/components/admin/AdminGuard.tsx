@@ -47,6 +47,21 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   }
 
   if (isAdmin === false) {
+    if (!user || user.isAnonymous) {
+      return (
+        <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center">
+          <div className="p-4 bg-muted rounded-full mb-4">
+            <ShieldAlert className="w-12 h-12 text-muted-foreground" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Login Required</h2>
+          <p className="text-muted-foreground mb-6">
+            You must be logged in to access the admin area. Please use the profile icon in the top right to log in.
+          </p>
+          <Button onClick={() => router.push("/")}>Return to Store</Button>
+        </div>
+      );
+    }
+
     return (
       <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center">
         <div className="p-4 bg-destructive/10 rounded-full mb-4">

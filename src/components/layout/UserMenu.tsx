@@ -4,8 +4,7 @@ import { useAuth } from "@/components/auth-provider";
 import { auth } from "@/lib/firebase/client";
 import { 
   signOut, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword,
+  sendSignInLinkToEmail,
   RecaptchaVerifier,
   signInWithPhoneNumber,
   ConfirmationResult
@@ -50,11 +49,10 @@ export function UserMenu() {
   const { t } = useLanguage();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
-  const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState("");
+  const [linkSent, setLinkSent] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [step, setStep] = useState<"input" | "otp">("input");
 
@@ -62,14 +60,15 @@ export function UserMenu() {
     e.preventDefault();
     setError("");
     try {
-      if (isRegister) {
-        await createUserWithEmailAndPassword(auth, email, password);
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
-      }
-      setIsLoginOpen(false);
-    } catch (err: any) {
-      setError(err.message);
+      const actionCodeSettings = {
+        url: window.location.origin + window.location.pathname,
+        handleCodeInApp: true,
+      };
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      window.localStorage.setItem('emailForSignIn', email);
+      setLinkSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -86,8 +85,8 @@ export function UserMenu() {
       const result = await signInWithPhoneNumber(auth, phone, appVerifier);
       setConfirmationResult(result);
       setStep("otp");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -98,8 +97,8 @@ export function UserMenu() {
     try {
       await confirmationResult.confirm(otp);
       setIsLoginOpen(false);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -163,10 +162,10 @@ export function UserMenu() {
         <div className="bg-primary p-6 text-primary-foreground text-center">
            <ShieldCheck className="w-12 h-12 mx-auto mb-4 opacity-80" />
            <DialogTitle className="text-2xl font-bold mb-2">
-             {isRegister ? t("auth.register_title") : t("auth.login_title")}
+             {t("auth.login_title")}
            </DialogTitle>
            <DialogDescription className="text-primary-foreground/80">
-             {isRegister ? t("auth.register_desc") : t("auth.login_desc")}
+             {t("auth.login_desc")}
            </DialogDescription>
         </div>
         
@@ -226,45 +225,38 @@ export function UserMenu() {
             </TabsContent>
             
             <TabsContent value="email">
-              <form onSubmit={handleEmailAuth} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">{t("auth.email")}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.fi"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-12"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">{t("auth.password")}</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="h-12"
-                  />
-                </div>
-                <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
-                  {isRegister ? t("auth.register") : t("auth.login")}
-                </Button>
-                
-                <div className="text-center mt-4 border-t pt-4">
-                  <Button 
-                    variant="link" 
-                    className="text-sm font-semibold text-muted-foreground hover:text-primary" 
-                    type="button" 
-                    onClick={() => setIsRegister(!isRegister)}
-                  >
-                    {isRegister ? t("auth.already_have_account") : t("auth.need_account")}
+              {linkSent ? (
+                <div className="text-center space-y-4">
+                  <div className="flex justify-center">
+                    <CheckCircle className="h-12 w-12 text-green-500" />
+                  </div>
+                  <h3 className="text-lg font-bold">Check your email</h3>
+                  <p className="text-muted-foreground">
+                    We've sent a magic link to <strong>{email}</strong>. Click the link in the email to sign in.
+                  </p>
+                  <Button variant="outline" className="w-full mt-4" onClick={() => setLinkSent(false)}>
+                    Try another email
                   </Button>
                 </div>
-              </form>
+              ) : (
+                <form onSubmit={handleEmailAuth} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">{t("auth.email")}</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="name@example.fi"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="h-12"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
+                    Send Magic Link
+                  </Button>
+                </form>
+              )}
             </TabsContent>
           </Tabs>
         </div>
@@ -275,6 +267,6 @@ export function UserMenu() {
 
 declare global {
   interface Window {
-    recaptchaVerifier: any;
+    recaptchaVerifier: RecaptchaVerifier;
   }
 }

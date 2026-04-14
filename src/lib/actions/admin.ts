@@ -39,7 +39,7 @@ export async function importProducts(formData: FormData) {
     const workbook = xlsx.read(buffer, { type: "buffer" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
-    const rawData: any[][] = xlsx.utils.sheet_to_json(sheet, { header: 1 });
+    const rawData: unknown[][] = xlsx.utils.sheet_to_json(sheet, { header: 1 });
 
     let currentCategory = "Uncategorized";
     const products: Partial<Product>[] = [];
@@ -61,8 +61,9 @@ export async function importProducts(formData: FormData) {
 
       if (!sku || typeof sku !== 'string' || !sku.startsWith('FDS-')) continue;
       
-      const price = parseFloat(String(priceStr).replace(',', '.'));
-      if (isNaN(price)) continue;
+      const rawPrice = parseFloat(String(priceStr).replace(',', '.'));
+      if (isNaN(rawPrice)) continue;
+      const price = rawPrice * 1.255;
 
       const name = String(descriptionEN).split(' - ')[0] || String(descriptionEN);
       const description = String(descriptionEN);
@@ -196,7 +197,7 @@ export async function deleteCategory(id: string) {
     revalidatePath("/admin/categories");
     revalidatePath("/shop");
     return { success: true };
-  } catch (error: any) {
-    return { success: false, error: error.message };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
   }
 }

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Search } from "lucide-react";
+import Image from "next/image";
 import {
   Command,
   CommandDialog,
@@ -12,7 +13,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { useRouter } from "next/navigation";
-import { getProducts } from "@/lib/actions/admin";
+import { getPublicProducts } from "@/lib/actions/products";
 import { Product } from "@/lib/types/firestore";
 import { useLanguage } from "../language-provider";
 import { formatPrice } from "@/lib/utils";
@@ -37,7 +38,7 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (open && products.length === 0) {
-      getProducts().then(setProducts);
+      getPublicProducts().then(setProducts);
     }
   }, [open, products.length]);
 
@@ -74,7 +75,7 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                 >
                   <div className="w-10 h-10 bg-muted rounded flex items-center justify-center shrink-0 border border-border/50">
                     {product.image_urls?.[0] ? (
-                      <img src={product.image_urls[0]} alt="" className="w-full h-full object-contain p-1" />
+                      <Image src={product.image_urls[0]} alt="" width={40} height={40} className="w-full h-full object-contain p-1" />
                     ) : (
                       <Search className="h-4 w-4 text-muted-foreground" />
                     )}
@@ -83,8 +84,9 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                     <p className="font-bold text-sm truncate">{product.name}</p>
                     <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
                   </div>
-                  <div className="text-sm font-extrabold text-primary">
-                    {formatPrice(product.price)} €
+                  <div className="text-sm font-extrabold text-primary flex flex-col items-end">
+                    <span>{formatPrice(product.price)} €</span>
+                    <span className="text-[9px] font-normal text-muted-foreground/80 uppercase tracking-widest">{t("product.incl_vat")} {product.tax_rate || 25.5}%</span>
                   </div>
                 </CommandItem>
               ))}

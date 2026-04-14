@@ -9,7 +9,7 @@ import { OrderConfirmationEmail } from "@/components/emails/OrderConfirmationEma
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
-  apiVersion: "2025-02-24.acacia" as any,
+  apiVersion: "2026-03-25.dahlia" as "2026-03-25.dahlia",
 }) : null;
 
 export async function createCheckoutSession(
@@ -70,13 +70,15 @@ export async function createCheckoutSession(
       
       const product = productDoc.data() as Product;
       const unitPrice = item.custom_price_override ?? product.price;
-      const itemTax = (unitPrice * item.quantity) * (product.tax_rate / 100);
+      const grossTotal = unitPrice * item.quantity;
+      const taxRate = product.tax_rate || 25.5;
+      const itemTax = grossTotal - (grossTotal / (1 + (taxRate / 100)));
       
-      subtotal += unitPrice * item.quantity;
+      subtotal += grossTotal;
       tax_total += itemTax;
 
       // Accumulate tax by rate
-      tax_map[product.tax_rate] = (tax_map[product.tax_rate] || 0) + itemTax;
+      tax_map[taxRate] = (tax_map[taxRate] || 0) + itemTax;
 
       orderItems.push({
         product_id: productDoc.id,
@@ -190,8 +192,8 @@ export async function createCheckoutSession(
     }
 
     return { success: true, url: stripeSession.url };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Checkout Session Error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
   }
 }
