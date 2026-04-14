@@ -9,6 +9,8 @@ import { GoogleTagManager } from '@next/third-parties/google';
 import { WhatsAppHelpdesk } from "@/components/WhatsAppHelpdesk";
 import { CookieBanner } from "@/components/cookie-banner";
 import { cookies } from "next/headers";
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -86,15 +88,18 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LanguageProvider>
-            <AuthProvider>
-              <CartProvider>
-                {children}
-                <WhatsAppHelpdesk />
-                <CookieBanner />
-              </CartProvider>
-            </AuthProvider>
-          </LanguageProvider>
+          <NuqsAdapter>
+            <LanguageProvider>
+              <AuthProvider>
+                <CartProvider>
+                  {children}
+                  <WhatsAppHelpdesk />
+                  <CookieBanner />
+                </CartProvider>
+              </AuthProvider>
+            </LanguageProvider>
+          </NuqsAdapter>
+          <Toaster position="bottom-right" theme="light" richColors />
         </ThemeProvider>
       </body>
     </html>

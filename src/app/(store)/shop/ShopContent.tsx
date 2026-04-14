@@ -14,6 +14,8 @@ import { useLanguage } from "@/components/language-provider";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useQueryState, parseAsString } from "nuqs";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ShopContentProps {
   initialProducts: Product[];
@@ -22,7 +24,7 @@ interface ShopContentProps {
 export default function ShopContent({ initialProducts }: ShopContentProps) {
   const { addItem } = useCart();
   const { t, lang } = useLanguage();
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useQueryState("category", parseAsString.withDefault("all"));
 
   const activeProducts = initialProducts.filter(p => {
     const matchesCategory = selectedCategory === "all" || p.category_id === selectedCategory;
@@ -124,8 +126,17 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 md:gap-8">
-            {activeProducts.map((product) => (
-              <Card key={product.id} className="flex flex-col overflow-hidden transition-all hover:shadow-xl border-border/50 hover:border-primary/40 group bg-card text-card-foreground">
+            <AnimatePresence mode="popLayout">
+              {activeProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
+                  <Card className="flex flex-col overflow-hidden transition-all hover:shadow-xl border-border/50 hover:border-primary/40 group bg-card text-card-foreground h-full">
                 <Link href={`/product/${product.id}`} className="flex-1 flex flex-col">
                   <div className="aspect-square bg-muted/10 flex flex-col items-center justify-center p-6 relative group-hover:bg-muted/30 transition-colors bg-white border-b border-border/50">
                     {product.image_urls && product.image_urls.length > 0 ? (
@@ -185,7 +196,9 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
                   </Button>
                 </CardFooter>
               </Card>
+              </motion.div>
             ))}
+            </AnimatePresence>
           </div>
         </div>
 
