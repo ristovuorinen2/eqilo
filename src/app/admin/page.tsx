@@ -128,7 +128,7 @@ export default async function AdminDashboardPage() {
                         </div>
                      </div>
                      <div className="text-right">
-                        <p className="font-extrabold text-sm text-foreground">€{order.total_amount?.toFixed(2)}</p>
+                        <p className="font-extrabold text-sm text-foreground">{order.total_amount?.toFixed(2).replace('.', ',')} €</p>
                         <Badge variant="outline" className="text-[10px] uppercase font-bold mt-1 border-emerald-200 bg-emerald-50 text-emerald-700">
                            {order.status || 'Paid'}
                         </Badge>

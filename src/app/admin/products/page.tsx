@@ -162,7 +162,7 @@ export default function AdminProductsPage() {
                       {p.category_id.replace(/-/g, ' ')}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right font-bold">€{p.price.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-bold">{p.price.toFixed(2).replace('.', ',')} €</TableCell>
                   <TableCell className="text-right font-medium">{p.inventory_count}</TableCell>
                   <TableCell className="text-center">
                     {p.is_active ? (

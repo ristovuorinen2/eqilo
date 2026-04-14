@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CheckCircle2, Battery, Wifi, ShieldCheck, MonitorPlay, Timer } from "lucide-react";
+import { ArrowRight, CheckCircle2, Battery, Wifi, ShieldCheck, MonitorPlay, Timer, ShoppingCart } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useLanguage } from "@/components/language-provider";
 
@@ -61,9 +61,11 @@ export default function HomePage() {
                     <CarouselItem key={product.id} className="h-full">
                       <div className="w-full h-full bg-white rounded-xl flex flex-col items-center justify-center p-6 text-center shadow-lg relative overflow-hidden border">
                          <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">{t("shop.in_stock")}</div>
-                         <div className="w-32 h-32 md:w-40 md:h-40 bg-muted rounded-full mb-6 flex items-center justify-center border-4 border-primary/5 relative overflow-hidden shrink-0">
+                         <div className="w-32 h-32 md:w-40 md:h-40 bg-muted/20 rounded-full mb-8 md:mb-10 mt-4 flex items-center justify-center border-4 border-primary/5 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-500">
                             {product.image_urls?.[0] ? (
-                              <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain p-4 mix-blend-multiply" sizes="160px" />
+                              <div className="absolute -inset-6 md:-inset-10">
+                                <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain mix-blend-multiply drop-shadow-lg group-hover:scale-110 transition-transform duration-500" sizes="256px" />
+                              </div>
                             ) : (
                               <Timer className="w-16 h-16 text-primary/60" />
                             )}
@@ -72,9 +74,18 @@ export default function HomePage() {
                          <div className="text-muted-foreground mb-6 max-w-xs text-xs line-clamp-2 h-8">
                             <LocalizedDescription product={product} />
                          </div>
-                         <Link href={`/product/${product.id}`} className="w-full px-4">
-                            <Button variant="default" className="w-full font-bold">€{product.price.toFixed(2)} - {t("shop.view_details")}</Button>
-                         </Link>
+                         <div className="flex-1 flex flex-col w-full px-4 mt-auto border-t border-border/50 pt-4 gap-3">
+                           <div className="flex items-center justify-between w-full">
+                             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("shop.price")}</p>
+                             <div className="font-extrabold text-2xl tracking-tight text-foreground">{product.price.toFixed(2).replace('.', ',')} €</div>
+                           </div>
+                           <Link href={`/product/${product.id}`} className="w-full">
+                              <Button variant="default" className="w-full font-bold h-12 shadow-sm text-md group-hover:bg-primary/90 transition-colors">
+                                 <ShoppingCart className="w-5 h-5 mr-2" />
+                                 {t("shop.view_details")}
+                              </Button>
+                           </Link>
+                         </div>
                       </div>
                     </CarouselItem>
                   )) : (

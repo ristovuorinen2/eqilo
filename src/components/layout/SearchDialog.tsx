@@ -83,7 +83,7 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                     <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
                   </div>
                   <div className="text-sm font-extrabold text-primary">
-                    €{product.price.toFixed(2)}
+                    {product.price.toFixed(2).replace('.', ',')} €
                   </div>
                 </CommandItem>
               ))}

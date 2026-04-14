@@ -129,7 +129,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-foreground">{product.name}</h1>
           <p className="text-muted-foreground mb-6 font-mono text-sm bg-muted/50 w-fit px-2 py-1 rounded">{t("product.sku")}: {product.sku}</p>
           
-          <div className="text-4xl font-extrabold mb-8 tracking-tight">€{totalPrice.toFixed(2)} <span className="text-sm font-medium text-muted-foreground ml-2">{t("product.incl_vat")} {product.tax_rate}%</span></div>
+          <div className="text-4xl font-extrabold mb-8 tracking-tight">{totalPrice.toFixed(2).replace('.', ',')} € <span className="text-sm font-medium text-muted-foreground ml-2">{t("product.incl_vat")} {product.tax_rate}%</span></div>
 
           {product.is_bundle && product.bundle_options && (
             <div className="mb-8 p-6 bg-muted/30 rounded-2xl border border-border/50">
@@ -154,7 +154,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                     </div>
                     {option.extra_price && option.extra_price > 0 && (
                       <span className="text-xs font-extrabold text-primary">
-                        +€{option.extra_price.toFixed(2)}
+                        +{option.extra_price.toFixed(2).replace('.', ',')} €
                       </span>
                     )}
                   </div>

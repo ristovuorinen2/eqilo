@@ -101,8 +101,8 @@ export default function CartPage() {
                             <p className="text-xs text-muted-foreground font-mono mt-1">{t("product.sku")}: {item.product!.sku}</p>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-lg">€{(item.product!.price * item.quantity).toFixed(2)}</p>
-                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} / {t("cart.unit")}</p>
+                            <p className="font-bold text-lg">{(item.product!.price * item.quantity).toFixed(2).replace('.', ',')} €</p>
+                            <p className="text-xs text-muted-foreground">{item.product!.price.toFixed(2).replace('.', ',')} € / {t("cart.unit")}</p>
                           </div>
                         </div>
                         
@@ -164,16 +164,16 @@ export default function CartPage() {
             <CardContent className="pt-6 space-y-4">
               <div className="flex justify-between text-muted-foreground font-medium">
                 <span>{t("cart.subtotal")}</span>
-                <span>€{subtotal.toFixed(2)}</span>
+                <span>{subtotal.toFixed(2).replace('.', ',')} €</span>
               </div>
               <div className="flex justify-between text-muted-foreground font-medium">
                 <span>{t("cart.shipping")}</span>
-                <span>{shipping === 0 ? t("cart.free") : `€${shipping.toFixed(2)}`}</span>
+                <span>{shipping === 0 ? t("cart.free") : `${shipping.toFixed(2).replace('.', ',')} €`}</span>
               </div>
               <Separator className="my-4 border-border/50" />
               <div className="flex justify-between font-extrabold text-2xl tracking-tight text-foreground">
                 <span>{t("cart.total")}</span>
-                <span>€{total.toFixed(2)}</span>
+                <span>{total.toFixed(2).replace('.', ',')} €</span>
               </div>
             </CardContent>
             <CardFooter className="bg-muted/30 border-t border-border/50 pt-6 flex flex-col gap-3">

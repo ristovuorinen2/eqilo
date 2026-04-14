@@ -161,7 +161,7 @@ export default function ShopPage() {
                   <div className="w-full flex items-end justify-between mt-1 mb-2">
                     <div>
                       <p className="text-xs font-bold text-muted-foreground mb-1 uppercase tracking-wider">{lang === "FI" ? "Hinta" : lang === "SE" ? "Pris" : "Price"}</p>
-                      <div className="font-extrabold text-3xl tracking-tight text-foreground">€{product.price.toFixed(2)}</div>
+                      <div className="font-extrabold text-3xl tracking-tight text-foreground">{product.price.toFixed(2).replace('.', ',')} €</div>
                     </div>
                     <Badge variant="outline" className="font-bold border-emerald-200 bg-emerald-50 text-emerald-700 px-3 py-1">{t("shop.in_stock")}</Badge>
                   </div>
