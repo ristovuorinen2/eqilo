@@ -34,16 +34,16 @@ export default function CategoriesAdminPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
   async function loadCategories() {
     setLoading(true);
     const data = await getCategories();
     setCategories(data);
     setLoading(false);
   }
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -82,10 +82,8 @@ export default function CategoriesAdminPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger>
-            <Button onClick={() => setEditingCategory(null)}>
-              <Plus className="mr-2 h-4 w-4" /> Add Category
-            </Button>
+          <DialogTrigger render={<Button onClick={() => setEditingCategory(null)} />}>
+            <Plus className="mr-2 h-4 w-4" /> Add Category
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <form onSubmit={handleSubmit}>

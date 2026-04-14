@@ -155,11 +155,9 @@ export function UserMenu() {
   // Handle Login / Anonymous State
   return (
     <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-      <DialogTrigger>
-        <Button variant="ghost" size="icon" className="hover:bg-primary/5 hover:text-primary transition-colors">
-          <User className="h-5 w-5" />
-          <span className="sr-only">{t("nav.login")}</span>
-        </Button>
+      <DialogTrigger render={<Button variant="ghost" size="icon" className="hover:bg-primary/5 hover:text-primary transition-colors" />}>
+        <User className="h-5 w-5" />
+        <span className="sr-only">{t("nav.login")}</span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0 shadow-2xl">
         <div className="bg-primary p-6 text-primary-foreground text-center">

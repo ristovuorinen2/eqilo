@@ -128,11 +128,9 @@ export function Header() {
           {/* Mobile Menu */}
           <div className="md:hidden">
             <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle Menu</span>
-                </Button>
+              <SheetTrigger render={<Button variant="ghost" size="icon" className="h-9 w-9" />}>
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle Menu</span>
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>

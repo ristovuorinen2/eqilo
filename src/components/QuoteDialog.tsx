@@ -61,11 +61,9 @@ export function QuoteDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        <Button variant="outline" className="w-full font-bold gap-2">
-          <FileText className="w-4 h-4" />
-          {t("cart.request_quote") || "Request PDF Quote"}
-        </Button>
+      <DialogTrigger render={<Button variant="outline" className="w-full font-bold gap-2" />}>
+        <FileText className="w-4 h-4" />
+        {t("cart.request_quote") || "Request PDF Quote"}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleGenerate}>

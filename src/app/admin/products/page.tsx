@@ -74,10 +74,8 @@ export default function AdminProductsPage() {
           <ProductUpload onImportSuccess={loadData} />
           
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger>
-              <Button onClick={() => setEditingProduct(null)} size="lg" className="font-bold shadow-md">
-                <Plus className="mr-2 h-5 w-5" /> Add Product
-              </Button>
+            <SheetTrigger render={<Button onClick={() => setEditingProduct(null)} size="lg" className="font-bold shadow-md" />}>
+              <Plus className="mr-2 h-5 w-5" /> Add Product
             </SheetTrigger>
             <SheetContent className="sm:max-w-xl overflow-y-auto">
               <SheetHeader>
