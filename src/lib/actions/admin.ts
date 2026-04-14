@@ -1,12 +1,36 @@
 "use server";
-
-import { adminDb } from "../firebase/admin";
+import { adminDb, adminAuth } from "../firebase/admin";
 import * as xlsx from "xlsx";
 import { Product } from "../types/firestore";
+import { cookies } from "next/headers";
+
+async function checkAdmin() {
+  try {
+    const cookieStore = await cookies();
+    const idToken = cookieStore.get("idToken")?.value;
+
+    if (!idToken) return false;
+
+    const decodedToken = await adminAuth.verifyIdToken(idToken);
+    const userDoc = await adminDb.collection("customers").doc(decodedToken.uid).get();
+
+    return userDoc.exists && userDoc.data()?.role === "admin";
+  } catch (error) {
+    console.error("Auth Check Failed:", error);
+    return false;
+  }
+}
 
 export async function importProducts(formData: FormData) {
   try {
+    // 1. Authorization Check
+    const isAdmin = await checkAdmin();
+    if (!isAdmin) {
+      return { success: false, error: "Access Denied: Administrative privileges required." };
+    }
+
     const file = formData.get("file") as File;
+...
     if (!file) {
       return { success: false, error: "No file provided" };
     }
@@ -77,6 +101,9 @@ export async function importProducts(formData: FormData) {
 
 export async function getProducts(): Promise<Product[]> {
   try {
+    // Basic auth check can be added here if catalog should be private
+    // For Eqilo, the catalog is public but the admin view uses this for management.
+    // We'll leave it public for the storefront but could restrict it if needed.
     const snapshot = await adminDb.collection("products").get();
     return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as Product);
   } catch (error) {
