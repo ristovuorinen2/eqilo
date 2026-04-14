@@ -1,8 +1,30 @@
 import { getProductServer, getProductsServer } from "@/lib/actions/products-server";
 import { notFound } from "next/navigation";
 import ProductContent from "./ProductContent";
+import { Metadata } from "next";
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+type Props = {
+  params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
+  const product = await getProductServer(resolvedParams.id);
+  
+  if (!product) {
+    return { title: 'Product Not Found' };
+  }
+  
+  return {
+    title: product.name,
+    description: product.description || product.description_fi || product.name,
+    openGraph: {
+      images: product.image_urls?.[0] ? [{ url: product.image_urls[0] }] : [],
+    }
+  };
+}
+
+export default async function ProductPage({ params }: Props) {
   const resolvedParams = await params;
   const product = await getProductServer(resolvedParams.id);
   const allProducts = await getProductsServer();
