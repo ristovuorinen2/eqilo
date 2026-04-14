@@ -59,7 +59,7 @@ export default function ServicesPage() {
               </ul>
             </div>
           </CardContent>
-          <CardFooter className="p-6 pt-0 mt-auto">
+          <CardFooter className="p-6 pt-8 mt-auto">
             <Link href="/services/training-and-results" className="w-full">
               <Button className="w-full h-14 text-lg font-bold shadow-md group-hover:bg-primary/90 transition-colors">
                 {lang === "FI" ? "Tutustu koulutuspalveluun" : lang === "SE" ? "Utforska utbildningstjänsten" : "Explore Training Service"} <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -96,7 +96,7 @@ export default function ServicesPage() {
               </ul>
             </div>
           </CardContent>
-          <CardFooter className="p-6 pt-0 mt-auto">
+          <CardFooter className="p-6 pt-8 mt-auto">
             <Link href="/services/equipe-software" className="w-full">
               <Button className="w-full h-14 text-lg font-bold shadow-md bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors">
                 {lang === "FI" ? "Tutustu Equipe-asetuksiin" : lang === "SE" ? "Utforska Equipe-konfiguration" : "Explore Equipe Setup"} <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

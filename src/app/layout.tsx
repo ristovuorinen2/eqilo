@@ -79,7 +79,7 @@ export default async function RootLayout({
         />
         {hasConsentedToTracking && <GoogleTagManager gtmId="G-ZRVTGT7VXH" />}
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

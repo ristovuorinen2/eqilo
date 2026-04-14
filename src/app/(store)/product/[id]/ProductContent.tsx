@@ -160,7 +160,7 @@ export default function ProductContent({ product }: ProductContentProps) {
             </Button>
           </div>
 
-          <Accordion className="w-full" type="single" collapsible defaultValue="description">
+          <Accordion className="w-full" defaultValue="description">
             <AccordionItem value="description" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.description")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-sm leading-relaxed prose prose-sm dark:prose-invert font-medium">
