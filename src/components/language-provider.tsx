@@ -227,6 +227,7 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "shop.items_found": "items found",
     "shop.in_stock": "In Stock",
     "shop.add": "Add",
+    "shop.price": "Price",
     "shop.description": "Professional timekeeping solutions for clubs.",
     "shop.loading": "Loading professional equipment...",
     "product.sku": "SKU",

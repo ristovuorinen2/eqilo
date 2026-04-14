@@ -61,11 +61,9 @@ export default function HomePage() {
                     <CarouselItem key={product.id} className="h-full">
                       <div className="w-full h-full bg-white rounded-xl flex flex-col items-center justify-center p-6 text-center shadow-lg relative overflow-hidden border">
                          <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">{t("shop.in_stock")}</div>
-                         <div className="w-32 h-32 md:w-40 md:h-40 bg-muted/20 rounded-full mb-8 md:mb-10 mt-4 flex items-center justify-center border-4 border-primary/5 relative overflow-hidden shrink-0 group-hover:scale-105 transition-transform duration-500">
+                         <div className="w-full aspect-square max-h-48 md:max-h-56 bg-gradient-to-tr from-muted/30 to-muted/10 rounded-2xl mb-8 md:mb-10 mt-2 flex items-center justify-center border border-border/50 relative overflow-hidden shrink-0 group-hover:shadow-md transition-all duration-500">
                             {product.image_urls?.[0] ? (
-                              <div className="absolute -inset-6 md:-inset-10">
-                                <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain mix-blend-multiply drop-shadow-lg group-hover:scale-110 transition-transform duration-500" sizes="256px" />
-                              </div>
+                              <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain p-4 mix-blend-multiply drop-shadow-sm group-hover:scale-105 transition-transform duration-500" sizes="256px" />
                             ) : (
                               <Timer className="w-16 h-16 text-primary/60" />
                             )}
