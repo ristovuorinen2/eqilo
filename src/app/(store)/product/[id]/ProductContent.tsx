@@ -49,7 +49,7 @@ export default function ProductContent({ product }: ProductContentProps) {
     <div className="container py-6 md:py-16">
       {/* Breadcrumb */}
       <nav className="flex items-center text-[10px] xs:text-xs font-bold text-muted-foreground/60 mb-6 uppercase tracking-widest overflow-x-auto whitespace-nowrap pb-2 no-scrollbar">
-        <Link href="/shop" className="hover:text-primary transition-colors">Shop</Link>
+        <Link href="/shop" className="hover:text-primary transition-colors">{t("nav.products")}</Link>
         <ChevronRight className="w-3 h-3 mx-2 opacity-50 shrink-0" />
         <span className="shrink-0">{t(`category.${product.category_id}`) !== `category.${product.category_id}` ? t(`category.${product.category_id}`) : product.category_id.replace(/-/g, ' ')}</span>
         <ChevronRight className="w-3 h-3 mx-2 opacity-50 shrink-0" />
@@ -78,7 +78,7 @@ export default function ProductContent({ product }: ProductContentProps) {
                    className="object-contain p-16 opacity-20 grayscale" 
                    sizes="(max-width: 768px) 100vw, 50vw"
                  />
-                 <span className="text-muted-foreground font-bold tracking-tight absolute bottom-12 z-10 bg-white/80 px-3 py-1 rounded-md backdrop-blur-sm text-sm">Image Coming Soon</span>
+                 <span className="text-muted-foreground font-bold tracking-tight absolute bottom-12 z-10 bg-white/80 px-3 py-1 rounded-md backdrop-blur-sm text-sm">{t("product.image_pending")}</span>
                </>
              )}
              <div className="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-mono border z-10">SKU: {product.sku}</div>
@@ -109,7 +109,7 @@ export default function ProductContent({ product }: ProductContentProps) {
             <div className="mb-8 p-4 xs:p-6 bg-muted/30 rounded-2xl border border-border/50">
               <h3 className="text-md xs:text-lg font-black mb-4 flex items-center gap-2 uppercase tracking-tight">
                 <PackageOpen className="w-5 h-5 text-primary" />
-                Customize Your Kit
+                {t("product.customize_kit")}
               </h3>
               <div className="space-y-3">
                 {product.bundle_options.map((option) => (
@@ -160,7 +160,7 @@ export default function ProductContent({ product }: ProductContentProps) {
             </Button>
           </div>
 
-          <Accordion className="w-full" defaultValue="description">
+          <Accordion className="w-full" defaultValue={["description"]}>
             <AccordionItem value="description" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.description")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-sm leading-relaxed prose prose-sm dark:prose-invert font-medium">
@@ -214,7 +214,7 @@ export default function ProductContent({ product }: ProductContentProps) {
                 <div className="flex items-start gap-4 bg-muted/30 p-4 rounded-2xl border border-border/50">
                   <ShieldCheck className="w-6 h-6 text-primary shrink-0" />
                   <p className="text-sm leading-relaxed">
-                    All FDS Timing devices are backed by Swiss-engineered reliability and supported locally by Eqilo&apos;s 20 years of expertise.
+                    {t("product.guarantee_desc")}
                   </p>
                 </div>
               </AccordionContent>

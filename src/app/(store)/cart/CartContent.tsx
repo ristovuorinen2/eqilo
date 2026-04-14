@@ -33,7 +33,7 @@ export default function CartContent({ products }: CartContentProps) {
       <div className="flex justify-between items-end mb-8 md:mb-10 pb-6 border-b border-border/50">
         <div className="space-y-1">
           <h1 className="text-3xl xs:text-4xl md:text-5xl font-black tracking-tighter text-foreground leading-tight">{t("cart.title")}</h1>
-          {cartItems.length > 0 && <p className="text-muted-foreground text-sm xs:text-base font-medium">{cartItems.length} {t("cart.items_in_cart") || "tuotetta"}</p>}
+          {cartItems.length > 0 && <p className="text-muted-foreground text-sm xs:text-base font-medium">{cartItems.length} {t("cart.items_in_cart")}</p>}
         </div>
         {cartItems.length > 0 && (
           <Button variant="ghost" size="sm" onClick={clearCart} className="text-muted-foreground hover:text-destructive font-bold text-xs uppercase tracking-widest">
@@ -170,7 +170,7 @@ export default function CartContent({ products }: CartContentProps) {
                 </Link>
                 <div className="w-full flex items-center gap-3 my-2">
                   <Separator className="flex-1 bg-border/50" />
-                  <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest">{t("cart.or") || "TAI"}</span>
+                  <span className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest">{t("cart.or")}</span>
                   <Separator className="flex-1 bg-border/50" />
                 </div>
                 <QuoteDialog />

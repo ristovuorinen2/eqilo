@@ -37,7 +37,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
     return (
       <div className="container py-20 text-center">
         <p className="text-muted-foreground animate-pulse font-medium">
-          {lang === "FI" ? "Ladataan..." : lang === "SE" ? "Laddar..." : "Loading..."}
+          {t("category.loading")}
         </p>
       </div>
     );
@@ -47,7 +47,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
     return (
       <div className="container py-20 text-center">
         <p className="text-muted-foreground font-medium">
-          {lang === "FI" ? "Tästä kategoriasta ei löytynyt tuotteita." : lang === "SE" ? "Inga produkter hittades i denna kategori." : "No products found in this category."}
+          {t("category.empty")}
         </p>
       </div>
     );
@@ -61,7 +61,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       <div className="mb-10 space-y-4 max-w-4xl border-b pb-8">
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight capitalize">{categoryName}</h1>
         <p className="text-muted-foreground text-lg leading-relaxed">
-          {lang === "FI" ? "Ammattimaiset FDS Timing -ratkaisut kategoriaan" : lang === "SE" ? "Professionella FDS Timing-lösningar för" : "Professional FDS Timing solutions for"} {categoryName.toLowerCase()}.
+          {t("category.description_prefix")} {categoryName.toLowerCase()}.
         </p>
       </div>
 

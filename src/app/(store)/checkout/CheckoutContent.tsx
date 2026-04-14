@@ -204,7 +204,7 @@ export default function CheckoutContent({ products }: CheckoutContentProps) {
                  {!isSubmitting && <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />}
                </Button>
                {!user && (
-                 <p className="text-sm text-destructive text-center mt-4 font-semibold">Kirjaudu sisään jatkaaksesi kassalle.</p>
+                 <p className="text-sm text-destructive text-center mt-4 font-semibold">{t("checkout.login_required")}</p>
                )}
             </CardFooter>
           </Card>

@@ -166,7 +166,7 @@ export function UserMenu() {
              {isRegister ? t("auth.register_title") : t("auth.login_title")}
            </DialogTitle>
            <DialogDescription className="text-primary-foreground/80">
-             {isRegister ? "Join Eqilo.fi to manage your professional equipment." : "Sign in to access your orders and saved carts."}
+             {isRegister ? t("auth.register_desc") : t("auth.login_desc")}
            </DialogDescription>
         </div>
         
