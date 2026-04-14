@@ -128,10 +128,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans overflow-x-hidden w-full;
+    @apply font-sans w-full;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply break-words;
