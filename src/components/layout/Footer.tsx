@@ -8,7 +8,7 @@ export function Footer() {
 
   return (
     <footer className="border-t bg-muted/20">
-      <div className="container py-12 md:py-16">
+      <div className="container pt-12 pb-24 md:pt-16 md:pb-28">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
           
           <div className="space-y-4 text-center sm:text-left">
