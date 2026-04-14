@@ -91,11 +91,11 @@ export default function TrainingAndResultsPage() {
                 <p className="text-muted-foreground text-lg">Johannes Hyrsky ja Eqilon tiimi ovat valmiina auttamaan.</p>
               </div>
            </div>
-           <Link href="/shop" className="w-full md:w-auto">
+           <a href="https://wa.me/358505633097" target="_blank" rel="noreferrer" className="w-full md:w-auto">
              <Button size="lg" className="w-full md:w-auto h-14 px-8 font-bold text-lg shadow-md hover:scale-105 transition-transform">
                 Ota Yhteyttä <ArrowRight className="ml-2 w-5 h-5" />
              </Button>
-           </Link>
+           </a>
         </section>
       </div>
     );
@@ -171,11 +171,11 @@ export default function TrainingAndResultsPage() {
                <p className="text-muted-foreground text-lg">Johannes Hyrsky and the Eqilo team are ready to help.</p>
             </div>
          </div>
-         <Link href="/shop" className="w-full md:w-auto">
+         <a href="https://wa.me/358505633097" target="_blank" rel="noreferrer" className="w-full md:w-auto">
            <Button size="lg" className="w-full md:w-auto h-14 px-8 font-bold text-lg shadow-md hover:scale-105 transition-transform">
               Contact Us <ArrowRight className="ml-2 w-5 h-5" />
            </Button>
-         </Link>
+         </a>
       </section>
     </div>
   );
