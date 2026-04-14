@@ -51,7 +51,8 @@ export default function CheckoutContent({ products }: CheckoutContentProps) {
   }).filter(item => item.product !== undefined);
 
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product!.price * item.quantity), 0);
-  const shipping = subtotal >= 200 ? 0 : 20;
+  const hasTestProduct = cartItems.some(item => item.product!.sku === "TEST-1EUR");
+  const shipping = (subtotal >= 200 || hasTestProduct) ? 0 : 20;
   const total = subtotal + shipping;
 
   const handleCheckout = async (e: React.FormEvent) => {

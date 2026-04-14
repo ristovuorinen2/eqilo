@@ -103,8 +103,10 @@ export async function createCheckoutSession(
       label: `VAT ${rate}%`,
     }));
 
-    // 20 € shipping if < 200 €, otherwise free
-    const shippingCost = subtotal < 200 ? 2000 : 0; // In cents
+    const hasTestProduct = orderItems.some(item => item.product_id === "test-1eur");
+
+    // 20 € shipping if < 200 €, otherwise free (or free if test product is present)
+    const shippingCost = (subtotal >= 200 || hasTestProduct) ? 0 : 2000; // In cents
     
     // Create pending order in Firestore
     const orderRef = adminDb.collection("orders").doc();
