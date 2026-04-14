@@ -1,6 +1,6 @@
 "use server";
 
-import { adminDb } from "../firebase/admin";
+import { adminDb, adminStorage } from "../firebase/admin";
 import * as cheerio from "cheerio";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -10,14 +10,55 @@ async function translateText(text: string, lang: 'fi' | 'sv') {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-3.1-pro-preview" });
     const language = lang === 'fi' ? "Finnish" : "Swedish";
-    const prompt = `Translate the following product description into professional ${language}. Keep formatting and technical terms intact where appropriate. Do not add any conversational filler. Only output the translation:\n\n${text}`;
+    
+    // Improved prompt for technical accuracy
+    const prompt = `You are a professional technical translator for Eqilo.fi, a Finnish timing systems expert. 
+    Translate the following FDS Timing product technical description into natural, professional ${language}. 
+    Ensure all technical specifications (like ranges, frequencies, and kit components) are accurately translated but kept in their standard units.
+    Do not add any conversational text. ONLY provide the translated content.
+    
+    Product Description to Translate:
+    ${text}`;
+
     const result = await model.generateContent(prompt);
-    return result.response.text().trim();
+    const translation = result.response.text().trim();
+    
+    // Simple sanity check: if translation is too short compared to original, something might have failed
+    if (translation.length < text.length * 0.3 && text.length > 100) {
+      console.warn("Translation seems suspiciously short, returning original.");
+      return text;
+    }
+
+    return translation;
   } catch (e) {
     console.error(`Gemini translation error for ${lang}:`, e);
     return text;
   }
 }
+
+async function uploadImageFromUrl(url: string, sku: string): Promise<string | null> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const buffer = Buffer.from(await res.arrayBuffer());
+    const fileName = `products/${sku}/${path.basename(new URL(url).pathname)}`;
+    const bucket = adminStorage.bucket();
+    const file = bucket.file(fileName);
+    
+    await file.save(buffer, {
+      metadata: { contentType: res.headers.get("content-type") || "image/jpeg" },
+      public: true,
+    });
+
+    // Construct public URL
+    return `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+  } catch (e) {
+    console.error(`Failed to upload image for ${sku}:`, e);
+    return null;
+  }
+}
+
+import path from "path";
 
 export async function scrapeAndTranslateDescriptions() {
   try {
@@ -100,10 +141,10 @@ export async function scrapeAndTranslateDescriptions() {
       let downloads = sData?.downloads || data.downloads || [];
 
       // Check if translation is missing or needs updating (if we scraped a new English description)
-      const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description;
-      const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0] !== imageUrl);
       const needsBox = boxContents && data.box_contents !== boxContents;
       const needsDownloads = downloads.length > 0 && JSON.stringify(data.downloads) !== JSON.stringify(downloads);
+      const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description || (data.description.length > 200 && (data.description_fi?.length || 0) < 100);
+      const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0].includes("fdstiming.com"));
 
       if ((sData && sData.desc !== data.description) || needsTranslation || needsImage || needsBox || needsDownloads) {
         console.log(`Updating product data for ${sku}...`);
@@ -112,24 +153,33 @@ export async function scrapeAndTranslateDescriptions() {
         let descriptionSE = data.description_se;
 
         // Run Gemini translation only if we haven't successfully translated it before, 
-        // or if the English description fundamentally changed.
-        if (process.env.GEMINI_API_KEY && descriptionEN && descriptionEN.length > 0 && (!descriptionFI || descriptionFI === data.description || (sData && sData.desc !== data.description))) {
+        // or if the technical description needs to be re-translated.
+        if (process.env.GEMINI_API_KEY && descriptionEN && descriptionEN.length > 0 && needsTranslation) {
            descriptionFI = await translateText(descriptionEN, 'fi');
            console.log(`  -> Gemini translated ${sku} to FI`);
         }
         
-        if (process.env.GEMINI_API_KEY && descriptionEN && descriptionEN.length > 0 && (!descriptionSE || descriptionSE === data.description || (sData && sData.desc !== data.description))) {
+        if (process.env.GEMINI_API_KEY && descriptionEN && descriptionEN.length > 0 && needsTranslation) {
            descriptionSE = await translateText(descriptionEN, 'sv');
            console.log(`  -> Gemini translated ${sku} to SE`);
+        }
+
+        let finalImageUrls = data.image_urls || [];
+        if (imageUrl && imageUrl.includes("fdstiming.com")) {
+           console.log(`  -> Downloading image for ${sku} to Firebase Storage...`);
+           const storageUrl = await uploadImageFromUrl(imageUrl, sku);
+           if (storageUrl) {
+             finalImageUrls = [storageUrl];
+           }
         }
 
         const updateData: any = {
           description: descriptionEN,
           description_fi: descriptionFI || descriptionEN,
           description_se: descriptionSE || descriptionEN,
+          image_urls: finalImageUrls,
         };
 
-        if (imageUrl) updateData.image_urls = [imageUrl];
         if (boxContents) updateData.box_contents = boxContents;
         if (downloads.length > 0) updateData.downloads = downloads;
 

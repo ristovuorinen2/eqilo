@@ -2,12 +2,27 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, CheckCircle2, Battery, Wifi, ShieldCheck, MonitorPlay, Timer } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useLanguage } from "@/components/language-provider";
 
+import { getProducts } from "@/lib/actions/admin";
+import { Product } from "@/lib/types/firestore";
+import { useEffect, useState } from "react";
+import { LocalizedDescription } from "@/components/LocalizedDescription";
+
 export default function HomePage() {
   const { t } = useLanguage();
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function fetchFeatured() {
+      const all = await getProducts();
+      setFeaturedProducts(all.filter(p => p.is_active && p.image_urls && p.image_urls.length > 0).slice(0, 6));
+    }
+    fetchFeatured();
+  }, []);
 
   return (
     <div className="w-full">
@@ -42,28 +57,35 @@ export default function HomePage() {
             <div className="mx-auto w-full max-w-lg aspect-video lg:aspect-square flex items-center justify-center">
               <Carousel className="w-full h-full" opts={{ loop: true }}>
                 <CarouselContent className="h-full">
-                  <CarouselItem className="h-full">
-                    <div className="w-full h-full bg-white rounded-xl flex flex-col items-center justify-center p-6 text-center shadow-lg relative overflow-hidden">
-                       <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Top Choice</div>
-                       <div className="w-32 h-32 md:w-48 md:h-48 bg-muted rounded-full mb-6 flex items-center justify-center border-4 border-primary/10">
-                          <Timer className="w-16 h-16 text-primary/60" />
-                       </div>
-                       <h3 className="text-2xl font-bold text-foreground mb-2">TBOX - Wireless Timing</h3>
-                       <p className="text-muted-foreground mb-6 max-w-xs">Complete precision for agility and equestrian sports.</p>
-                       <Link href="/shop"><Button variant="default" className="w-full">View Equipment</Button></Link>
-                    </div>
-                  </CarouselItem>
-                  <CarouselItem className="h-full">
-                    <div className="w-full h-full bg-white rounded-xl flex flex-col items-center justify-center p-6 text-center shadow-lg relative overflow-hidden">
-                       <div className="absolute top-4 right-4 bg-secondary text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Pro Setup</div>
-                       <div className="w-32 h-32 md:w-48 md:h-48 bg-muted rounded-full mb-6 flex items-center justify-center border-4 border-primary/10">
-                          <Wifi className="w-16 h-16 text-primary/60" />
-                       </div>
-                       <h3 className="text-2xl font-bold text-foreground mb-2">Wireless Photocells</h3>
-                       <p className="text-muted-foreground mb-6 max-w-xs">Zero cables on the field. 100% reliable wireless connection.</p>
-                       <Link href="/shop"><Button variant="default" className="w-full">View Equipment</Button></Link>
-                    </div>
-                  </CarouselItem>
+                  {featuredProducts.length > 0 ? featuredProducts.map((product) => (
+                    <CarouselItem key={product.id} className="h-full">
+                      <div className="w-full h-full bg-white rounded-xl flex flex-col items-center justify-center p-6 text-center shadow-lg relative overflow-hidden border">
+                         <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Top Choice</div>
+                         <div className="w-32 h-32 md:w-40 md:h-40 bg-muted rounded-full mb-6 flex items-center justify-center border-4 border-primary/5 relative overflow-hidden shrink-0">
+                            {product.image_urls?.[0] ? (
+                              <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain p-4 mix-blend-multiply" sizes="160px" />
+                            ) : (
+                              <Timer className="w-16 h-16 text-primary/60" />
+                            )}
+                         </div>
+                         <h3 className="text-xl font-bold text-foreground mb-1 truncate w-full px-4">{product.name}</h3>
+                         <div className="text-muted-foreground mb-6 max-w-xs text-xs line-clamp-2 h-8">
+                            <LocalizedDescription product={product} />
+                         </div>
+                         <Link href={`/product/${product.id}`} className="w-full px-4">
+                            <Button variant="default" className="w-full font-bold">€{product.price.toFixed(2)} - Details</Button>
+                         </Link>
+                      </div>
+                    </CarouselItem>
+                  )) : (
+                    <CarouselItem className="h-full">
+                      <div className="w-full h-full bg-white rounded-xl flex flex-col items-center justify-center p-6 text-center shadow-lg relative overflow-hidden border">
+                        <div className="w-32 h-32 md:w-48 md:h-48 bg-muted rounded-full mb-6 flex items-center justify-center animate-pulse" />
+                        <div className="h-6 w-48 bg-muted rounded mb-2 animate-pulse mx-auto" />
+                        <div className="h-4 w-32 bg-muted rounded animate-pulse mx-auto" />
+                      </div>
+                    </CarouselItem>
+                  )}
                 </CarouselContent>
                 <div className="hidden sm:block">
                   <CarouselPrevious className="left-4 bg-background/80 text-foreground hover:bg-background hover:text-primary border-none shadow-md h-10 w-10" />
