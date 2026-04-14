@@ -28,9 +28,10 @@ import { formatPrice } from "@/lib/utils";
 
 interface ProductContentProps {
   product: Product;
+  relatedProducts?: Product[];
 }
 
-export default function ProductContent({ product }: ProductContentProps) {
+export default function ProductContent({ product, relatedProducts }: ProductContentProps) {
   const { addItem } = useCart();
   const { t } = useLanguage();
   const [selectedBundleOptions, setSelectedBundleOptions] = useState<string[]>(
@@ -223,6 +224,41 @@ export default function ProductContent({ product }: ProductContentProps) {
 
         </div>
       </div>
+
+      {relatedProducts && relatedProducts.length > 0 && (
+        <div className="mt-20 pt-10 border-t border-border/50">
+          <h2 className="text-2xl xs:text-3xl font-black tracking-tight mb-8 uppercase text-foreground">{t("product.related")}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {relatedProducts.map(related => (
+              <Link key={related.id} href={`/product/${related.id}`} className="group">
+                <div className="bg-card text-card-foreground rounded-2xl border border-border/50 overflow-hidden flex flex-col h-full hover:shadow-lg transition-all hover:border-primary/40">
+                  <div className="aspect-square bg-muted/10 p-6 flex items-center justify-center relative border-b border-border/50 group-hover:bg-muted/30 transition-colors">
+                    {related.image_urls?.[0] ? (
+                      <Image 
+                        src={related.image_urls[0]} 
+                        alt={related.name} 
+                        fill 
+                        className="object-contain p-6 mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center opacity-20">
+                        <Image src="/eqilologo.jpeg" alt="Logo" fill className="object-contain p-10 grayscale" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5 flex-1 flex flex-col">
+                    <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors line-clamp-2 mb-2">{related.name}</h3>
+                    <div className="mt-auto pt-4">
+                      <PriceDisplay price={related.price} taxRate={related.tax_rate} size="sm" align="left" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

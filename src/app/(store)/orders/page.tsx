@@ -12,13 +12,19 @@ import {
   Clock, 
   CreditCard, 
   ExternalLink,
-  MapPin
+  MapPin,
+  FileDown,
+  RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/components/cart-provider";
+import { useRouter } from "next/navigation";
+import { generateReceipt } from "@/lib/actions/receipts";
+import { useAuth } from "@/components/auth-provider";
 
 const statuses = [
   { id: 'paid', label: 'orders.paid', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -30,7 +36,11 @@ const statuses = [
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generatingReceiptId, setGeneratingReceiptId] = useState<string | null>(null);
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const { addItem } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     async function load() {
@@ -40,6 +50,36 @@ export default function OrdersPage() {
     }
     load();
   }, []);
+
+  const handleDownloadReceipt = async (orderId: string) => {
+    if (!user) return;
+    setGeneratingReceiptId(orderId);
+    try {
+      const result = await generateReceipt(user.uid, orderId);
+      if (result.success && result.pdf) {
+        const linkSource = `data:application/pdf;base64,${result.pdf}`;
+        const downloadLink = document.createElement("a");
+        const fileName = `Receipt_${orderId.substring(0, 8).toUpperCase()}.pdf`;
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+      } else {
+        alert(t("orders.receipt_error") || "Failed to generate receipt.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert(t("orders.receipt_error") || "Failed to generate receipt.");
+    } finally {
+      setGeneratingReceiptId(null);
+    }
+  };
+
+  const handleReorder = async (order: Order) => {
+    for (const item of order.items) {
+      await addItem(item.product_id, item.quantity);
+    }
+    router.push("/cart");
+  };
 
   if (loading) {
     return (
@@ -183,6 +223,29 @@ export default function OrdersPage() {
                         </div>
                       )}
                     </div>
+                  </div>
+                  
+                  <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    <Button 
+                      variant="outline" 
+                      className="w-full sm:w-auto font-bold"
+                      onClick={() => handleDownloadReceipt(order.id)}
+                      disabled={generatingReceiptId === order.id}
+                    >
+                      {generatingReceiptId === order.id ? (
+                        <Clock className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <FileDown className="w-4 h-4 mr-2" />
+                      )}
+                      {t("orders.download_receipt") || "Download Receipt"}
+                    </Button>
+                    <Button 
+                      className="w-full sm:w-auto font-bold"
+                      onClick={() => handleReorder(order)}
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      {t("orders.reorder") || "Reorder Items"}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

@@ -295,6 +295,7 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "product.image_pending": "Product Image Pending",
     "product.customize_kit": "Customize Your Kit",
     "product.quantity": "Quantity",
+    "product.related": "Frequently Bought Together",
     "product.guarantee_desc": "All FDS Timing devices are backed by Swiss-engineered reliability and supported locally by Eqilo's 20 years of expertise.",
     "category.after-sales": "After-Sales",
     "category.peripheral": "Peripherals",
