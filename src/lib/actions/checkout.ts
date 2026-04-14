@@ -3,6 +3,7 @@
 import { adminDb } from "../firebase/admin";
 import { Stripe } from "stripe";
 import { CartItem, Product, Order } from "../types/firestore";
+import { verifySession } from "./auth";
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
@@ -15,6 +16,11 @@ export async function createCheckoutSession(
   customerDetails?: { email: string; phone: string; businessId?: string }
 ) {
   try {
+    const session = await verifySession();
+    if (!session || session.uid !== userId) {
+      throw new Error("Unauthorized: Invalid session");
+    }
+
     if (!stripe) {
       throw new Error("Stripe is not configured in this environment.");
     }
@@ -107,7 +113,7 @@ export async function createCheckoutSession(
     await orderRef.set(newOrder);
 
     // Create Stripe session
-    const session = await stripe.checkout.sessions.create({
+    const stripeSession = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ['card', 'mobilepay'],
       line_items,
@@ -138,16 +144,16 @@ export async function createCheckoutSession(
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/cart`,
     });
 
-    if (!session.url) {
+    if (!stripeSession.url) {
       throw new Error("Failed to create Stripe session URL");
     }
 
     // Link intent to order if available
-    if (session.payment_intent) {
-      await orderRef.update({ stripe_payment_intent: session.payment_intent as string });
+    if (stripeSession.payment_intent) {
+      await orderRef.update({ stripe_payment_intent: stripeSession.payment_intent as string });
     }
 
-    return { success: true, url: session.url };
+    return { success: true, url: stripeSession.url };
   } catch (error: any) {
     console.error("Checkout Session Error:", error);
     return { success: false, error: error.message };

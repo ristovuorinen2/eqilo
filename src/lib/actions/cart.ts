@@ -2,9 +2,15 @@
 
 import { adminDb } from "../firebase/admin";
 import { CartItem } from "../types/firestore";
+import { verifySession } from "./auth";
 
 export async function syncUserCart(userId: string, items: CartItem[]) {
   try {
+    const session = await verifySession();
+    if (!session || session.uid !== userId) {
+      throw new Error("Unauthorized: Invalid session");
+    }
+
     const cartRef = adminDb.collection("carts").doc(userId);
     
     // Check if cart exists to preserve fields like is_public_link
@@ -36,6 +42,11 @@ export async function syncUserCart(userId: string, items: CartItem[]) {
 
 export async function fetchUserCart(userId: string) {
   try {
+    const session = await verifySession();
+    if (!session || session.uid !== userId) {
+      throw new Error("Unauthorized: Invalid session");
+    }
+
     const doc = await adminDb.collection("carts").doc(userId).get();
     if (doc.exists) {
       return { success: true, items: doc.data()?.items as CartItem[] };
@@ -47,8 +58,20 @@ export async function fetchUserCart(userId: string) {
   }
 }
 
+// Ensure the caller is an admin
+async function requireAdmin() {
+  const session = await verifySession();
+  if (!session) throw new Error("Unauthorized");
+  const userDoc = await adminDb.collection("customers").doc(session.uid).get();
+  if (!userDoc.exists || userDoc.data()?.role !== "admin") {
+    throw new Error("Forbidden: Admin access required");
+  }
+}
+
 export async function generateShareableCartLink(cartId: string) {
   try {
+    await requireAdmin();
+
     const cartRef = adminDb.collection("carts").doc(cartId);
     await cartRef.update({
       is_public_link: true,
@@ -64,6 +87,8 @@ export async function generateShareableCartLink(cartId: string) {
 
 export async function updateCartItemPrice(cartId: string, productId: string, newPrice: number) {
   try {
+    await requireAdmin();
+
     const cartRef = adminDb.collection("carts").doc(cartId);
     const doc = await cartRef.get();
     if (!doc.exists) throw new Error("Cart not found");

@@ -1,8 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onIdTokenChanged, User } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
+import { createSession, removeSession } from "@/lib/actions/auth";
 
 interface AuthContextType {
   user: User | null;
@@ -19,8 +20,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
       setUser(user);
+      
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          await createSession(token);
+        } catch (e) {
+          console.error("Failed to sync session cookie:", e);
+        }
+      } else {
+        await removeSession();
+      }
+      
       setLoading(false);
     });
 

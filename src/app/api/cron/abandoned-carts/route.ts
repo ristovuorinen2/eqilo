@@ -12,7 +12,9 @@ export async function GET(request: Request) {
     const resend = new Resend(resendApiKey);
     // 1. Verify authorization header to prevent public triggering
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET || 'dev_secret'}`) {
+    const cronSecret = process.env.CRON_SECRET;
+
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
