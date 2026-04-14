@@ -38,8 +38,11 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-10">
         
         {/* Sidebar Filters */}
-        <aside className="w-full md:w-72 shrink-0 space-y-8 md:sticky md:top-24 md:h-[calc(100vh-7rem)] md:overflow-y-auto no-scrollbar">
-          <div className="border border-border/50 rounded-2xl p-4 md:p-6 bg-card shadow-sm overflow-hidden">
+        <aside 
+          className="w-full md:w-72 shrink-0 md:sticky md:top-24 md:overflow-y-auto no-scrollbar"
+          style={{ maxHeight: "calc(100vh - 8rem)" }}
+        >
+          <div className="border border-border/50 rounded-2xl p-4 md:p-6 bg-card shadow-sm mb-4">
             <h3 className="text-lg md:text-xl font-extrabold mb-4 md:mb-6 flex items-center gap-2 text-foreground tracking-tight">
               <Tag className="w-4 h-4 md:w-5 md:h-5 text-primary" /> {t("shop.categories")}
             </h3>
