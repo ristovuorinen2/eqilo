@@ -24,7 +24,7 @@ The webstore will serve as a foundation for long-term growth, expanding into add
 ## Technical Scope
 - **Customer Portal:** Product discovery, simple product search (utilizing native Firestore composite indexes and search limits, without external services), persistent carts saved to user accounts, mandatory account creation during the first order, Stripe checkout, and a dedicated **E-store Terms & Conditions** page which users must explicitly accept before completing a purchase.
 - **Admin Panel:** Product management (importing from Excel, plus a fully-featured Product Manager/Editor to modify descriptions, prices, and status), order/inventory management, comprehensive Sales Dashboard, Cart management (ability to view, edit, override prices, and generate shareable public cart links), and a built-in CRM to manage customers and their orders.
-- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be containerized using a secure Docker image and deployed to **Google Cloud Run** for scalable, serverless execution. Firebase services (Firestore, Auth via email or phone number) will be used for the backend data layer.
+- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be deployed via **Firebase App Hosting**, which provides seamless GitHub integration, global CDN edge caching, and serverless execution without manual Docker containerization. Firebase services (Firestore, Auth via email or phone number) will be used for the backend data layer.
 - **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk), Google Analytics 4 / Plausible (Analytics).
 - **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 - **Internationalization (i18n):** Support for Finnish (FI - Default), English (EN), and Swedish (SE).
@@ -242,4 +242,4 @@ The Next.js App Router will follow this logical page hierarchy:
 
 ## Migration & Rollback
 - Since this is a greenfield project, initial migration involves one-time importing from `Price List 2026 V3.0.xlsx`.
-- Rollback strategies involve utilizing Firestore point-in-time recovery and Google Cloud Run's traffic management to immediately revert to a previous secure Docker image revision in case of critical bugs.
+- Rollback strategies involve utilizing Firestore point-in-time recovery and Firebase App Hosting's built-in version management to instantly revert to a previous deployment revision in case of critical bugs.

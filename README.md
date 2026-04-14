@@ -14,7 +14,7 @@ This repository contains the Next.js App Router frontend and backend for the Eqi
 - **Payments:** Stripe Checkout (Apple Pay, Google Pay, MobilePay, B2B invoicing)
 - **Transactional Emails:** Resend
 - **AI Localization:** Google Gemini 3.1 Pro (Automated Product Translation)
-- **Deployment:** Google Cloud Run (Docker)
+- **Deployment:** Firebase App Hosting (Google Cloud Run + Edge CDN)
 
 ## Getting Started
 
