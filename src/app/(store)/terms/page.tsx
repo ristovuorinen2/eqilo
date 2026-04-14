@@ -3,7 +3,7 @@
 import { useLanguage } from "@/components/language-provider";
 
 export default function TermsPage() {
-  const { lang, t } = useLanguage();
+  const { lang } = useLanguage();
 
   if (lang === "FI") {
     return (
@@ -13,9 +13,8 @@ export default function TermsPage() {
 
         <section className="mb-12">
           <h2 className="text-2xl font-bold">1. Yleistä</h2>
-          <p>Näitä sopimusehtoja sovelletaan Eqilo Oy:n (jäljempänä "Eqilo") ja sen asiakkaiden välisessä kauppasuhteessa. Eqilo pidättää oikeuden muuttaa näitä ehtoja yksipuolisesti ilman ennakkoilmoitusta.</p>
+          <p>Näitä sopimusehtoja sovelletaan Eqilo Oy:n (jäljempänä &quot;Eqilo&quot;) ja sen asiakkaiden välisessä kauppasuhteessa. Eqilo pidättää oikeuden muuttaa näitä ehtoja yksipuolisesti ilman ennakkoilmoitusta.</p>
         </section>
-
         <section className="mb-12">
           <h2 className="text-2xl font-bold">2. Hinnat ja tuotteet</h2>
           <p>Tuotteiden hinnat sisältävät voimassa olevan arvonlisäveron (25,5 % yleinen kanta, ellei toisin mainita). Hinnat eivät sisällä toimituskuluja, ellei toisin mainita. Eqilo pidättää oikeuden peruuttaa tilauksen, mikäli tuotteen hinta on ollut verkkokaupassa selvästi virheellinen.</p>
@@ -39,7 +38,7 @@ export default function TermsPage() {
         <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
           <h3 className="text-lg font-bold mb-2">Onko kysyttävää?</h3>
           <p className="text-sm text-muted-foreground mb-4">Asiakaspalvelumme auttaa mielellään kaikissa sopimusasioissa.</p>
-          <p className="font-bold text-primary">+358 50 5633097</p>
+          <a href="tel:+358505633097" className="font-bold text-primary hover:underline">+358 50 5633097</a>
         </div>
       </div>
     );
@@ -53,9 +52,8 @@ export default function TermsPage() {
 
         <section className="mb-12">
           <h2 className="text-2xl font-bold">1. Allmänt</h2>
-          <p>Dessa villkor gäller för det kommersiella förhållandet mellan Eqilo Oy ("Eqilo") och dess kunder. Eqilo förbehåller sig rätten att ensidigt ändra dessa villkor utan föregående meddelande.</p>
+          <p>Dessa villkor gäller för det kommersiella förhållandet mellan Eqilo Oy (&quot;Eqilo&quot;) och dess kunder. Eqilo förbehåller sig rätten att ensidigt ändra dessa villkor utan föregående meddelande.</p>
         </section>
-
         <section className="mb-12">
           <h2 className="text-2xl font-bold">2. Priser och produkter</h2>
           <p>Produktpriserna inkluderar tillämplig mervärdesskatt (25,5 % allmän sats om inget annat anges). Priserna inkluderar inte leveranskostnader om inget annat anges. Eqilo förbehåller sig rätten att annullera en beställning om priset på produkten i webbutiken har varit uppenbart felaktigt.</p>
@@ -79,7 +77,7 @@ export default function TermsPage() {
         <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
           <h3 className="text-lg font-bold mb-2">Har du frågor?</h3>
           <p className="text-sm text-muted-foreground mb-4">Vår kundtjänst hjälper gärna till med alla avtalsfrågor.</p>
-          <p className="font-bold text-primary">+358 50 5633097</p>
+          <a href="tel:+358505633097" className="font-bold text-primary hover:underline">+358 50 5633097</a>
         </div>
       </div>
     );
@@ -92,7 +90,7 @@ export default function TermsPage() {
 
       <section className="mb-12">
         <h2 className="text-2xl font-bold">1. General</h2>
-        <p>These terms and conditions apply to the commercial relationship between Eqilo Oy ("Eqilo") and its customers. Eqilo reserves the right to change these terms unilaterally without prior notice.</p>
+        <p>These terms and conditions apply to the commercial relationship between Eqilo Oy (&quot;Eqilo&quot;) and its customers. Eqilo reserves the right to change these terms unilaterally without prior notice.</p>
       </section>
 
       <section className="mb-12">
@@ -118,7 +116,7 @@ export default function TermsPage() {
       <div className="mt-20 p-8 bg-muted/30 rounded-2xl border border-border/50 text-center">
         <h3 className="text-lg font-bold mb-2">Any Questions?</h3>
         <p className="text-sm text-muted-foreground mb-4">Our customer service is happy to help with any contractual matters.</p>
-        <p className="font-bold text-primary">+358 50 5633097</p>
+        <a href="tel:+358505633097" className="font-bold text-primary hover:underline">+358 50 5633097</a>
       </div>
     </div>
   );

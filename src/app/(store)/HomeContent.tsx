@@ -7,7 +7,6 @@ import { ArrowRight, CheckCircle2, Battery, Wifi, ShieldCheck, MonitorPlay, Time
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useLanguage } from "@/components/language-provider";
 import { Product } from "@/lib/types/firestore";
-import { LocalizedDescription } from "@/components/LocalizedDescription";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
 import { formatPrice } from "@/lib/utils";
@@ -30,7 +29,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
           <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
             <div className="flex flex-col justify-center space-y-4 text-center lg:text-left">
               <div className="space-y-3">
-                <h1 className="text-3xl font-extrabold tracking-tighter xs:text-4xl sm:text-5xl xl:text-6xl/none break-words">
+                <h1 className="text-3xl font-extrabold tracking-tighter xs:text-4xl sm:text-5xl xl:text-6xl/none break-words hyphens-auto max-w-full overflow-hidden">
                   {t("home.hero.title")}
                 </h1>
                 <p className="max-w-[600px] mx-auto lg:mx-0 text-primary-foreground/90 text-sm xs:text-base md:text-xl">
@@ -66,10 +65,10 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <CarouselContent className="h-full">
                   {featuredProducts.length > 0 ? featuredProducts.map((product) => (
                     <CarouselItem key={product.id} className="h-full">
-                      <div className="w-full h-full bg-white rounded-2xl flex flex-col items-center justify-center p-4 xs:p-8 md:p-10 text-center shadow-2xl relative overflow-hidden border">
+                      <div className="w-full h-full bg-white rounded-2xl flex flex-col items-center justify-center p-3 xs:p-8 md:p-10 text-center shadow-2xl relative overflow-hidden border">
                          <div className="absolute top-4 right-4 bg-emerald-500 text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">{t("shop.in_stock")}</div>
                          
-                         <div className="w-32 h-32 xs:w-44 xs:h-44 md:w-64 md:h-64 bg-muted/10 rounded-full mb-6 mt-4 flex items-center justify-center border-4 border-muted/30 relative overflow-hidden shrink-0 group hover:scale-105 transition-transform duration-500 shadow-inner">
+                         <div className="w-24 h-24 xs:w-44 xs:h-44 md:w-64 md:h-64 bg-muted/10 rounded-full mb-4 xs:mb-6 mt-4 flex items-center justify-center border-4 border-muted/30 relative overflow-hidden shrink-0 group hover:scale-105 transition-transform duration-500 shadow-inner">
                             {product.image_urls?.[0] ? (
                               <div className="absolute -inset-8 md:-inset-12">
                                 <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4 md:p-8" sizes="(max-width: 768px) 256px, 512px" />
