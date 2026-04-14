@@ -11,7 +11,6 @@ import {
   CheckCircle2, 
   Clock, 
   CreditCard, 
-  ChevronRight,
   ExternalLink,
   MapPin
 } from "lucide-react";
@@ -21,10 +20,10 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const statuses = [
-  { id: 'paid', label: 'Paid', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { id: 'processing', label: 'Processing', icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50' },
-  { id: 'shipped', label: 'Shipped', icon: Truck, color: 'text-purple-600', bg: 'bg-purple-50' },
-  { id: 'delivered', label: 'Delivered', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  { id: 'paid', label: 'orders.paid', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50' },
+  { id: 'processing', label: 'orders.processing', icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50' },
+  { id: 'shipped', label: 'orders.shipped', icon: Truck, color: 'text-purple-600', bg: 'bg-purple-50' },
+  { id: 'delivered', label: 'orders.delivered', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
 ];
 
 export default function OrdersPage() {
@@ -44,7 +43,7 @@ export default function OrdersPage() {
   if (loading) {
     return (
       <div className="container py-20 text-center">
-        <p className="text-muted-foreground animate-pulse font-medium">Loading your orders...</p>
+        <p className="text-muted-foreground animate-pulse font-medium">{t("orders.loading")}</p>
       </div>
     );
   }
@@ -53,14 +52,14 @@ export default function OrdersPage() {
     <div className="container py-10 md:py-16 max-w-5xl">
       <div className="mb-10">
         <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">{t("nav.my_orders")}</h1>
-        <p className="text-muted-foreground">Track your FDS Timing equipment deliveries.</p>
+        <p className="text-muted-foreground">{t("orders.description")}</p>
       </div>
 
       {orders.length === 0 ? (
         <div className="text-center py-20 border rounded-2xl bg-muted/10">
           <Package className="w-16 h-16 mx-auto text-muted-foreground/30 mb-4" />
-          <h2 className="text-xl font-bold mb-2">No orders found</h2>
-          <p className="text-muted-foreground mb-6">You haven't placed any orders yet.</p>
+          <h2 className="text-xl font-bold mb-2">{t("orders.empty")}</h2>
+          <p className="text-muted-foreground mb-6">{t("orders.empty_sub")}</p>
           <Link href="/shop">
              <Button>{t("cart.browse")}</Button>
           </Link>
@@ -75,15 +74,15 @@ export default function OrdersPage() {
                 <CardHeader className="bg-muted/30 border-b border-border/50 px-6 py-4 flex flex-row items-center justify-between">
                   <div className="flex gap-6">
                      <div>
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Order ID</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t("orders.id")}</p>
                        <p className="text-sm font-mono font-bold">#{order.id.substring(0, 8)}</p>
                      </div>
                      <div>
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Date</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t("orders.date")}</p>
                        <p className="text-sm font-bold">{new Date(order.created_at as any).toLocaleDateString()}</p>
                      </div>
                      <div>
-                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total</p>
+                       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t("cart.total")}</p>
                        <p className="text-sm font-bold text-primary">€{order.total_amount.toFixed(2)}</p>
                      </div>
                   </div>
@@ -92,7 +91,7 @@ export default function OrdersPage() {
                     order.status === 'shipped' ? 'border-purple-200 bg-purple-50 text-purple-700' :
                     'border-amber-200 bg-amber-50 text-amber-700'
                   )}>
-                    {order.status}
+                    {t(statuses.find(s => s.id === order.status)?.label || order.status)}
                   </Badge>
                 </CardHeader>
                 <CardContent className="p-6">
@@ -119,7 +118,7 @@ export default function OrdersPage() {
                             "text-[10px] font-bold uppercase tracking-tight absolute -bottom-6 whitespace-nowrap",
                             isActive ? "text-primary" : "text-muted-foreground"
                           )}>
-                            {s.label}
+                            {t(s.label)}
                           </span>
                         </div>
                       );
@@ -128,11 +127,11 @@ export default function OrdersPage() {
 
                   <div className="grid md:grid-cols-2 gap-8 pt-6 border-t mt-10">
                     <div className="space-y-4">
-                      <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">Order Items</h4>
+                      <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">{t("orders.items")}</h4>
                       <div className="space-y-3">
                          {order.items.map((item, idx) => (
                            <div key={idx} className="flex justify-between items-center text-sm font-medium">
-                              <span className="text-muted-foreground">{item.quantity}x <span className="text-foreground">Product ID: {item.product_id.substring(0, 10)}...</span></span>
+                              <span className="text-muted-foreground">{item.quantity}x <span className="text-foreground">{t("orders.product_id")}: {item.product_id.substring(0, 10)}...</span></span>
                               <span>€{(item.price * item.quantity).toFixed(2)}</span>
                            </div>
                          ))}
@@ -140,7 +139,7 @@ export default function OrdersPage() {
                       
                       {order.tax_breakdown && order.tax_breakdown.length > 0 && (
                         <div className="pt-4 mt-4 border-t border-dashed">
-                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Tax Breakdown</p>
+                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">{t("orders.tax_breakdown")}</p>
                           {order.tax_breakdown.map((tax, idx) => (
                             <div key={idx} className="flex justify-between text-xs font-medium">
                                <span className="text-muted-foreground">{tax.label}</span>
@@ -152,7 +151,7 @@ export default function OrdersPage() {
                     </div>
 
                     <div className="space-y-4">
-                      <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">Delivery Details</h4>
+                      <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">{t("orders.delivery_details")}</h4>
                       <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/30 border border-border/50">
                         <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                         <div className="text-sm">
@@ -163,7 +162,7 @@ export default function OrdersPage() {
                       
                       {order.tracking_number && (
                         <div className="mt-4 pt-4 border-t">
-                           <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Tracking Information</p>
+                           <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">{t("orders.tracking")}</p>
                            <div className="flex items-center justify-between bg-primary/5 p-3 rounded-lg border border-primary/10">
                               <div className="flex items-center gap-3">
                                  <Truck className="w-5 h-5 text-primary" />
@@ -175,7 +174,7 @@ export default function OrdersPage() {
                               {order.tracking_url && (
                                 <a href={order.tracking_url} target="_blank" rel="noreferrer">
                                   <Button size="sm" variant="ghost" className="h-8 gap-2 font-bold">
-                                     Track <ExternalLink className="w-3 h-3" />
+                                     {t("orders.track_button")} <ExternalLink className="w-3 h-3" />
                                   </Button>
                                 </a>
                               )}

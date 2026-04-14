@@ -65,7 +65,7 @@ export function WhatsAppHelpdesk() {
               rel="noreferrer"
               className="text-sm text-primary hover:underline font-medium"
             >
-              {lang === "FI" ? "Tai klikkaa tästä WhatsApp Webiin" : lang === "SE" ? "Eller klicka här för WhatsApp Web" : "Or click here for WhatsApp Web"}
+              {t("whatsapp.web_link")}
             </a>
           </div>
         </Card>

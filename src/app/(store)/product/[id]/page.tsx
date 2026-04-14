@@ -149,7 +149,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                       />
                       <label htmlFor={option.id} className="text-sm font-bold cursor-pointer flex flex-col">
                         <span>{option.name}</span>
-                        {option.base_quantity > 1 && <span className="text-xs text-muted-foreground font-medium">Quantity: {option.base_quantity}</span>}
+                        {option.base_quantity > 1 && <span className="text-xs text-muted-foreground font-medium">{t("product.quantity")}: {option.base_quantity}</span>}
                       </label>
                     </div>
                     {option.extra_price && option.extra_price > 0 && (

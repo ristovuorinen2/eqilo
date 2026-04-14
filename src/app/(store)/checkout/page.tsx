@@ -75,7 +75,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (loading) return <div className="container py-20 text-center animate-pulse">{lang === "FI" ? "Valmistellaan kassaa..." : "Preparing checkout..."}</div>;
+  if (loading) return <div className="container py-20 text-center animate-pulse">{t("checkout.loading")}</div>;
 
   if (cartItems.length === 0) {
     return (
@@ -126,14 +126,14 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="business_id">{t("footer.business_id")} ({lang === "FI" ? "Valinnainen" : lang === "SE" ? "Valfri" : "Optional"})</Label>
+                  <Label htmlFor="business_id">{t("footer.business_id")} ({t("checkout.optional")})</Label>
                   <Input 
                     id="business_id" 
                     placeholder="e.g. 1234567-8" 
                     value={details.businessId}
                     onChange={(e) => setDetails({ ...details, businessId: e.target.value })}
                   />
-                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">Required for B2B Invoice & VAT handling</p>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tight">{t("checkout.b2b_note")}</p>
                 </div>
 
                 <Separator className="my-6 opacity-50" />
@@ -147,7 +147,7 @@ export default function CheckoutPage() {
                   />
                   <div className="grid gap-1.5 leading-none">
                     <label htmlFor="terms" className="text-sm font-bold leading-none cursor-pointer">
-                      {lang === "FI" ? "Hyväksyn kaupan käyttöehdot" : lang === "SE" ? "Jag godkänner köpvillkoren" : "I accept the store terms & conditions"}
+                      {t("checkout.terms_agree")}
                     </label>
                     <Link href="/terms" className="text-xs text-primary hover:underline font-medium" target="_blank">
                        {t("nav.terms")}
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
 
           <div className="flex items-center gap-3 text-muted-foreground bg-muted/30 p-4 rounded-lg border border-dashed">
              <Lock className="w-5 h-5" />
-             <p className="text-xs font-medium italic">Payments are securely processed by Stripe. Your data is encrypted and never stored on our servers.</p>
+             <p className="text-xs font-medium italic">{t("checkout.stripe_note")}</p>
           </div>
         </div>
 
@@ -191,7 +191,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-sm text-muted-foreground font-medium">
                     <span>{t("cart.shipping")}</span>
-                    <span>{shipping === 0 ? (lang === "FI" ? "Ilmainen" : lang === "SE" ? "Gratis" : "Free") : `€${shipping.toFixed(2)}`}</span>
+                    <span>{shipping === 0 ? t("cart.free") : `€${shipping.toFixed(2)}`}</span>
                   </div>
                   <div className="flex justify-between text-xl font-extrabold text-foreground pt-4 border-t">
                     <span>{t("cart.total")}</span>

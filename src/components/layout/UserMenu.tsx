@@ -195,7 +195,7 @@ export function UserMenu() {
                       required
                       className="h-12 text-lg font-medium"
                     />
-                    <p className="text-xs text-muted-foreground mt-1">Include country code (e.g., +358).</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("auth.phone_note")}</p>
                   </div>
                   <div id="recaptcha-container"></div>
                   <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
@@ -221,7 +221,7 @@ export function UserMenu() {
                     {t("auth.verify")}
                   </Button>
                   <Button variant="ghost" className="w-full" onClick={() => setStep("input")}>
-                    Back
+                    {t("auth.back")}
                   </Button>
                 </form>
               )}

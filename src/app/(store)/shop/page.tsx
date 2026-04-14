@@ -45,7 +45,7 @@ export default function ShopPage() {
       <div className="container py-20 text-center flex flex-col items-center justify-center min-h-[50vh]">
         <PackageOpen className="w-12 h-12 text-muted-foreground/30 animate-pulse mb-4" />
         <p className="text-muted-foreground animate-pulse font-bold tracking-tight">
-          {lang === "FI" ? "Ladataan ammattilaitteita..." : lang === "SE" ? "Laddar professionell utrustning..." : "Loading professional equipment..."}
+          {t("shop.loading")}
         </p>
       </div>
     );
@@ -111,7 +111,7 @@ export default function ShopPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-border/50">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">{t("shop.all_equipment")}</h1>
-              <p className="text-muted-foreground mt-3 text-lg font-medium">Professional timekeeping solutions for clubs.</p>
+              <p className="text-muted-foreground mt-3 text-lg font-medium">{t("shop.description")}</p>
             </div>
             <div className="mt-4 md:mt-0 text-sm font-bold bg-primary/10 text-primary px-4 py-1.5 rounded-full border border-primary/20">
               {activeProducts.length} {t("shop.items_found")}
@@ -160,7 +160,7 @@ export default function ShopPage() {
                   <div className="w-full h-[1px] bg-border/50 mb-1"></div>
                   <div className="w-full flex items-end justify-between mt-1 mb-2">
                     <div>
-                      <p className="text-xs font-bold text-muted-foreground mb-1 uppercase tracking-wider">Price</p>
+                      <p className="text-xs font-bold text-muted-foreground mb-1 uppercase tracking-wider">{lang === "FI" ? "Hinta" : lang === "SE" ? "Pris" : "Price"}</p>
                       <div className="font-extrabold text-3xl tracking-tight text-foreground">€{product.price.toFixed(2)}</div>
                     </div>
                     <Badge variant="outline" className="font-bold border-emerald-200 bg-emerald-50 text-emerald-700 px-3 py-1">{t("shop.in_stock")}</Badge>

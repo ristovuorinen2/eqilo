@@ -64,7 +64,7 @@ export function Header() {
                               {t("nav.consulting")}
                             </div>
                             <p className="text-sm leading-tight text-muted-foreground font-medium">
-                              20+ years of expertise in competition and timekeeping systems.
+                              {t("nav.consulting_desc")}
                             </p>
                         </NavigationMenuLink>
                       </li>
@@ -75,7 +75,7 @@ export function Header() {
                         >
                             <div className="text-sm font-bold leading-none">{t("nav.training")}</div>
                             <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                              On-site operations and staff training.
+                              {t("nav.training_desc")}
                             </p>
                         </NavigationMenuLink>
                       </li>
@@ -86,7 +86,7 @@ export function Header() {
                         >
                             <div className="text-sm font-bold leading-none">{t("nav.equipe")}</div>
                             <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                              The standard for equestrian show management.
+                              {t("nav.equipe_desc")}
                             </p>
                         </NavigationMenuLink>
                       </li>
@@ -105,7 +105,7 @@ export function Header() {
           <SearchDialog>
             <Button variant="ghost" size="icon" className="hidden sm:inline-flex hover:bg-primary/5 hover:text-primary transition-colors">
               <Search className="h-5 w-5" />
-              <span className="sr-only">Search products</span>
+              <span className="sr-only">{t("nav.search_sr")}</span>
             </Button>
           </SearchDialog>
           

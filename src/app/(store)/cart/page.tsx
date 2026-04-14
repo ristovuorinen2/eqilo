@@ -41,7 +41,7 @@ export default function CartPage() {
     return (
       <div className="container py-20 text-center">
         <p className="text-muted-foreground animate-pulse font-medium">
-          {lang === "FI" ? "Päivitetään ostoskoria..." : lang === "SE" ? "Uppdaterar kundvagnen..." : "Updating your cart..."}
+          {t("cart.updating")}
         </p>
       </div>
     );
@@ -53,7 +53,7 @@ export default function CartPage() {
         <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground">{t("cart.title")}</h1>
         {cartItems.length > 0 && (
           <Button variant="ghost" size="sm" onClick={clearCart} className="text-muted-foreground hover:text-destructive">
-            {lang === "FI" ? "Tyhjennä" : lang === "SE" ? "Rensa" : "Clear All"}
+            {t("cart.clear_all")}
           </Button>
         )}
       </div>
@@ -102,7 +102,7 @@ export default function CartPage() {
                           </div>
                           <div className="text-right">
                             <p className="font-bold text-lg">€{(item.product!.price * item.quantity).toFixed(2)}</p>
-                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} / {lang === "FI" ? "kpl" : lang === "SE" ? "st" : "each"}</p>
+                            <p className="text-xs text-muted-foreground">€{item.product!.price.toFixed(2)} / {t("cart.unit")}</p>
                           </div>
                         </div>
                         
@@ -168,7 +168,7 @@ export default function CartPage() {
               </div>
               <div className="flex justify-between text-muted-foreground font-medium">
                 <span>{t("cart.shipping")}</span>
-                <span>{shipping === 0 ? (lang === "FI" ? "Ilmainen" : lang === "SE" ? "Gratis" : "Free") : `€${shipping.toFixed(2)}`}</span>
+                <span>{shipping === 0 ? t("cart.free") : `€${shipping.toFixed(2)}`}</span>
               </div>
               <Separator className="my-4 border-border/50" />
               <div className="flex justify-between font-extrabold text-2xl tracking-tight text-foreground">

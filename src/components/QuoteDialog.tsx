@@ -70,14 +70,14 @@ export function QuoteDialog() {
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleGenerate}>
           <DialogHeader>
-            <DialogTitle>Request Official Quote</DialogTitle>
+            <DialogTitle>{t("quote.title")}</DialogTitle>
             <DialogDescription>
-              Enter your organization details. We'll generate a formal PDF for your board approval and email a copy to you.
+              {t("quote.desc")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="org_name">Club / Organization Name</Label>
+              <Label htmlFor="org_name">{t("quote.org_name")}</Label>
               <Input
                 id="org_name"
                 value={details.name}
@@ -87,7 +87,7 @@ export function QuoteDialog() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="contact_person">Contact Person</Label>
+              <Label htmlFor="contact_person">{t("quote.contact_person")}</Label>
               <Input
                 id="contact_person"
                 value={details.contact}
@@ -97,7 +97,7 @@ export function QuoteDialog() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">{t("auth.email")}</Label>
               <Input
                 id="email"
                 type="email"
@@ -108,7 +108,7 @@ export function QuoteDialog() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="reference">Reference (Optional)</Label>
+              <Label htmlFor="reference">{t("quote.reference")} ({t("checkout.optional")})</Label>
               <Input
                 id="reference"
                 value={details.reference}
@@ -122,12 +122,12 @@ export function QuoteDialog() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
+                  {t("quote.generating")}
                 </>
               ) : (
                 <>
                   <Download className="mr-2 h-4 w-4" />
-                  Download & Email Quote
+                  {t("quote.download_button")}
                 </>
               )}
             </Button>
