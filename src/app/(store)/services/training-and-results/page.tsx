@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/components/language-provider";
+import { SEOContent as TrainingSEO } from "@/components/seo/TrainingSEO";
 
 export default function TrainingAndResultsPage() {
   const { lang, t } = useLanguage();
@@ -97,6 +98,9 @@ export default function TrainingAndResultsPage() {
              </Button>
            </a>
         </section>
+        <div className="mt-20 container px-4 md:px-6">
+          <TrainingSEO />
+        </div>
       </div>
     );
   }
@@ -177,6 +181,9 @@ export default function TrainingAndResultsPage() {
            </Button>
          </a>
       </section>
+      <div className="mt-20 container px-4 md:px-6">
+        <TrainingSEO />
+      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { useQueryState, parseAsString } from "nuqs";
 import { motion, AnimatePresence } from "framer-motion";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
+import { SEOContent as ShopSEO } from "@/components/seo/ShopSEO";
 
 interface ShopContentProps {
   initialProducts: Product[];
@@ -211,6 +212,9 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
           </div>
         </div>
 
+      </div>
+      <div className="mt-20">
+        <ShopSEO />
       </div>
     </div>
   );

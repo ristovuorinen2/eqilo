@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
+import { SEOContent as EquipeSEO } from "@/components/seo/EquipeSEO";
 
 export default function EquipeSoftwarePage() {
   const { t } = useLanguage();
@@ -79,6 +80,9 @@ export default function EquipeSoftwarePage() {
          </div>
          <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
       </section>
+      <div className="mt-20 container px-4 md:px-6">
+        <EquipeSEO />
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowRight, BookOpen, Wrench, Trophy, Activity, Medal } from "lucide-react";
 import { useLanguage } from "@/components/language-provider";
+import { SEOContent as ServicesSEO } from "@/components/seo/ServicesSEO";
 
 export default function ServicesPage() {
   const { t } = useLanguage();
@@ -91,6 +92,9 @@ export default function ServicesPage() {
           </CardFooter>
         </Card>
 
+      </div>
+      <div className="mt-20">
+        <ServicesSEO />
       </div>
     </div>
   );

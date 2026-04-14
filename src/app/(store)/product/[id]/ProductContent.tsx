@@ -25,6 +25,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
+import { SEOContent as ProductSEO } from "@/components/seo/ProductSEO";
 
 interface ProductContentProps {
   product: Product;
@@ -259,6 +260,9 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
           </div>
         </div>
       )}
+      <div className="mt-20">
+        <ProductSEO />
+      </div>
     </div>
   );
 }

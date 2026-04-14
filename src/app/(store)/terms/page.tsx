@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/components/language-provider";
+import { SEOContent as TermsSEO } from "@/components/seo/TermsSEO";
 
 export default function TermsPage() {
   const { lang } = useLanguage();
@@ -119,10 +120,11 @@ export default function TermsPage() {
           <p className="text-sm text-muted-foreground mb-4">Vår kundtjänst hjälper gärna till med alla avtalsfrågor.</p>
           <a href="tel:+358505633097" className="font-bold text-primary hover:underline">+358 50 5633097</a>
         </div>
-      </div>
-    );
-  }
 
+        <TermsSEO />
+        </div>
+        );
+        }
   return (
     <div className="container py-10 md:py-16 max-w-4xl prose prose-sm md:prose-base dark:prose-invert mx-auto text-foreground">
       <h1 className="text-4xl font-extrabold tracking-tight mb-8">Terms & Conditions</h1>

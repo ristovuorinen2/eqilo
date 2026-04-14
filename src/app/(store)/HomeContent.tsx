@@ -16,6 +16,8 @@ interface HomeContentProps {
   featuredProducts: Product[];
 }
 
+import { SEOContent as HomeSEO } from "@/components/seo/HomeSEO";
+
 export default function HomeContent({ featuredProducts }: HomeContentProps) {
   const { t } = useLanguage();
   const plugin = useRef(

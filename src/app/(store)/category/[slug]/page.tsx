@@ -15,6 +15,8 @@ import { getProducts } from "@/lib/actions/admin";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 
+import { SEOContent as CategorySEO } from "@/components/seo/CategorySEO";
+
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
@@ -129,7 +131,9 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               </Card>
             ))}
       </div>
-      
+      <div className="mt-20">
+        <CategorySEO />
+      </div>
     </div>
   );
 }
