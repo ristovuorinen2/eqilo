@@ -19,8 +19,20 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eqilo.fi - Modern Timekeeping Solutions",
+  title: {
+    template: '%s | Eqilo.fi',
+    default: 'Eqilo.fi - Modern Timekeeping Solutions',
+  },
   description: "Eqilo provides modern timekeeping devices from Swiss manufacturer FDS Timing, targeting agility and equestrian clubs in Finland.",
+  keywords: ["FDS Timing", "timekeeping", "agility", "equestrian", "Eqilo", "Finland"],
+  openGraph: {
+    title: 'Eqilo.fi - Modern Timekeeping Solutions',
+    description: 'Modern timekeeping devices from Swiss manufacturer FDS Timing, targeting agility and equestrian clubs in Finland.',
+    url: 'https://eqilo.fi',
+    siteName: 'Eqilo.fi',
+    locale: 'fi_FI',
+    type: 'website',
+  },
   verification: {
     google: "LZj3B0ok1VW0eB_zpPPod5uAOugP2PkjrTrlLPS_Zac",
   },
@@ -31,6 +43,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'Eqilo Oy',
+    url: 'https://eqilo.fi',
+    logo: 'https://eqilo.fi/eqilologo.jpeg',
+    description: 'Modern timekeeping devices from Swiss manufacturer FDS Timing.',
+    telephone: '+358 50 5633097',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Hakkapeliitantie 4',
+      addressLocality: 'LOHJA',
+      postalCode: '08350',
+      addressCountry: 'FI'
+    }
+  };
+
   return (
     <html
       lang="en"
@@ -38,6 +67,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <GoogleTagManager gtmId="G-ZRVTGT7VXH" />
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider
           attribute="class"
