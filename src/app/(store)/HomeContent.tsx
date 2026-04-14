@@ -79,9 +79,6 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                          </div>
                          
                          <h3 className="text-lg xs:text-xl md:text-3xl font-black tracking-tight text-foreground mb-2 truncate w-full px-4 leading-none">{product.name}</h3>
-                         <div className="text-muted-foreground mb-6 max-w-sm text-[10px] xs:text-xs md:text-sm line-clamp-2 md:line-clamp-3 h-8 md:h-16 font-medium">
-                            <LocalizedDescription product={product} />
-                         </div>
                          
                          <div className="flex-1 flex flex-col w-full px-2 xs:px-4 md:px-6 mt-auto border-t border-border/50 pt-4 gap-3 md:gap-4">
                            <div className="flex items-center justify-between w-full">
