@@ -175,7 +175,10 @@ export default function CheckoutContent({ products }: CheckoutContentProps) {
                       <p className="font-bold group-hover:text-primary transition-colors">{item.product!.name}</p>
                       <p className="text-xs text-muted-foreground">{item.quantity}x @ {formatPrice(item.product!.price)} €</p>
                     </div>
-                    <p className="font-bold">{formatPrice(item.product!.price * item.quantity)} €</p>
+                    <div className="text-right">
+                      <p className="font-bold">{formatPrice(item.product!.price * item.quantity)} €</p>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t("product.incl_vat")} {item.product!.tax_rate || 25.5}%</p>
+                    </div>
                   </div>
                 ))}
                 <Separator className="my-4 border-border/50" />

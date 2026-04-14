@@ -23,7 +23,6 @@ import {
   CheckCircle2, 
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 
 interface ProductContentProps {
@@ -215,6 +214,18 @@ export default function ProductContent({ product }: ProductContentProps) {
                   <ShieldCheck className="w-6 h-6 text-primary shrink-0" />
                   <p className="text-sm leading-relaxed">
                     {t("product.guarantee_desc")}
+                  </p>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+           {t("product.guarantee_desc")}
                   </p>
                 </div>
               </AccordionContent>

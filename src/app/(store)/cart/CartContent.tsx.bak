@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, ArrowRight, Minus, Plus, Trash2, PackageOpen, Truck } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 
 interface CartContentProps {
@@ -179,6 +178,13 @@ export default function CartContent({ products }: CartContentProps) {
                 <QuoteDialog />
               </CardFooter>
             </Card>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+Card>
           </div>
         </div>
       )}

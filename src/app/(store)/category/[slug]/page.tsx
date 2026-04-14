@@ -12,6 +12,7 @@ import { useCart } from "@/components/cart-provider";
 import { useLanguage } from "@/components/language-provider";
 import { useEffect, useState, use } from "react";
 import { getProducts } from "@/lib/actions/admin";
+import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

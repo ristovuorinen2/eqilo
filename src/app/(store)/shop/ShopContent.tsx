@@ -16,6 +16,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useQueryState, parseAsString } from "nuqs";
 import { motion, AnimatePresence } from "framer-motion";
+import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 
 interface ShopContentProps {

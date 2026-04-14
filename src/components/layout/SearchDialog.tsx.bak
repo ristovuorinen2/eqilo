@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { getPublicProducts } from "@/lib/actions/products";
 import { Product } from "@/lib/types/firestore";
 import { useLanguage } from "../language-provider";
-import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { formatPrice } from "@/lib/utils";
 
 export function SearchDialog({ children }: { children: React.ReactNode }) {
@@ -86,6 +85,17 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                     <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
                   </div>
                   <PriceDisplay price={product.price} taxRate={product.tax_rate} size="sm" align="right" className="text-primary" />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </CommandDialog>
+    </>
+  );
+}
+d-foreground/80 uppercase tracking-widest">{t("product.incl_vat")} {product.tax_rate || 25.5}%</span>
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>

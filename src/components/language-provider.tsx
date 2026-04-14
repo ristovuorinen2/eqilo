@@ -279,6 +279,8 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "shop.loading": "Loading professional equipment...",
     "product.sku": "SKU",
     "product.incl_vat": "incl. VAT",
+    "product.vat_amount": "VAT amount",
+    "product.net_price": "Net (0% VAT)",
     "product.standard_shipping": "Standard Shipping: 1-2 Weeks",
     "product.shipping_details": "Products are shipped directly to Finland. Free shipping on orders over 200 €.",
     "product.add_to_cart": "Add to Cart",
