@@ -30,7 +30,6 @@ export async function importProducts(formData: FormData) {
     }
 
     const file = formData.get("file") as File;
-...
     if (!file) {
       return { success: false, error: "No file provided" };
     }

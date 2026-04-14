@@ -34,8 +34,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { useLanguage } from "@/components/language-provider";
+
 export function UserMenu() {
   const { user, loading } = useAuth();
+  const { t } = useLanguage();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -107,7 +110,7 @@ export function UserMenu() {
         <DialogContent className="sm:max-w-[425px]">
           <div id="recaptcha-container"></div>
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">{isRegister ? "Create Account" : "Welcome Back"}</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">{isRegister ? t("auth.register") : t("auth.login")}</DialogTitle>
             <DialogDescription className="text-base">
               {isRegister 
                 ? "Join Eqilo.fi to manage your professional equipment." 
@@ -118,17 +121,17 @@ export function UserMenu() {
           <Tabs defaultValue="email" className="w-full mt-4">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="email" className="flex items-center gap-2">
-                <Mail className="w-4 h-4" /> Email
+                <Mail className="w-4 h-4" /> {t("auth.email")}
               </TabsTrigger>
               <TabsTrigger value="phone" className="flex items-center gap-2">
-                <Phone className="w-4 h-4" /> Phone
+                <Phone className="w-4 h-4" /> {t("auth.phone")}
               </TabsTrigger>
             </TabsList>
             
             <TabsContent value="email">
               <form onSubmit={handleEmailAuth} className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="email">{t("auth.email")}</Label>
                   <Input 
                     id="email" 
                     type="email" 
@@ -139,7 +142,7 @@ export function UserMenu() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t("auth.password")}</Label>
                   <Input 
                     id="password" 
                     type="password" 
@@ -150,7 +153,7 @@ export function UserMenu() {
                 </div>
                 {error && <p className="text-sm text-destructive font-medium bg-destructive/10 p-2 rounded">{error}</p>}
                 <Button type="submit" className="w-full font-bold h-11">
-                  {isRegister ? "Create Account" : "Sign In"}
+                  {isRegister ? t("auth.register") : t("auth.login")}
                 </Button>
               </form>
             </TabsContent>
@@ -159,7 +162,7 @@ export function UserMenu() {
               {step === "input" ? (
                 <form onSubmit={handlePhoneSignIn} className="space-y-4 pt-4">
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="phone">{t("auth.phone")}</Label>
                     <Input 
                       id="phone" 
                       type="tel" 
@@ -172,7 +175,7 @@ export function UserMenu() {
                   </div>
                   {error && <p className="text-sm text-destructive font-medium bg-destructive/10 p-2 rounded">{error}</p>}
                   <Button type="submit" className="w-full font-bold h-11">
-                    Send Login Code
+                    {t("auth.send_code")}
                   </Button>
                 </form>
               ) : (
@@ -190,7 +193,7 @@ export function UserMenu() {
                   </div>
                   {error && <p className="text-sm text-destructive font-medium bg-destructive/10 p-2 rounded">{error}</p>}
                   <Button type="submit" className="w-full font-bold h-11">
-                    Verify & Sign In
+                    {t("auth.verify")}
                   </Button>
                   <button 
                     type="button" 
@@ -232,7 +235,7 @@ export function UserMenu() {
         <DropdownMenuLabel className="font-normal p-2">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-bold leading-none text-foreground flex items-center gap-2">
-              Account <ShieldCheck className="w-3 h-3 text-primary" />
+              {t("nav.profile")} <ShieldCheck className="w-3 h-3 text-primary" />
             </p>
             <p className="text-xs leading-none text-muted-foreground truncate">
               {user.email || user.phoneNumber}
@@ -243,19 +246,19 @@ export function UserMenu() {
         <DropdownMenuItem className="p-0 focus:bg-primary/5">
           <Link href="/admin" className="flex items-center w-full font-medium p-2 cursor-pointer">
             <LayoutDashboard className="mr-3 h-4 w-4 text-muted-foreground" />
-            <span>Admin Dashboard</span>
+            <span>{t("nav.admin")}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="p-0 focus:bg-primary/5">
           <Link href="/checkout" className="flex items-center w-full font-medium p-2 cursor-pointer">
             <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
-            <span>Order History</span>
+            <span>{t("nav.my_orders")}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="opacity-50" />
         <DropdownMenuItem onClick={handleSignOut} className="p-2 text-destructive focus:text-destructive focus:bg-destructive/5 cursor-pointer font-bold">
           <LogOut className="mr-3 h-4 w-4" />
-          <span>Sign Out</span>
+          <span>{t("nav.logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
