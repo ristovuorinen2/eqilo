@@ -14,6 +14,7 @@ import { useCart } from "@/components/cart-provider";
 import { useLanguage } from "@/components/language-provider";
 import { useEffect, useState, use } from "react";
 import { getProducts } from "@/lib/actions/admin";
+import { formatPrice } from "@/lib/utils";
 
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
@@ -104,7 +105,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                     <Clock className="w-3.5 h-3.5" /> {t("product.standard_shipping")}
                   </div>
                   <div className="w-full flex items-center justify-between mt-1">
-                    <div className="font-extrabold text-2xl tracking-tight text-foreground">{product.price.toFixed(2).replace('.', ',')} €</div>
+                    <div className="font-extrabold text-2xl tracking-tight text-foreground">{formatPrice(product.price)} €</div>
                     <Badge variant="outline" className="font-semibold border-primary/20 bg-primary/5 text-primary">{t("shop.in_stock")}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 w-full mt-2">

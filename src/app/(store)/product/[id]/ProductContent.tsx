@@ -23,6 +23,7 @@ import {
   CheckCircle2, 
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductContentProps {
   product: Product;
@@ -101,7 +102,7 @@ export default function ProductContent({ product }: ProductContentProps) {
           <p className="text-muted-foreground mb-6 font-mono text-[10px] xs:text-xs bg-muted/50 w-fit px-2 py-1 rounded font-bold uppercase tracking-wider">{t("product.sku")}: {product.sku}</p>
           
           <div className="text-3xl xs:text-4xl font-black mb-8 tracking-tighter text-primary flex items-baseline gap-2">
-            {totalPrice.toFixed(2).replace('.', ',')} € 
+            {formatPrice(totalPrice)} € 
             <span className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">{t("product.incl_vat")} {product.tax_rate}%</span>
           </div>
 
@@ -128,7 +129,7 @@ export default function ProductContent({ product }: ProductContentProps) {
                     </div>
                     {option.extra_price && option.extra_price > 0 && (
                       <span className="text-[10px] xs:text-xs font-black text-primary bg-primary/5 px-2 py-1 rounded-md border border-primary/10">
-                        +{option.extra_price.toFixed(2).replace('.', ',')} €
+                        +{formatPrice(option.extra_price)} €
                       </span>
                     )}
                   </div>

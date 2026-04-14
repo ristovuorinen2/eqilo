@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, Users, ShoppingCart, DollarSign, TrendingUp, ArrowUpRight, Activity } from "lucide-react";
 import { adminDb } from "@/lib/firebase/admin";
 import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -128,7 +129,7 @@ export default async function AdminDashboardPage() {
                         </div>
                      </div>
                      <div className="text-right">
-                        <p className="font-extrabold text-sm text-foreground">{order.total_amount?.toFixed(2).replace('.', ',')} €</p>
+                        <p className="font-extrabold text-sm text-foreground">{formatPrice(order.total_amount || 0)} €</p>
                         <Badge variant="outline" className="text-[10px] uppercase font-bold mt-1 border-emerald-200 bg-emerald-50 text-emerald-700">
                            {order.status || 'Paid'}
                         </Badge>

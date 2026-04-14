@@ -14,6 +14,7 @@ import { ShoppingBag, Loader2, ArrowRight, ShieldCheck, Lock } from "lucide-reac
 import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
 import { Separator } from "@/components/ui/separator";
+import { formatPrice } from "@/lib/utils";
 
 interface CheckoutContentProps {
   products: Product[];
@@ -172,24 +173,24 @@ export default function CheckoutContent({ products }: CheckoutContentProps) {
                   <div key={item.product_id} className="flex justify-between text-sm group">
                     <div className="flex-1 pr-4">
                       <p className="font-bold group-hover:text-primary transition-colors">{item.product!.name}</p>
-                      <p className="text-xs text-muted-foreground">{item.quantity}x @ {item.product!.price.toFixed(2).replace('.', ',')} €</p>
+                      <p className="text-xs text-muted-foreground">{item.quantity}x @ {formatPrice(item.product!.price)} €</p>
                     </div>
-                    <p className="font-bold">{(item.product!.price * item.quantity).toFixed(2).replace('.', ',')} €</p>
+                    <p className="font-bold">{formatPrice(item.product!.price * item.quantity)} €</p>
                   </div>
                 ))}
                 <Separator className="my-4 border-border/50" />
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm text-muted-foreground font-medium">
                     <span>{t("cart.subtotal")}</span>
-                    <span>{subtotal.toFixed(2).replace('.', ',')} €</span>
+                    <span>{formatPrice(subtotal)} €</span>
                   </div>
                   <div className="flex justify-between text-sm text-muted-foreground font-medium">
                     <span>{t("cart.shipping")}</span>
-                    <span>{shipping === 0 ? t("cart.free") : `${shipping.toFixed(2).replace('.', ',')} €`}</span>
+                    <span>{shipping === 0 ? t("cart.free") : `${formatPrice(shipping)} €`}</span>
                   </div>
                   <div className="flex justify-between text-xl font-extrabold text-foreground pt-4 border-t">
                     <span>{t("cart.total")}</span>
-                    <span>{total.toFixed(2).replace('.', ',')} €</span>
+                    <span>{formatPrice(total)} €</span>
                   </div>
                 </div>
               </div>

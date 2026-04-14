@@ -6,6 +6,7 @@ import { CheckCircle2, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
 import { Order } from "@/lib/types/firestore";
+import { formatPrice } from "@/lib/utils";
 
 interface CheckoutSuccessProps {
   orderId: string | null;
@@ -46,7 +47,7 @@ export function CheckoutSuccess({ orderId, order, amountTotal, paymentStatus, em
                 {order.tax_breakdown.map((tax, idx) => (
                   <div key={idx} className="flex justify-between text-xs font-medium">
                     <span className="text-muted-foreground">{tax.label}</span>
-                    <span>{tax.amount.toFixed(2).replace('.', ',')} €</span>
+                    <span>{formatPrice(tax.amount)} €</span>
                   </div>
                 ))}
               </div>
@@ -58,7 +59,7 @@ export function CheckoutSuccess({ orderId, order, amountTotal, paymentStatus, em
             </div>
             <div className="flex justify-between font-bold text-xl pt-4 mt-4 border-t">
               <span>{t("checkout.total_paid")}</span>
-              <span>{(amountTotal / 100).toFixed(2).replace('.', ',')} €</span>
+              <span>{formatPrice(amountTotal / 100)} €</span>
             </div>
           </div>
 

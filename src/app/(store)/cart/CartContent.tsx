@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, ArrowRight, Minus, Plus, Trash2, PackageOpen, Truck } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { formatPrice } from "@/lib/utils";
 
 interface CartContentProps {
   products: Product[];
@@ -83,8 +84,8 @@ export default function CartContent({ products }: CartContentProps) {
                           <p className="text-[10px] xs:text-xs text-muted-foreground font-mono mt-1 font-bold bg-muted/50 w-fit px-1.5 py-0.5 rounded">{t("product.sku")}: {item.product!.sku}</p>
                         </div>
                         <div className="text-left xs:text-right shrink-0">
-                          <p className="font-black text-lg xs:text-xl text-primary leading-none tracking-tighter">{(item.product!.price * item.quantity).toFixed(2).replace('.', ',')} €</p>
-                          <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest mt-1">{item.product!.price.toFixed(2).replace('.', ',')} € / {t("cart.unit")}</p>
+                          <p className="font-black text-lg xs:text-xl text-primary leading-none tracking-tighter">{formatPrice(item.product!.price * item.quantity)} €</p>
+                          <p className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest mt-1">{formatPrice(item.product!.price)} € / {t("cart.unit")}</p>
                         </div>
                       </div>
                       
@@ -148,18 +149,18 @@ export default function CartContent({ products }: CartContentProps) {
               <CardContent className="pt-6 space-y-4">
                 <div className="flex justify-between text-muted-foreground font-bold text-sm uppercase tracking-widest">
                   <span>{t("cart.subtotal")}</span>
-                  <span className="text-foreground">{(subtotal).toFixed(2).replace('.', ',')} €</span>
+                  <span className="text-foreground">{formatPrice(subtotal)} €</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground font-bold text-sm uppercase tracking-widest">
                   <span>{t("cart.shipping")}</span>
                   <span className={shipping === 0 ? "text-emerald-600 font-black" : "text-foreground"}>
-                    {shipping === 0 ? (t("cart.free") || "ILMAINEN") : `${shipping.toFixed(2).replace('.', ',')} €`}
+                    {shipping === 0 ? (t("cart.free") || "ILMAINEN") : `${formatPrice(shipping)} €`}
                   </span>
                 </div>
                 <Separator className="my-4 border-border/50" />
                 <div className="flex justify-between font-black text-2xl xs:text-3xl tracking-tighter text-foreground">
                   <span>{t("cart.total")}</span>
-                  <span className="text-primary">{total.toFixed(2).replace('.', ',')} €</span>
+                  <span className="text-primary">{formatPrice(total)} €</span>
                 </div>
               </CardContent>
               <CardFooter className="bg-muted/30 border-t border-border/50 pt-6 flex flex-col gap-3">

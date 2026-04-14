@@ -9,6 +9,7 @@ import {
   Text,
 } from "@react-email/components";
 import * as React from "react";
+import { formatPrice } from "@/lib/utils";
 
 interface OrderConfirmationEmailProps {
   orderId: string;
@@ -30,7 +31,7 @@ export const OrderConfirmationEmail = ({
         </Text>
         <Section style={orderInfo}>
           <Text style={text}>
-            <strong>Total Amount:</strong> {amount.toFixed(2).replace(".", ",")} €
+            <strong>Total Amount:</strong> {formatPrice(amount)} €
           </Text>
         </Section>
         <Text style={text}>

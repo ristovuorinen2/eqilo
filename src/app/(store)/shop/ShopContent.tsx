@@ -16,6 +16,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useQueryState, parseAsString } from "nuqs";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatPrice } from "@/lib/utils";
 
 interface ShopContentProps {
   initialProducts: Product[];
@@ -180,7 +181,7 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
                   <div className="w-full flex items-end justify-between mt-1 mb-2">
                     <div>
                       <p className="text-xs font-bold text-muted-foreground mb-1 uppercase tracking-wider">{t("shop.price")}</p>
-                      <div className="font-extrabold text-3xl tracking-tight text-foreground">{product.price.toFixed(2).replace('.', ',')} €</div>
+                      <div className="font-extrabold text-3xl tracking-tight text-foreground">{formatPrice(product.price)} €</div>
                     </div>
                     <Badge variant="outline" className="font-bold border-emerald-200 bg-emerald-50 text-emerald-700 px-3 py-1">{t("shop.in_stock")}</Badge>
                   </div>

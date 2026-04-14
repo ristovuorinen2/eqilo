@@ -26,6 +26,7 @@ import { Plus, Pencil, Trash2, Search, ExternalLink, PackageOpen } from "lucide-
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Link from "next/link";
+import { formatPrice } from "@/lib/utils";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -44,6 +45,7 @@ export default function AdminProductsPage() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
   }, []);
 
@@ -160,7 +162,7 @@ export default function AdminProductsPage() {
                       {p.category_id.replace(/-/g, ' ')}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right font-bold">{p.price.toFixed(2).replace('.', ',')} €</TableCell>
+                  <TableCell className="text-right font-bold">{formatPrice(p.price)} €</TableCell>
                   <TableCell className="text-right font-medium">{p.inventory_count}</TableCell>
                   <TableCell className="text-center">
                     {p.is_active ? (

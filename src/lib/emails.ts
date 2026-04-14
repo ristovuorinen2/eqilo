@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/utils";
 export function getOrderConfirmationEmailHtml(orderId: string, totalAmount: string | number, lang: "FI" | "EN" | "SE" = "FI") {
   const content = {
     FI: {
@@ -64,7 +65,7 @@ export function getOrderConfirmationEmailHtml(orderId: string, totalAmount: stri
               </div>
               <div class="order-row">
                 <span>${content.total}</span>
-                <span class="highlight">${Number(totalAmount).toFixed(2).replace('.', ',')} €</span>
+                <span class="highlight">${formatPrice(Number(totalAmount))} €</span>
               </div>
             </div>
 
@@ -90,7 +91,7 @@ export function getAdminNotificationEmailHtml(orderId: string, totalAmount: stri
         <div style="border-left: 4px solid #0055A4; padding-left: 16px;">
           <h2 style="margin-top: 0; color: #0055A4;">🚨 New Eqilo Order Received</h2>
           <p><strong>Order ID:</strong> ${orderId}</p>
-          <p><strong>Total Paid:</strong> ${Number(totalAmount).toFixed(2).replace('.', ',')} €</p>
+          <p><strong>Total Paid:</strong> ${formatPrice(Number(totalAmount))} €</p>
           <p><strong>Customer ID:</strong> ${customerId}</p>
           <br/>
           <p>Please check the <a href="https://eqilo.fi/admin">Eqilo Admin Dashboard</a> to begin processing this order.</p>

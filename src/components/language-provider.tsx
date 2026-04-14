@@ -666,11 +666,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const savedLang = localStorage.getItem("eqilo_lang") as Language;
     if (savedLang && ["FI", "EN", "SE"].includes(savedLang)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLang(savedLang);
-    }
-    setMounted(true);
-  }, []);
-
+      }
+      setMounted(true);
+      }, []);
   const handleSetLang = (newLang: Language) => {
     setLang(newLang);
     localStorage.setItem("eqilo_lang", newLang);

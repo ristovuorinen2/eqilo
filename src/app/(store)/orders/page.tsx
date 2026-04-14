@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useLanguage } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/utils";
 
 const statuses = [
   { id: 'paid', label: 'orders.paid', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -83,7 +84,7 @@ export default function OrdersPage() {
                      </div>
                      <div>
                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t("cart.total")}</p>
-                       <p className="text-sm font-bold text-primary">{order.total_amount.toFixed(2).replace('.', ',')} €</p>
+                       <p className="text-sm font-bold text-primary">{formatPrice(order.total_amount)} €</p>
                      </div>
                   </div>
                   <Badge variant="outline" className={cn("font-bold uppercase tracking-wider px-3 py-1", 
@@ -132,7 +133,7 @@ export default function OrdersPage() {
                          {order.items.map((item, idx) => (
                            <div key={idx} className="flex justify-between items-center text-sm font-medium">
                               <span className="text-muted-foreground">{item.quantity}x <span className="text-foreground">{t("orders.product_id")}: {item.product_id.substring(0, 10)}...</span></span>
-                              <span>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
+                              <span>{formatPrice(item.price * item.quantity)} €</span>
                            </div>
                          ))}
                       </div>
@@ -143,7 +144,7 @@ export default function OrdersPage() {
                           {order.tax_breakdown.map((tax, idx) => (
                             <div key={idx} className="flex justify-between text-xs font-medium">
                                <span className="text-muted-foreground">{tax.label}</span>
-                               <span>{tax.amount.toFixed(2).replace('.', ',')} €</span>
+                               <span>{formatPrice(tax.amount)} €</span>
                             </div>
                           ))}
                         </div>

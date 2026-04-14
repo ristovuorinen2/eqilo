@@ -10,6 +10,7 @@ import { Product } from "@/lib/types/firestore";
 import { LocalizedDescription } from "@/components/LocalizedDescription";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
+import { formatPrice } from "@/lib/utils";
 
 interface HomeContentProps {
   featuredProducts: Product[];
@@ -83,7 +84,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                          <div className="flex-1 flex flex-col w-full px-2 xs:px-4 md:px-6 mt-auto border-t border-border/50 pt-4 gap-3 md:gap-4">
                            <div className="flex items-center justify-between w-full">
                              <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted-foreground">{t("shop.price")}</p>
-                             <div className="font-extrabold text-xl xs:text-2xl md:text-3xl tracking-tighter text-foreground">{product.price.toFixed(2).replace('.', ',')} €</div>
+                             <div className="font-extrabold text-xl xs:text-2xl md:text-3xl tracking-tighter text-foreground">{formatPrice(product.price)} €</div>
                            </div>
                            <Link href={`/product/${product.id}`} className="w-full">
                               <Button variant="default" className="w-full font-black h-10 xs:h-12 md:h-14 shadow-md text-sm xs:text-md md:text-lg hover:bg-primary/90 hover:scale-[1.02] transition-all uppercase tracking-wider">

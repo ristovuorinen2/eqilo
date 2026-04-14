@@ -7,6 +7,7 @@ import { adminDb } from "../firebase/admin";
 import { Resend } from "resend";
 import path from "path";
 import fs from "fs";
+import { formatPrice } from "@/lib/utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -93,8 +94,8 @@ export async function generateQuote(
               ...products.map((p) => [
                 p.name,
                 p.quantity.toString(),
-                `${p.price.toFixed(2).replace('.', ',')} €`,
-                `${(p.price * p.quantity).toFixed(2).replace('.', ',')} €`,
+                `${formatPrice(p.price)} €`,
+                `${formatPrice(p.price * p.quantity)} €`,
               ]),
             ],
           },
@@ -107,11 +108,11 @@ export async function generateQuote(
           table: {
             widths: ["*", "auto"],
             body: [
-              ["Subtotal (0% VAT)", { text: `${subtotal.toFixed(2).replace('.', ',')} €`, alignment: "right" }],
-              ["VAT (25.5%)", { text: `${vat.toFixed(2).replace('.', ',')} €`, alignment: "right" }],
+              ["Subtotal (0% VAT)", { text: `${formatPrice(subtotal)} €`, alignment: "right" }],
+              ["VAT (25.5%)", { text: `${formatPrice(vat)} €`, alignment: "right" }],
               [
                 { text: "GRAND TOTAL", bold: true, fontSize: 14 },
-                { text: `${total.toFixed(2).replace('.', ',')} €`, bold: true, fontSize: 14, alignment: "right" },
+                { text: `${formatPrice(total)} €`, bold: true, fontSize: 14, alignment: "right" },
               ],
             ],
           },

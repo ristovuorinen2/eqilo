@@ -12,6 +12,7 @@ export function CookieBanner() {
     // Check if user has already made a choice
     const consent = localStorage.getItem("eqilo_cookie_consent");
     if (!consent) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
     }
   }, []);

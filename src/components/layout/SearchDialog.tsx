@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { getProducts } from "@/lib/actions/admin";
 import { Product } from "@/lib/types/firestore";
 import { useLanguage } from "../language-provider";
+import { formatPrice } from "@/lib/utils";
 
 export function SearchDialog({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
@@ -83,7 +84,7 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                     <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
                   </div>
                   <div className="text-sm font-extrabold text-primary">
-                    {product.price.toFixed(2).replace('.', ',')} €
+                    {formatPrice(product.price)} €
                   </div>
                 </CommandItem>
               ))}
