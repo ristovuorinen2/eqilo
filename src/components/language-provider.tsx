@@ -159,6 +159,10 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "footer.store": "Butik",
     "footer.partners": "Partners",
     "footer.terms": "Villkor",
+    "cookie.title": "Vi värnar om din integritet",
+    "cookie.desc": "Vi använder cookies för att förbättra din webbupplevelse, visa personligt innehåll och analysera vår trafik. Genom att klicka på \"Acceptera alla\" samtycker du till vår användning av cookies.",
+    "cookie.accept": "Acceptera alla",
+    "cookie.decline": "Avvisa valfria",
   }
 };
 

@@ -7,6 +7,8 @@ import { AuthProvider } from "@/components/auth-provider";
 import { LanguageProvider } from "@/components/language-provider";
 import { GoogleTagManager } from '@next/third-parties/google';
 import { WhatsAppHelpdesk } from "@/components/WhatsAppHelpdesk";
+import { CookieBanner } from "@/components/cookie-banner";
+import { cookies } from "next/headers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,11 +40,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const consentCookie = cookieStore.get("eqilo_cookie_consent");
+  const hasConsentedToTracking = consentCookie?.value === "accepted";
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -66,12 +72,12 @@ export default function RootLayout({
       className={`${inter.variable} ${robotoMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <GoogleTagManager gtmId="G-ZRVTGT7VXH" />
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
+        {hasConsentedToTracking && <GoogleTagManager gtmId="G-ZRVTGT7VXH" />}
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider
@@ -85,6 +91,7 @@ export default function RootLayout({
               <CartProvider>
                 {children}
                 <WhatsAppHelpdesk />
+                <CookieBanner />
               </CartProvider>
             </AuthProvider>
           </LanguageProvider>
