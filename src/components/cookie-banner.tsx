@@ -45,12 +45,12 @@ export function CookieBanner() {
             {t("cookie.desc")}
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2 w-full">
-          <Button onClick={handleDecline} variant="outline" className="w-full text-xs sm:text-sm order-2 sm:order-1 font-bold">
-            {t("cookie.decline")}
-          </Button>
-          <Button onClick={handleAccept} className="w-full text-xs sm:text-sm order-1 sm:order-2 font-bold shadow-md">
+        <div className="flex flex-col gap-3 mt-2 w-full">
+          <Button onClick={handleAccept} className="w-full text-sm font-bold shadow-md">
             {t("cookie.accept")}
+          </Button>
+          <Button onClick={handleDecline} variant="outline" className="w-full text-sm font-bold">
+            {t("cookie.decline")}
           </Button>
         </div>
       </div>
