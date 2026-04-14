@@ -8,6 +8,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { ShieldAlert, Loader2, LogOut, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOut } from "firebase/auth";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -55,17 +56,13 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   if (isAdmin === false) {
     if (!user || user.isAnonymous) {
       return (
-        <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center min-h-screen bg-muted/20">
-          <div className="p-4 bg-muted rounded-full mb-4">
-            <ShieldAlert className="w-12 h-12 text-muted-foreground" />
+        <div className="h-full w-full flex flex-col items-center justify-center p-4 sm:p-20 min-h-screen bg-muted/20">
+          <div className="w-full max-w-md mb-8">
+            <Button onClick={() => router.push("/")} variant="ghost" className="mb-4">
+              <Home className="w-4 h-4 mr-2" /> Return to Store
+            </Button>
+            <LoginForm />
           </div>
-          <h2 className="text-2xl font-bold mb-2">Login Required</h2>
-          <p className="text-muted-foreground mb-8 max-w-md">
-            You must be logged in to access the Eqilo Admin Portal. Please return to the store and use the profile icon in the top right to log in.
-          </p>
-          <Button onClick={() => router.push("/")} size="lg" className="font-bold">
-            <Home className="w-5 h-5 mr-2" /> Return to Store
-          </Button>
         </div>
       );
     }
