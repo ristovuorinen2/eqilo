@@ -78,7 +78,7 @@ export async function createCheckoutSession(
       tax_map[product.tax_rate] = (tax_map[product.tax_rate] || 0) + itemTax;
 
       orderItems.push({
-        product_id: product.id,
+        product_id: productDoc.id,
         quantity: item.quantity,
         price: unitPrice,
       });
