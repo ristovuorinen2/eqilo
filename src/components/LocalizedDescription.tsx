@@ -11,8 +11,9 @@ export function LocalizedDescription({ product }: { product: Product }) {
                       product.description;
 
   return (
-    <div className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert">
-       <p>{description}</p>
-    </div>
+    <div 
+      className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none"
+      dangerouslySetInnerHTML={{ __html: description }}
+    />
   );
 }

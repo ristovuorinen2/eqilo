@@ -11,17 +11,19 @@ async function translateText(text: string, lang: 'fi' | 'sv') {
     const model = genAI.getGenerativeModel({ model: "gemini-3.1-pro-preview" });
     const language = lang === 'fi' ? "Finnish" : "Swedish";
     
-    // Improved prompt for technical accuracy
+    // Improved prompt for technical accuracy and HTML formatting
     const prompt = `You are a professional technical translator for Eqilo.fi, a Finnish timing systems expert. 
     Translate the following FDS Timing product technical description into natural, professional ${language}. 
+    
+    CRITICAL: Output the translation in HTML format using <h3>, <p>, <ul>, and <li> tags where appropriate for technical specs and lists. 
     Ensure all technical specifications (like ranges, frequencies, and kit components) are accurately translated but kept in their standard units.
-    Do not add any conversational text. ONLY provide the translated content.
+    Do not add any conversational text. ONLY provide the translated HTML content.
     
     Product Description to Translate:
     ${text}`;
 
     const result = await model.generateContent(prompt);
-    const translation = result.response.text().trim();
+    const translation = result.response.text().trim().replace(/```html|```/g, ''); // Remove potential markdown wrappers
     
     // Simple sanity check: if translation is too short compared to original, something might have failed
     if (translation.length < text.length * 0.3 && text.length > 100) {
@@ -90,16 +92,16 @@ export async function scrapeAndTranslateDescriptions() {
           const pageSku = $(".sku").text().trim();
           if (!pageSku || !pageSku.startsWith("FDS-")) return;
 
-          const shortDesc = $(".woocommerce-product-details__short-description").text().trim() 
-                         || $(".product-details .description").text().trim()
+          const shortDesc = $(".woocommerce-product-details__short-description").html()?.trim() 
+                         || $(".product-details .description").html()?.trim()
                          || $('meta[property="og:description"]').attr("content")?.trim() || "";
 
-          const fullDesc = $("#tab-description").text().trim() || $(".woocommerce-Tabs-panel--description").text().trim() || "";
-          const specs = $("#tab-additional_information").text().trim() || $(".shop_attributes").text().trim() || "";
+          const fullDesc = $("#tab-description").html()?.trim() || $(".woocommerce-Tabs-panel--description").html()?.trim() || "";
+          const specs = $("#tab-additional_information").html()?.trim() || $(".shop_attributes").html()?.trim() || "";
           
           let descriptionEN = fullDesc || shortDesc;
           if (specs) {
-            descriptionEN += "\n\nSpecifications:\n" + specs.replace(/\n\s*\n/g, '\n').trim();
+            descriptionEN += "\n\n<h3>Specifications</h3>\n" + specs;
           }
 
           let imageUrl = $(".woocommerce-product-gallery__image img").first().attr("src")
@@ -147,7 +149,7 @@ export async function scrapeAndTranslateDescriptions() {
       // Check if translation is missing or needs updating (if we scraped a new English description)
       const needsBox = boxContents && data.box_contents !== boxContents;
       const needsDownloads = downloads.length > 0 && JSON.stringify(data.downloads) !== JSON.stringify(downloads);
-      const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description || (data.description.length > 200 && (data.description_fi?.length || 0) < 100);
+      const needsTranslation = !data.description_fi || !data.description_se || data.description_fi === data.description || data.description_se === data.description || (data.description.length > 200 && (data.description_fi?.length || 0) < 100) || !data.description_fi.includes("<");
       const needsImage = imageUrl && (!data.image_urls || data.image_urls.length === 0 || data.image_urls[0].includes("fdstiming.com"));
       const needsDownloadsMigration = downloads.some(d => d.url.includes("fdstiming.com"));
 
