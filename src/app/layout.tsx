@@ -81,7 +81,7 @@ export default async function RootLayout({
         />
         {hasConsentedToTracking && <GoogleTagManager gtmId="G-ZRVTGT7VXH" />}
       </head>
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+      <body className={`${inter.variable} ${robotoMono.variable} min-h-screen flex flex-col bg-background text-foreground antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

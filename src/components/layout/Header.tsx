@@ -32,11 +32,11 @@ export function Header() {
         
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <Image 
-              src="/eqilologo.jpeg" 
-              alt="Eqilo.fi Logo" 
-              width={120} 
-              height={40} 
+            <Image
+              src="/eqilologo.jpeg"
+              alt="Eqilo.fi Logo"
+              width={120}
+              height={40}
               className="h-10 w-auto object-contain"
               priority
             />
@@ -136,12 +136,13 @@ export function Header() {
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex flex-col h-full py-6">
                   <Link href="/" className="mb-8 px-2">
-                    <Image 
-                      src="/eqilologo.jpeg" 
-                      alt="Eqilo.fi Logo" 
-                      width={120} 
-                      height={40} 
-                      className="h-8 w-auto object-contain"
+                    <Image
+                      src="/eqilologo.jpeg"
+                      alt="Eqilo.fi Logo"
+                      width={120}
+                      height={40}
+                      className="h-10 w-auto object-contain"
+                      priority
                     />
                   </Link>
                   

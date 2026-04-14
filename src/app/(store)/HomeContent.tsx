@@ -66,22 +66,22 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 onMouseLeave={plugin.current.reset}
               >
                 <CarouselContent className="h-full">
-                  {featuredProducts.length > 0 ? featuredProducts.map((product) => (
+                  {featuredProducts.length > 0 ? featuredProducts.map((product, index) => (
                     <CarouselItem key={product.id} className="h-full">
                       <div className="w-full h-full bg-white rounded-2xl flex flex-col items-center justify-center p-3 xs:p-8 md:p-10 text-center shadow-2xl relative overflow-hidden border">
-                         <div className="absolute top-4 right-4 bg-emerald-500 text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">{t("shop.in_stock")}</div>
+                         <div className="absolute top-4 right-4 bg-emerald-700 text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">{t("shop.in_stock")}</div>
                          
                          <div className="w-24 h-24 xs:w-44 xs:h-44 md:w-64 md:h-64 bg-muted/10 rounded-full mb-4 xs:mb-6 mt-4 flex items-center justify-center border-4 border-muted/30 relative overflow-hidden shrink-0 group hover:scale-105 transition-transform duration-500 shadow-inner">
                             {product.image_urls?.[0] ? (
                               <div className="absolute -inset-8 md:-inset-12">
-                                <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4 md:p-8" sizes="(max-width: 768px) 256px, 512px" />
+                                <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4 md:p-8" sizes="(max-width: 768px) 256px, 512px" priority={index === 0} />
                               </div>
                             ) : (
                               <Timer className="w-16 h-16 text-primary/60" />
                             )}
                          </div>
                          
-                         <h3 className="text-lg xs:text-xl md:text-3xl font-black tracking-tight text-foreground mb-2 truncate w-full px-4 leading-none">{product.name}</h3>
+                         <h2 className="text-lg xs:text-xl md:text-3xl font-black tracking-tight text-foreground mb-2 truncate w-full px-4 leading-none">{product.name}</h2>
                          
                          <div className="flex-1 flex flex-col w-full px-2 xs:px-4 md:px-6 mt-auto border-t border-border/50 pt-4 gap-3 md:gap-4">
                            <div className="flex items-center justify-between w-full">
@@ -144,7 +144,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-2xl font-bold tracking-tighter xs:text-3xl sm:text-4xl">{t("home.advantages.title")}</h2>
-              <p className="max-w-[900px] text-muted-foreground text-sm xs:text-base md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="max-w-[900px] text-foreground/80 font-medium text-sm xs:text-base md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 {t("home.advantages.subtitle")}
               </p>
             </div>
@@ -156,7 +156,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <Wifi className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold">{t("home.advantage.wireless.title")}</h3>
-              <p className="text-muted-foreground">{t("home.advantage.wireless.desc")}</p>
+              <p className="text-foreground/80 font-medium">{t("home.advantage.wireless.desc")}</p>
             </div>
 
             <div className="flex flex-col items-center space-y-4 text-center p-8 border rounded-2xl bg-background shadow-sm hover:shadow-md transition-shadow">
@@ -164,7 +164,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <Battery className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold">{t("home.advantage.battery.title")}</h3>
-              <p className="text-muted-foreground">{t("home.advantage.battery.desc")}</p>
+              <p className="text-foreground/80 font-medium">{t("home.advantage.battery.desc")}</p>
             </div>
 
             <div className="flex flex-col items-center space-y-4 text-center p-8 border rounded-2xl bg-background shadow-sm hover:shadow-md transition-shadow">
@@ -172,7 +172,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <MonitorPlay className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold">{t("home.advantage.software.title")}</h3>
-              <p className="text-muted-foreground">{t("home.advantage.software.desc")}</p>
+              <p className="text-foreground/80 font-medium">{t("home.advantage.software.desc")}</p>
             </div>
 
             <div className="flex flex-col items-center space-y-4 text-center p-8 border rounded-2xl bg-background shadow-sm hover:shadow-md transition-shadow">
@@ -180,7 +180,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <ShieldCheck className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold">{t("home.advantage.weather.title")}</h3>
-              <p className="text-muted-foreground">{t("home.advantage.weather.desc")}</p>
+              <p className="text-foreground/80 font-medium">{t("home.advantage.weather.desc")}</p>
             </div>
 
             <div className="flex flex-col items-center space-y-4 text-center p-8 border rounded-2xl bg-background shadow-sm hover:shadow-md transition-shadow">
@@ -188,7 +188,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <CheckCircle2 className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold">{t("home.advantage.cost.title")}</h3>
-              <p className="text-muted-foreground">{t("home.advantage.cost.desc")}</p>
+              <p className="text-foreground/80 font-medium">{t("home.advantage.cost.desc")}</p>
             </div>
 
             <div className="flex flex-col items-center justify-center space-y-4 text-center p-8 border border-primary/20 rounded-2xl bg-primary/5 shadow-sm hover:shadow-md transition-shadow">
@@ -196,9 +196,9 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                 <ArrowRight className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-primary">{t("home.advantage.more.title")}</h3>
-              <p className="text-muted-foreground">{t("home.advantage.more.desc")}</p>
-              <Link href="/shop">
-                <Button variant="link" className="text-primary font-bold mt-2">{t("home.advantage.more.button")}</Button>
+              <p className="text-foreground/80 font-medium">{t("home.advantage.more.desc")}</p>
+              <Link href="/shop" className="mt-4">
+                <Button variant="default" className="w-full font-bold shadow-md min-h-[44px]">{t("home.advantage.more.button")}</Button>
               </Link>
             </div>
 

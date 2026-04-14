@@ -8,6 +8,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, ArrowRight, Minus, Plus, Trash2, PackageOpen, Truck } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";

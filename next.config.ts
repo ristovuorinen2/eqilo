@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pdfmake'],
   images: {
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',
