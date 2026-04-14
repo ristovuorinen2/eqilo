@@ -1,0 +1,139 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { FileText, Loader2, Download } from "lucide-react";
+import { useCart } from "@/components/cart-provider";
+import { generateQuote } from "@/lib/actions/quotes";
+import { toast } from "sonner";
+import { useLanguage } from "@/components/language-provider";
+
+export function QuoteDialog() {
+  const { items } = useCart();
+  const { t } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [details, setDetails] = useState({
+    name: "",
+    contact: "",
+    email: "",
+    reference: "",
+  });
+
+  const handleGenerate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (items.length === 0) {
+      toast.error("Cart is empty");
+      return;
+    }
+
+    setLoading(true);
+    const res = await generateQuote(items, details);
+    
+    if (res.success && res.pdf) {
+      toast.success("Quote generated and emailed!");
+      
+      // Trigger download
+      const linkSource = `data:application/pdf;base64,${res.pdf}`;
+      const downloadLink = document.createElement("a");
+      const fileName = `Eqilo_Quote_${details.name.replace(/[^a-z0-9]/gi, "_")}.pdf`;
+      downloadLink.href = linkSource;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      
+      setIsOpen(false);
+    } else {
+      toast.error(res.error || "Failed to generate quote");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger>
+        <Button variant="outline" className="w-full font-bold gap-2">
+          <FileText className="w-4 h-4" />
+          {t("cart.request_quote") || "Request PDF Quote"}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={handleGenerate}>
+          <DialogHeader>
+            <DialogTitle>Request Official Quote</DialogTitle>
+            <DialogDescription>
+              Enter your organization details. We'll generate a formal PDF for your board approval and email a copy to you.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="org_name">Club / Organization Name</Label>
+              <Input
+                id="org_name"
+                value={details.name}
+                onChange={(e) => setDetails({ ...details, name: e.target.value })}
+                placeholder="e.g. Helsinki Agility Association"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="contact_person">Contact Person</Label>
+              <Input
+                id="contact_person"
+                value={details.contact}
+                onChange={(e) => setDetails({ ...details, contact: e.target.value })}
+                placeholder="Full Name"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                value={details.email}
+                onChange={(e) => setDetails({ ...details, email: e.target.value })}
+                placeholder="name@organization.fi"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="reference">Reference (Optional)</Label>
+              <Input
+                id="reference"
+                value={details.reference}
+                onChange={(e) => setDetails({ ...details, reference: e.target.value })}
+                placeholder="Project name or internal ID"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" disabled={loading} className="w-full font-bold">
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-4 w-4" />
+                  Download & Email Quote
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

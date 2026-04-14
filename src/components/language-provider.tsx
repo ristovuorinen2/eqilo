@@ -53,6 +53,7 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "cart.shipping": "Toimitus (Suomi)",
     "cart.total": "Yhteensä",
     "cart.checkout": "Siirry kassalle",
+    "cart.request_quote": "Lataa virallinen tarjous (PDF)",
     "footer.company": "Yritys",
     "footer.store": "Kauppa",
     "footer.partners": "Kumppanit",
@@ -119,6 +120,7 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "cart.shipping": "Shipping (Finland)",
     "cart.total": "Total",
     "cart.checkout": "Proceed to Checkout",
+    "cart.request_quote": "Request Official Quote (PDF)",
     "footer.company": "Company",
     "footer.store": "Store",
     "footer.partners": "Partners",
@@ -227,3 +229,4 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useLanguage = () => useContext(LanguageContext);
+

@@ -11,6 +11,7 @@ import { getProducts } from "@/lib/actions/admin";
 import { Product } from "@/lib/types/firestore";
 
 import { useLanguage } from "@/components/language-provider";
+import { QuoteDialog } from "@/components/QuoteDialog";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart } = useCart();
@@ -187,13 +188,14 @@ export default function CartPage() {
                 </div>
                 <p className="text-xs text-muted-foreground text-right">Includes 25.5% VAT</p>
               </CardContent>
-              <CardFooter className="bg-muted/30 pt-6 border-t border-border/50">
+              <CardFooter className="bg-muted/30 border-t border-border/50 pt-6 flex flex-col gap-3">
                 <Link href="/checkout" className="w-full">
-                  <Button className="w-full h-14 text-lg font-bold shadow-md hover:shadow-lg transition-all group">
-                    Proceed to Checkout
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <Button size="lg" className="w-full text-lg h-14 font-bold shadow-md hover:shadow-lg transition-all group">
+                    {t("cart.checkout")}
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
+                <QuoteDialog />
               </CardFooter>
             </Card>
           </div>
