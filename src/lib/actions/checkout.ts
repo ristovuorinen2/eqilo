@@ -16,7 +16,8 @@ export async function createCheckoutSession(
   userId: string, 
   cartItems: CartItem[], 
   customerDetails?: { email: string; phone: string; businessId?: string },
-  lang: string = "FI"
+  lang: string = "FI",
+  baseUrl?: string
 ) {
   try {
     const session = await verifySession();
@@ -175,8 +176,8 @@ export async function createCheckoutSession(
           },
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/cart`,
+      success_url: `${baseUrl || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/cart`,
     });
 
     if (!stripeSession.url) {

@@ -61,7 +61,8 @@ export default function CheckoutContent({ products }: CheckoutContentProps) {
     if (!details.acceptTerms) return;
 
     setIsSubmitting(true);
-    const res = await createCheckoutSession(user.uid, items, details, lang);
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : undefined;
+    const res = await createCheckoutSession(user.uid, items, details, lang, baseUrl);
     if (res.success && res.url) {
       window.location.href = res.url;
     } else {
