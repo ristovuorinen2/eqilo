@@ -100,11 +100,17 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                />
              ) : (
                <>
-                 <PackageOpen className="w-24 h-24 text-primary/20 mb-4" />
-                 <span className="text-muted-foreground font-medium text-sm">Product Image Pending</span>
+                 <Image 
+                   src="/eqilologo.jpeg" 
+                   alt="Eqilo Logo Placeholder" 
+                   fill 
+                   className="object-contain p-16 opacity-20 grayscale" 
+                   sizes="(max-width: 768px) 100vw, 50vw"
+                 />
+                 <span className="text-muted-foreground font-bold tracking-tight absolute bottom-12 z-10 bg-white/80 px-3 py-1 rounded-md backdrop-blur-sm">Image Coming Soon</span>
                </>
              )}
-             <div className="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-xs font-mono border">SKU: {product.sku}</div>
+             <div className="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-xs font-mono border z-10">SKU: {product.sku}</div>
           </div>
           {/* Thumbnails */}
           {product.image_urls && product.image_urls.length > 1 && (
