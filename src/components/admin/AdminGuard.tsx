@@ -3,10 +3,11 @@
 import { useAuth } from "@/components/auth-provider";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { db } from "@/lib/firebase/client";
+import { auth, db } from "@/lib/firebase/client";
 import { doc, getDoc } from "firebase/firestore";
-import { ShieldAlert, Loader2 } from "lucide-react";
+import { ShieldAlert, Loader2, LogOut, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { signOut } from "firebase/auth";
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -38,6 +39,11 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     checkAdmin();
   }, [user, loading]);
 
+  const handleSignOut = async () => {
+    await signOut(auth);
+    router.push("/");
+  };
+
   if (loading || isAdmin === null) {
     return (
       <div className="h-full w-full flex items-center justify-center p-20">
@@ -49,29 +55,38 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   if (isAdmin === false) {
     if (!user || user.isAnonymous) {
       return (
-        <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center">
+        <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center min-h-screen bg-muted/20">
           <div className="p-4 bg-muted rounded-full mb-4">
             <ShieldAlert className="w-12 h-12 text-muted-foreground" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Login Required</h2>
-          <p className="text-muted-foreground mb-6">
-            You must be logged in to access the admin area. Please use the profile icon in the top right to log in.
+          <p className="text-muted-foreground mb-8 max-w-md">
+            You must be logged in to access the Eqilo Admin Portal. Please return to the store and use the profile icon in the top right to log in.
           </p>
-          <Button onClick={() => router.push("/")}>Return to Store</Button>
+          <Button onClick={() => router.push("/")} size="lg" className="font-bold">
+            <Home className="w-5 h-5 mr-2" /> Return to Store
+          </Button>
         </div>
       );
     }
 
     return (
-      <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center">
+      <div className="h-full w-full flex flex-col items-center justify-center p-20 text-center min-h-screen bg-muted/20">
         <div className="p-4 bg-destructive/10 rounded-full mb-4">
           <ShieldAlert className="w-12 h-12 text-destructive" />
         </div>
         <h2 className="text-2xl font-bold mb-2">Access Denied</h2>
-        <p className="text-muted-foreground mb-6">
-          You do not have the required administrative privileges to view this page.
+        <p className="text-muted-foreground mb-8 max-w-md">
+          You are logged in as <strong>{user.email || user.phoneNumber || "a guest user"}</strong>, which does not have the required administrative privileges.
         </p>
-        <Button onClick={() => router.push("/")}>Return to Store</Button>
+        <div className="flex gap-4">
+          <Button onClick={() => router.push("/")} variant="outline" size="lg" className="font-bold">
+            <Home className="w-5 h-5 mr-2" /> Store
+          </Button>
+          <Button onClick={handleSignOut} variant="destructive" size="lg" className="font-bold">
+            <LogOut className="w-5 h-5 mr-2" /> Sign Out
+          </Button>
+        </div>
       </div>
     );
   }

@@ -31,7 +31,21 @@ export const OrderConfirmationEmail = ({
         </Text>
         <Section style={orderInfo}>
           <Text style={text}>
-            <strong>Total Amount:</strong> {formatPrice(amount)} €
+            <strong>Receipt / Kuitti #{orderId.substring(0, 8).toUpperCase()}</strong><br />
+            Date: {new Date().toLocaleDateString('fi-FI')}<br /><br />
+            <strong>Total Amount:</strong> {formatPrice(amount)} €<br />
+            <span style={{ fontSize: '14px', color: '#666' }}>
+              Incl. VAT (25.5%): {formatPrice(amount - (amount / 1.255))} €<br />
+              Net Amount (0% VAT): {formatPrice(amount / 1.255)} €
+            </span>
+          </Text>
+        </Section>
+        <Section style={footer}>
+          <Text style={footerText}>
+            <strong>Eqilo Oy</strong><br />
+            Y-tunnus / Business ID: 3530342-3<br />
+            Hakkapeliitantie 4, 08350 LOHJA, Finland<br />
+            orders@eqilo.fi
           </Text>
         </Section>
         <Text style={text}>
@@ -75,4 +89,16 @@ const orderInfo = {
   borderRadius: "8px",
   marginTop: "24px",
   marginBottom: "24px",
+};
+
+const footer = {
+  borderTop: "1px solid #eaeaea",
+  paddingTop: "24px",
+  marginTop: "24px",
+};
+
+const footerText = {
+  color: "#666",
+  fontSize: "14px",
+  lineHeight: "24px",
 };

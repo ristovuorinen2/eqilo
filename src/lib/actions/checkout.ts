@@ -152,6 +152,7 @@ export async function createCheckoutSession(
     // Create Stripe session
     const stripeSession = await stripe.checkout.sessions.create({
       mode: "payment",
+      invoice_creation: { enabled: true },
       payment_method_types: ['card', 'mobilepay'],
       line_items,
       client_reference_id: userId,
