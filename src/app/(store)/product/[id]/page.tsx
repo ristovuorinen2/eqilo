@@ -19,9 +19,12 @@ import { getProducts } from "@/lib/actions/admin";
 
 import { LocalizedDescription } from "@/components/LocalizedDescription";
 
+import { useLanguage } from "@/components/language-provider";
+
 export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const { addItem } = useCart();
+  const { t } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -97,16 +100,16 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
         {/* Details Column */}
         <div className="flex flex-col">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-foreground">{product.name}</h1>
-          <p className="text-muted-foreground mb-6 font-mono text-sm bg-muted/50 w-fit px-2 py-1 rounded">SKU: {product.sku}</p>
+          <p className="text-muted-foreground mb-6 font-mono text-sm bg-muted/50 w-fit px-2 py-1 rounded">{t("product.sku")}: {product.sku}</p>
           
-          <div className="text-4xl font-extrabold mb-8 tracking-tight">€{product.price.toFixed(2)} <span className="text-sm font-medium text-muted-foreground ml-2">incl. {product.tax_rate}% VAT</span></div>
+          <div className="text-4xl font-extrabold mb-8 tracking-tight">€{product.price.toFixed(2)} <span className="text-sm font-medium text-muted-foreground ml-2">{t("product.incl_vat")} {product.tax_rate}%</span></div>
 
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-8 flex items-start gap-4 shadow-sm">
             <Truck className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-bold text-emerald-800">Standard Shipping: 1-2 Weeks</h4>
+              <h4 className="font-bold text-emerald-800">{t("product.standard_shipping")}</h4>
               <p className="text-sm text-emerald-700/80 mt-1 font-medium">
-                Products are shipped directly to Finland. Free shipping on orders over 200 €.
+                {t("product.shipping_details")}
               </p>
             </div>
           </div>
@@ -118,27 +121,27 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
               onClick={() => addItem(product.id)}
             >
               <ShoppingCart className="mr-2 w-5 h-5" />
-              Add to Cart
+              {t("product.add_to_cart")}
             </Button>
           </div>
 
           <Accordion className="w-full">
             <AccordionItem value="description">
-              <AccordionTrigger className="text-lg font-bold">Description</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-bold">{t("product.description")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert">
                 <LocalizedDescription product={product} />
               </AccordionContent>
             </AccordionItem>
             
             <AccordionItem value="specs">
-              <AccordionTrigger className="text-lg font-bold">Specifications</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-bold">{t("product.specs")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
                 <div className="flex justify-between py-3 border-b border-border/50">
-                  <span className="font-medium text-foreground">Weight</span>
+                  <span className="font-medium text-foreground">{t("product.weight")}</span>
                   <span>{product.weight ? `${product.weight} kg` : "N/A"}</span>
                 </div>
                 <div className="flex justify-between py-3 border-b border-border/50">
-                  <span className="font-medium text-foreground">Category</span>
+                  <span className="font-medium text-foreground">{t("product.category")}</span>
                   <span className="capitalize">{product.category_id.replace(/-/g, ' ')}</span>
                 </div>
               </AccordionContent>
@@ -146,7 +149,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
             {product.box_contents && (
               <AccordionItem value="box_contents">
-                <AccordionTrigger className="text-lg font-bold">Box Contents</AccordionTrigger>
+                <AccordionTrigger className="text-lg font-bold">{t("product.box_contents")}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed">
                    <p className="whitespace-pre-line">{product.box_contents}</p>
                 </AccordionContent>
@@ -155,7 +158,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
             {product.downloads && product.downloads.length > 0 && (
               <AccordionItem value="downloads">
-                <AccordionTrigger className="text-lg font-bold">Downloads</AccordionTrigger>
+                <AccordionTrigger className="text-lg font-bold">{t("product.downloads")}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed">
                    <ul className="space-y-2">
                      {product.downloads.map((d, idx) => (
@@ -171,7 +174,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             )}
 
             <AccordionItem value="guarantee">
-              <AccordionTrigger className="text-lg font-bold">Quality Guarantee</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-bold">{t("product.guarantee")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
                 <div className="flex items-start gap-4 bg-muted/30 p-4 rounded-lg">
                   <ShieldCheck className="w-6 h-6 text-primary shrink-0" />
