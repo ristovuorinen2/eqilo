@@ -74,7 +74,7 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
             <RadioGroup 
               defaultValue="all" 
               value={selectedCategory}
-              onValueChange={setSelectedCategory}
+              onValueChange={(val) => setSelectedCategory(val)}
               className="hidden md:flex flex-col space-y-2.5"
             >
               <div 
