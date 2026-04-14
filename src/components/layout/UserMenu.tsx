@@ -250,7 +250,7 @@ export function UserMenu() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="p-0 focus:bg-primary/5">
-          <Link href="/checkout" className="flex items-center w-full font-medium p-2 cursor-pointer">
+          <Link href="/orders" className="flex items-center w-full font-medium p-2 cursor-pointer">
             <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
             <span>{t("nav.my_orders")}</span>
           </Link>

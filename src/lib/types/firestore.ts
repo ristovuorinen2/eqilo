@@ -77,8 +77,9 @@ export interface Order {
   tax_total: number; // Total VAT amount, required for Holvi invoicing
   total_amount: number; // Final amount including tax
   shipping_address: Address; // Snapshot at the time of order
-  status: 'pending' | 'paid' | 'shipped';
+  status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered';
   tracking_number?: string;
+  tracking_url?: string;
   courier?: string;
   stripe_payment_intent?: string;
   holvi_invoice_id?: string;
