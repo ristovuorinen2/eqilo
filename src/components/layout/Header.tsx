@@ -99,8 +99,10 @@ export function Header() {
         </div>
 
         {/* Action Icons */}
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          <LanguageSwitcher />
+        <div className="flex items-center space-x-1 sm:space-x-4">
+          <div className="hidden xs:block">
+            <LanguageSwitcher />
+          </div>
           
           <SearchDialog>
             <Button variant="ghost" size="icon" className="hidden sm:inline-flex hover:bg-primary/5 hover:text-primary transition-colors">
@@ -126,14 +128,16 @@ export function Header() {
           {/* Mobile Menu */}
           <div className="md:hidden">
             <Sheet>
-              <SheetTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9">
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle Menu</span>
+                </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <div className="flex flex-col space-y-6 mt-6">
-                  <Link href="/" className="mb-4 px-2">
+                <div className="flex flex-col h-full py-6">
+                  <Link href="/" className="mb-8 px-2">
                     <Image 
                       src="/eqilologo.jpeg" 
                       alt="Eqilo.fi Logo" 
@@ -143,29 +147,38 @@ export function Header() {
                     />
                   </Link>
                   
-                  <div className="space-y-4 px-2">
-                    <Link href="/shop" className="text-lg font-bold flex items-center gap-3" prefetch={true}>
-                      <div className="p-2 bg-muted rounded-lg"><ShoppingCart className="w-5 h-5 text-primary" /></div>
+                  <div className="space-y-6 px-2">
+                    <Link href="/shop" className="text-xl font-bold flex items-center gap-3 py-2" prefetch={true}>
+                      <div className="p-2 bg-primary/10 rounded-lg"><ShoppingCart className="w-5 h-5 text-primary" /></div>
                       {t("nav.products")}
                     </Link>
-                    <div className="space-y-2 pt-2 border-t">
-                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2 mb-2">{t("nav.services")}</p>
-                      <Link href="/services" className="text-md font-semibold flex items-center gap-3 px-2 py-1" prefetch={false}>{t("nav.consulting")}</Link>
-                      <Link href="/services/training-and-results" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>{t("nav.training")}</Link>
-                      <Link href="/services/equipe-software" className="text-sm font-medium text-muted-foreground flex items-center gap-3 px-2 py-1" prefetch={false}>{t("nav.equipe")}</Link>
+                    
+                    <div className="space-y-4 pt-4 border-t">
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2">{t("nav.services")}</p>
+                      <div className="grid gap-2">
+                        <Link href="/services" className="text-lg font-semibold px-2 py-2 rounded-md hover:bg-accent" prefetch={false}>{t("nav.consulting")}</Link>
+                        <Link href="/services/training-and-results" className="text-md font-medium text-muted-foreground px-2 py-2 rounded-md hover:bg-accent" prefetch={false}>{t("nav.training")}</Link>
+                        <Link href="/services/equipe-software" className="text-md font-medium text-muted-foreground px-2 py-2 rounded-md hover:bg-accent" prefetch={false}>{t("nav.equipe")}</Link>
+                      </div>
+                    </div>
+
+                    <div className="xs:hidden pt-4 border-t">
+                      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2 mb-2">{t("nav.language")}</p>
+                      <div className="px-2">
+                        <LanguageSwitcher />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t px-4 mt-auto">
-                    <Link href="/admin" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2" prefetch={false}>
-                       <User className="w-3 h-3" /> {t("nav.admin")}
+                  <div className="mt-auto pt-6 border-t px-2">
+                    <Link href="/admin" className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 px-2 py-3 rounded-md hover:bg-accent" prefetch={false}>
+                       <User className="w-4 h-4" /> {t("nav.admin")}
                     </Link>
                   </div>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
-
         </div>
       </div>
     </header>

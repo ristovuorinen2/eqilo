@@ -9,61 +9,65 @@ export function Footer() {
   return (
     <footer className="border-t bg-muted/20">
       <div className="container py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
           
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold tracking-tight text-primary">EQILO.FI</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+          <div className="space-y-4 text-center sm:text-left">
+            <h3 className="text-xl font-black tracking-tighter text-primary">EQILO.FI</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto sm:mx-0">
               {t("footer.company_desc")}
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="font-semibold">{t("footer.company")}</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Eqilo Oy</li>
+          <div className="space-y-4 text-center sm:text-left">
+            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{t("footer.company")}</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li className="font-semibold text-foreground">Eqilo Oy</li>
               <li>{t("footer.business_id")}: 3530342-3</li>
-              <li>Hakkapeliitantie 4</li>
-              <li>08350 LOHJA</li>
-              <li><a href="tel:+358505633097" className="hover:text-primary transition-colors">+358 50 5633097</a></li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="font-semibold">{t("footer.store")}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/shop" className="text-muted-foreground hover:text-foreground">{t("shop.all_equipment")}</Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-muted-foreground hover:text-foreground">{t("nav.services")}</Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground">{t("nav.terms")}</Link>
+              <li>Hakkapeliitantie 4, 08350 LOHJA</li>
+              <li className="pt-2">
+                <a href="tel:+358505633097" className="inline-flex items-center justify-center sm:justify-start px-4 py-2 rounded-full border border-primary/20 bg-primary/5 text-primary font-bold hover:bg-primary hover:text-white transition-all w-full sm:w-auto">
+                  +358 50 5633097
+                </a>
               </li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="font-semibold">{t("footer.partners")}</h4>
-            <ul className="space-y-2 text-sm">
+          <div className="space-y-4 text-center sm:text-left">
+            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{t("footer.store")}</h4>
+            <ul className="space-y-3 text-sm">
               <li>
-                <a href="https://fdstiming.com/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">FDS Timing</a>
+                <Link href="/shop" className="text-muted-foreground hover:text-primary font-medium transition-colors">{t("shop.all_equipment")}</Link>
               </li>
               <li>
-                <a href="https://equipe.com/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">Equipe</a>
+                <Link href="/services" className="text-muted-foreground hover:text-primary font-medium transition-colors">{t("nav.services")}</Link>
               </li>
               <li>
-                <a href="https://awc2026.fi/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">AWC 2026</a>
+                <Link href="/terms" className="text-muted-foreground hover:text-primary font-medium transition-colors">{t("nav.terms")}</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-4 text-center sm:text-left">
+            <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{t("footer.partners")}</h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a href="https://fdstiming.com/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary font-medium transition-colors">FDS Timing</a>
+              </li>
+              <li>
+                <a href="https://equipe.com/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary font-medium transition-colors">Equipe</a>
+              </li>
+              <li>
+                <a href="https://awc2026.fi/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary font-medium transition-colors">AWC 2026</a>
               </li>
             </ul>
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+        <div className="mt-16 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] xs:text-xs text-muted-foreground text-center md:text-left">
           <p>© {new Date().getFullYear()} Eqilo Oy. {t("footer.rights")}</p>
-          <div className="flex gap-4">
-            <span className="font-medium text-primary">{t("product.standard_shipping")}</span>
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <span className="font-bold text-primary bg-primary/5 px-3 py-1 rounded-full border border-primary/10">{t("product.standard_shipping")}</span>
+            <Link href="/terms" className="hover:underline">{t("nav.terms")}</Link>
           </div>
         </div>
       </div>

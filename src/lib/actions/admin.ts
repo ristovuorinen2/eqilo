@@ -109,6 +109,17 @@ export async function getProducts(): Promise<Product[]> {
   }
 }
 
+export async function getProduct(id: string): Promise<Product | null> {
+  try {
+    const doc = await adminDb.collection("products").doc(id).get();
+    if (!doc.exists) return null;
+    return { ...doc.data(), id: doc.id } as Product;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
+
 export async function upsertProduct(id: string | null, data: Partial<Product>) {
   try {
     const isAdmin = await checkAdmin();
