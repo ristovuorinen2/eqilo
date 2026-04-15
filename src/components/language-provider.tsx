@@ -52,7 +52,7 @@ const dictionaries: Record<Language, TranslationDictionary> = {
     "home.advantage.more.desc": "Sopii kaikille tasoille seurakilpailuista kansainvälisiin arvokisoihin.",
     "home.advantage.more.button": "Selaa tuotteita",
     "home.services.title": "20 vuoden asiantuntemus",
-    "home.services.desc": "Laitteiden myynnin lisäksi tarjoamme kilpailukonsultointia, teknistä tukea, huoltoa ja dedikoitua koulutusta ajanottojärjestelmiin.",
+    "home.services.desc": "Laitteiden myynnin lisäksi tarjoamme kilpailukonsultointia, teknistä tukea, huoltoa ja koulutusta ajanottojärjestelmiin.",
     "home.services.button": "Tutustu palveluihimme",
     "home.services.expert_cta": "Tarvitsetko asiantuntijaa tapahtumaasi?",
     "home.services.expert_desc": "Johannes Hyrsky ja Eqilon tiimi ovat valmiina auttamaan.",
