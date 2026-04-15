@@ -9,9 +9,10 @@ interface PriceDisplayProps {
   className?: string;
   size?: "sm" | "md" | "lg" | "xl";
   align?: "left" | "right" | "center";
+  hideDetails?: boolean;
 }
 
-export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md", align = "left" }: PriceDisplayProps) {
+export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md", align = "left", hideDetails = false }: PriceDisplayProps) {
   const { t } = useLanguage();
   
   // Calculate VAT based on inclusive price

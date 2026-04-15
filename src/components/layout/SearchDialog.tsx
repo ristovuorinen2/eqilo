@@ -85,7 +85,7 @@ export function SearchDialog({ children }: { children: React.ReactNode }) {
                     <p className="font-bold text-sm truncate">{product.name}</p>
                     <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
                   </div>
-                  <PriceDisplay price={product.price} taxRate={product.tax_rate} size="sm" align="right" className="text-primary" />
+                  <PriceDisplay price={product.price} taxRate={product.tax_rate} size="sm" align="right" className="text-primary" hideDetails />
                 </CommandItem>
               ))}
             </CommandGroup>
