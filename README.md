@@ -36,6 +36,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
   - Native **JSON-LD (Product)** Schema markup injected via Server Components for rich snippets in Google.
   - Dynamic `sitemap.xml` paired with a strict `robots.txt` actively disallowing spider traps (e.g., parameterized `/shop` filter views, carts).
   - Dynamic **Open Graph Images** (`next/og`) generated at the Edge for engaging social media cards.
+- **B2B Technical SEO & Localization:** Deep structured data (JSON-LD) with `additionalProperty` for technical specs and VAT-inclusive `priceSpecification`. Bidirectional `hreflang` routing maps for FI/EN/SE markets, and Server-Side dictionary resolution to prevent i18n key leaks. See `docs/b2b-seo-guide.md` for implementation details.
 - **Frictionless Auth:** Automatic anonymous sign-in ensures every visitor has a persistent session from their first second. Permanent accounts are secured via passwordless **Firebase Magic Links** and Phone SMS verification.
 - **Admin Panel:** Full CRUD management for products and categories, including inventory tracking and VAT-compliant order management.
 - **Financial Compliance:** Prices are managed inclusive of 25.5% VAT. The UI features an interactive Net/Gross toggle component. The system automatically calculates tax shares for display, checkout, and dynamically generated PDF receipts ("Kuitti") available in the customer's order history portal.
