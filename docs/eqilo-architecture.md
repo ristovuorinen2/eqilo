@@ -187,21 +187,17 @@ Based on modern ecommerce best practices, the Customer Portal will be built util
   - **FDS Timing** (https://fdstiming.com/)
 
 ### Advanced SEO, Analytics & Google Merchant Center
-- **Dynamic SEO:** Leverage Next.js Server-Side Rendering (SSR) for all product and **category pages** to ensure immediate indexing by Google. Category pages will include comprehensive SEO text fields to maximize search ranking for broad keywords. Automatically generate `sitemap.xml`. Include the Google Site Verification meta tag `<meta name="google-site-verification" content="LZj3B0ok1VW0eB_zpPPod5uAOugP2PkjrTrlLPS_Zac" />` in the root layout.
-- **Google Merchant Center:** A Next.js Route Handler (`GET /api/feed/google-merchant.xml`) will dynamically output an XML RSS 2.0 feed of all active products. This feed seamlessly links the site catalog to Google Merchant Center (https://merchants.google.com), enabling products to appear in Google Shopping tabs and dynamic search ads automatically.
-- **Social Sharing:** Implement dynamic Open Graph (OG) image generation so products look professional and engaging when shared on platforms like WhatsApp, Facebook, or LinkedIn.
-- **Conversion Tracking:** Integrate Google Analytics 4 (GA4) via Google Tag Manager to monitor the full ecommerce funnel (Product View -> Add to Cart -> Initiate Checkout -> Purchase) to optimize conversion rates. The following GTM snippet (`G-ZRVTGT7VXH`) will be injected into the root layout:
-  ```html
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRVTGT7VXH"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+- **Dynamic SEO & Metadata:** Leverage Next.js Server-Side Rendering (SSR) for all product and **category pages** to ensure immediate indexing by Google. Comprehensive metadata is generated dynamically, including explicit **canonical URLs** via `alternates` to prevent duplicate content issues across different routing paths.
+- **Structured Data (JSON-LD):** Product pages natively inject `Product` schema markup into the `<head>` directly from the Server Components, providing search engines with structured pricing, availability, and SKU data for rich search results.
+- **Sitemap & Crawl Management:** Automatically generated `sitemap.xml` indexes products, categories, sports, and static pages. A strict `robots.txt` is configured to actively disallow crawling of `/cart/`, `/checkout/`, `/api/`, and parameterized filter URLs (`/*?*category=`) to eliminate spider traps and optimize crawl budget.
+- **Google Merchant Center:** A Next.js Route Handler (`GET /api/feed/google-merchant.xml`) dynamically outputs an XML RSS 2.0 feed of all active products, enabling products to appear in Google Shopping tabs automatically.
+- **Social Sharing (Open Graph):** Implemented dynamic Open Graph (OG) image generation at the edge using `@vercel/og` (`next/og`). Branded social cards are generated on the fly, ensuring products look professional when shared on platforms like WhatsApp, Facebook, or LinkedIn.
+- **Conversion Tracking:** Integrate Google Analytics 4 (GA4) via Google Tag Manager (`G-ZRVTGT7VXH`) to monitor the full ecommerce funnel to optimize conversion rates.
 
-    gtag('config', 'G-ZRVTGT7VXH');
-  </script>
-  ```
+### Core Web Vitals & Accessibility
+- **LCP Optimization:** Critical product images utilize `next/image` with the `priority` flag for aggressive preloading, ensuring a lightning-fast Largest Contentful Paint.
+- **Layout Stability:** Addressed specific browser quirks (e.g., Firefox CSS Grid stretching) and implemented dynamic HTML `lang` attribute assignment to support native CSS `hyphens-auto` for complex Finnish vocabulary, preventing mobile layout overflows.
+- **VAT & Pricing UI:** Built a standardized, interactive `PriceDisplay` component that allows users to toggle between Gross (incl. 25.5% VAT) and Net prices seamlessly, adhering to European formatting standards.
 
 ### Abandoned Cart Recovery
 - A background process will identify `carts` in Firestore that have been inactive for over 24 hours.
