@@ -19,7 +19,7 @@ export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md
   const vatAmount = price - netPrice;
 
   let priceClass = "font-extrabold tracking-tighter text-foreground flex items-baseline gap-1";
-  let detailClass = "text-[10px] text-muted-foreground/80 flex flex-col uppercase tracking-widest mt-1";
+  let detailClass = "text-[10px] text-muted-foreground flex flex-col uppercase tracking-widest mt-1 font-medium";
 
   if (size === "sm") {
     priceClass += " text-lg";

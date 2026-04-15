@@ -44,7 +44,7 @@ export function WhatsAppHelpdesk() {
           <div className="bg-[#25D366] p-4 text-white flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center shrink-0 overflow-hidden relative border-2 border-white/20 shadow-sm">
-                <Image src="/johannes.jpeg" alt="Johannes Hyrsky" fill className="object-cover" sizes="44px" />
+                <Image src="/johannes.webp" alt="Johannes Hyrsky" fill className="object-cover" sizes="44px" />
               </div>
               <div>
                 <h3 className="font-bold text-md leading-tight">
@@ -104,7 +104,7 @@ export function WhatsAppHelpdesk() {
         {isOpen && !isMobile ? (
           <X className="w-6 h-6" />
         ) : (
-          <Image src="/johannes.jpeg" alt="Johannes" fill className="object-cover" sizes="64px" />
+          <Image src="/johannes.webp" alt="Johannes" fill className="object-cover" sizes="64px" />
         )}
         
         {/* Always Online Indicator */}

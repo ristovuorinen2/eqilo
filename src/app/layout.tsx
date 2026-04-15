@@ -56,7 +56,7 @@ export default async function RootLayout({
     '@type': 'LocalBusiness',
     name: 'Eqilo Oy',
     url: 'https://eqilo.fi',
-    logo: 'https://eqilo.fi/eqilologo.jpeg',
+    logo: 'https://eqilo.fi/eqilologo.webp',
     description: 'Modern timekeeping devices from Swiss manufacturer FDS Timing.',
     telephone: '+358 50 5633097',
     address: {

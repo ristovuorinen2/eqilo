@@ -157,7 +157,7 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
                     ) : (
                       <>
                         <Image 
-                          src="/eqilologo.jpeg" 
+                          src="/eqilologo.webp" 
                           alt="Eqilo Logo Placeholder" 
                           fill 
                           className="object-contain p-12 opacity-20 grayscale group-hover:opacity-40 transition-opacity duration-500" 

@@ -33,7 +33,7 @@ export function Header() {
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
             <Image
-              src="/eqilologo.jpeg"
+              src="/eqilologo.webp"
               alt="Eqilo.fi Logo"
               width={120}
               height={40}
@@ -142,7 +142,7 @@ export function Header() {
                 <div className="flex flex-col h-full py-6">
                   <Link href="/" className="mb-8 px-2">
                     <Image
-                      src="/eqilologo.jpeg"
+                      src="/eqilologo.webp"
                       alt="Eqilo.fi Logo"
                       width={120}
                       height={40}

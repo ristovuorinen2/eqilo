@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="p-2 bg-primary/5 rounded-lg group-hover:bg-primary/10 transition-colors">
               <Image 
-                src="/eqilologo.jpeg" 
+                src="/eqilologo.webp" 
                 alt="Eqilo.fi Logo" 
                 width={32} 
                 height={32} 

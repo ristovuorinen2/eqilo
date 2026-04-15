@@ -77,7 +77,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
              ) : (
                <>
                  <Image 
-                   src="/eqilologo.jpeg" 
+                   src="/eqilologo.webp" 
                    alt="Eqilo Logo Placeholder" 
                    fill 
                    className="object-contain p-16 opacity-20 grayscale" 
@@ -293,7 +293,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center opacity-20">
-                        <Image src="/eqilologo.jpeg" alt="Logo" fill className="object-contain p-10 grayscale" />
+                        <Image src="/eqilologo.webp" alt="Logo" fill className="object-contain p-10 grayscale" />
                       </div>
                     )}
                   </div>
