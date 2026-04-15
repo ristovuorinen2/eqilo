@@ -129,14 +129,16 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
             <h2 className="text-[10px] xs:text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-[0.3em]">{t("home.partners.title")}</h2>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 md:gap-24 opacity-60 hover:opacity-100 transition-opacity duration-300">
-            <Link href="https://fdstiming.com/" target="_blank" className="flex items-center text-xl xs:text-2xl md:text-3xl font-extrabold tracking-tight text-foreground hover:text-primary transition-colors">
-              FDS Timing
+            <Link href="https://fdstiming.com/" target="_blank" rel="noopener noreferrer" className="flex items-center hover:opacity-80 transition-opacity">
+              <Image src="/logos/fdstiming-logo.png" alt="FDS Timing" width={120} height={46} className="h-8 md:h-10 w-auto object-contain" />
             </Link>
-            <Link href="https://equipe.com/" target="_blank" className="flex items-center text-xl xs:text-2xl md:text-3xl font-extrabold tracking-tight text-foreground hover:text-primary transition-colors">
-              Equipe
+            <Link href="https://equipe.com/" target="_blank" rel="noopener noreferrer" className="flex items-center hover:opacity-80 transition-opacity">
+              <Image src="/logos/equipe-logo.png" alt="Equipe" width={120} height={52} className="h-8 md:h-10 w-auto object-contain" />
             </Link>
-            <Link href="https://awc2026.fi/" target="_blank" className="flex items-center text-xl xs:text-2xl md:text-3xl font-extrabold tracking-tight text-foreground hover:text-primary transition-colors">
-              AWC 2026
+            <Link href="https://awc2026.fi/" target="_blank" rel="noopener noreferrer" className="flex items-center hover:opacity-80 transition-opacity">
+              <span className="flex items-center bg-foreground rounded-md px-3 py-1">
+                <Image src="/logos/awc2026-logo.png" alt="AWC 2026" width={120} height={43} className="h-8 md:h-10 w-auto object-contain" />
+              </span>
             </Link>
           </div>
         </div>
