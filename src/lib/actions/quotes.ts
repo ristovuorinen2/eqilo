@@ -1,8 +1,5 @@
 "use server";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const PdfPrinter = require("pdfmake/js/Printer").default;
-
 import { CartItem, Product } from "../types/firestore";
 import { adminDb } from "../firebase/admin";
 import { Resend } from "resend";
@@ -50,6 +47,8 @@ export async function generateQuote(
     const total = grossTotal;
 
     // 2. Define PDF Document
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const PdfPrinter = require("pdfmake/js/Printer").default;
     const printer = new PdfPrinter(fonts);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

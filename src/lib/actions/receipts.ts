@@ -1,7 +1,5 @@
 "use server";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const PdfPrinter = require("pdfmake/js/Printer").default;
 import { Order, Product } from "../types/firestore";
 import { adminDb } from "../firebase/admin";
 import path from "path";
@@ -21,6 +19,9 @@ export async function generateReceipt(
   orderId: string
 ): Promise<{ success: boolean; pdf?: string; error?: string }> {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const PdfPrinter = require("pdfmake/js/Printer").default;
+
     const orderDoc = await adminDb.collection("orders").doc(orderId).get();
     if (!orderDoc.exists) {
       throw new Error("Order not found");

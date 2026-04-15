@@ -8,7 +8,7 @@ const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { 
     key: 'Content-Security-Policy', 
-    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://storage.googleapis.com https://firebasestorage.googleapis.com; font-src 'self' data:; frame-src 'self' https://js.stripe.com https://www.youtube.com; connect-src 'self' https://api.stripe.com https://*.googleapis.com https://*.firebaseio.com https://www.google-analytics.com;"
+    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://storage.googleapis.com https://firebasestorage.googleapis.com https://placehold.co; font-src 'self' data:; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.youtube.com blob: data: about:; connect-src 'self' https://api.stripe.com https://*.googleapis.com https://*.firebaseio.com https://www.google-analytics.com;"
   }
 ];
 
