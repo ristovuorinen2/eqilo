@@ -2,6 +2,7 @@
 
 import { formatPrice } from "@/lib/utils";
 import { useLanguage } from "@/components/language-provider";
+import { useState } from "react";
 
 interface PriceDisplayProps {
   price: number;
@@ -14,6 +15,7 @@ interface PriceDisplayProps {
 
 export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md", align = "left", hideDetails = false }: PriceDisplayProps) {
   const { t } = useLanguage();
+  const [showNet, setShowNet] = useState(false);
   
   // Calculate VAT based on inclusive price
   const netPrice = price / (1 + (taxRate / 100));
@@ -46,15 +48,24 @@ export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md
   return (
     <div className={`flex flex-col ${align === 'right' ? 'items-end' : align === 'center' ? 'items-center' : 'items-start'} ${className}`}>
       <div className={priceClass}>
-        <span className="whitespace-nowrap">{formatPrice(price)} €</span>
-        <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest whitespace-nowrap">
-          {t("product.incl_vat")} {taxRate}%
-        </span>
+        <span className="whitespace-nowrap">{formatPrice(showNet ? netPrice : price)} €</span>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowNet(!showNet);
+          }}
+          className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest whitespace-nowrap cursor-pointer hover:text-primary transition-colors focus:outline-none"
+        >
+          {showNet ? `${t("product.net_price")}` : `${t("product.incl_vat")} ${taxRate}%`}
+        </button>
       </div>
-      <div className={detailClass}>
-        <span>{t("product.net_price")}: {formatPrice(netPrice)} €</span>
-        <span>{t("product.vat_amount")} ({taxRate}%): {formatPrice(vatAmount)} €</span>
-      </div>
+      {!hideDetails && (
+        <div className={detailClass}>
+          <span>{t("product.net_price")}: {formatPrice(netPrice)} €</span>
+          <span>{t("product.vat_amount")} ({taxRate}%): {formatPrice(vatAmount)} €</span>
+        </div>
+      )}
     </div>
   );
 }
