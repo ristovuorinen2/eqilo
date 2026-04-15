@@ -68,7 +68,7 @@ export function Footer() {
         </div>
         
         <div className="mt-16 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] xs:text-xs text-muted-foreground text-center md:text-left">
-          <p>© {new Date().getFullYear()} Eqilo Oy. {t("footer.rights")} <span className="text-muted-foreground/80 ml-2 font-medium">v{packageJson.version}</span></p>
+          <p>© {new Date().getFullYear()} Eqilo Oy. {t("footer.rights")} <span className="text-muted-foreground ml-2 font-bold">v{packageJson.version}</span></p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <span className="font-bold text-primary bg-primary/5 px-3 py-1 rounded-full border border-primary/10">{t("product.standard_shipping")}</span>
             <Link href="/cookie-policy" className="hover:underline">{t("nav.cookie") || "Cookie Policy"}</Link>
