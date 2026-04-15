@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next';
 import { adminDb } from "@/lib/firebase/admin";
 import { Product } from "@/lib/types/firestore";
+import { AIProductSchema } from "@/components/seo/AIProductSchema";
 
 type Props = {
   params: Promise<{ id: string }>
@@ -57,31 +58,9 @@ export default async function ProductLayout({
 
   const product = doc.data() as Product;
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    image: product.image_urls || [],
-    description: product.description,
-    sku: product.sku,
-    category: product.category_id,
-    offers: {
-      '@type': 'Offer',
-      price: product.price.toFixed(2),
-      priceCurrency: 'EUR',
-      availability: product.is_active && product.inventory_count > 0 
-        ? 'https://schema.org/InStock' 
-        : 'https://schema.org/OutOfStock',
-      url: `https://eqilo.fi/product/${id}`
-    }
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
-      />
+      <AIProductSchema product={product} />
       {children}
     </>
   );

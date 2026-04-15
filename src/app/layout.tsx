@@ -23,15 +23,22 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://eqilo.fi'),
   title: {
     template: '%s | Eqilo.fi',
     default: 'Eqilo.fi - Modern Timekeeping Solutions',
   },
-  description: "Eqilo provides modern timekeeping devices from Swiss manufacturer FDS Timing, targeting agility and equestrian clubs in Finland.",
+  description: "Eqilo provides modern timekeeping devices from Swiss manufacturer FDS Timing. Over 20 years of expertise for Finnish agility and equestrian clubs.",
   keywords: ["FDS Timing", "timekeeping", "agility", "equestrian", "Eqilo", "Finland"],
+  applicationName: 'Eqilo Webstore',
+  authors: [{ name: 'Johannes Hyrsky', url: 'https://eqilo.fi/services' }],
+  publisher: 'Eqilo Oy',
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     title: 'Eqilo.fi - Modern Timekeeping Solutions',
-    description: 'Modern timekeeping devices from Swiss manufacturer FDS Timing, targeting agility and equestrian clubs in Finland.',
+    description: 'Eqilo provides modern timekeeping devices from Swiss manufacturer FDS Timing. Over 20 years of expertise for Finnish agility and equestrian clubs.',
     url: 'https://eqilo.fi',
     siteName: 'Eqilo.fi',
     locale: 'fi_FI',
@@ -53,11 +60,16 @@ export default async function RootLayout({
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': 'Organization',
     name: 'Eqilo Oy',
     url: 'https://eqilo.fi',
     logo: 'https://eqilo.fi/eqilologo.webp',
-    description: 'Modern timekeeping devices from Swiss manufacturer FDS Timing.',
+    description: 'Finnish distributor of FDS Timing systems for equestrian and agility sports.',
+    founder: {
+      '@type': 'Person',
+      name: 'Johannes Hyrsky',
+      jobTitle: 'Timekeeping Expert',
+    },
     telephone: '+358 50 5633097',
     address: {
       '@type': 'PostalAddress',
@@ -65,7 +77,11 @@ export default async function RootLayout({
       addressLocality: 'LOHJA',
       postalCode: '08350',
       addressCountry: 'FI'
-    }
+    },
+    sameAs: [
+      'https://www.facebook.com/eqilo',
+      'https://fdstiming.com/'
+    ]
   };
 
   return (

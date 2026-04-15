@@ -51,19 +51,19 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
   const totalPrice = product.price + (product.bundle_options?.filter(o => selectedBundleOptions.includes(o.id)).reduce((acc, o) => acc + (o.extra_price || 0), 0) || 0);
 
   return (
-    <div className="container py-6 md:py-16">
+    <article itemScope itemType="https://schema.org/Product" className="container py-6 md:py-16">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-[10px] xs:text-xs font-bold text-muted-foreground/60 mb-6 uppercase tracking-widest overflow-x-auto whitespace-nowrap pb-2 no-scrollbar">
+      <nav aria-label="Breadcrumb" className="flex items-center text-[10px] xs:text-xs font-bold text-muted-foreground/60 mb-6 uppercase tracking-widest overflow-x-auto whitespace-nowrap pb-2 no-scrollbar">
         <Link href="/shop" className="hover:text-primary transition-colors">{t("nav.products")}</Link>
         <ChevronRight className="w-3 h-3 mx-2 opacity-50 shrink-0" />
         <span className="shrink-0">{t(`category.${product.category_id}`) !== `category.${product.category_id}` ? t(`category.${product.category_id}`) : product.category_id.replace(/-/g, ' ')}</span>
         <ChevronRight className="w-3 h-3 mx-2 opacity-50 shrink-0" />
-        <span className="text-primary truncate max-w-[150px] xs:max-w-none shrink-0">{product.name}</span>
+        <span itemProp="name" className="text-foreground truncate">{product.name}</span>
       </nav>
 
       <div className="grid gap-8 md:grid-cols-2 lg:gap-16 items-start">
         {/* Images Column */}
-        <div className="space-y-4 md:sticky md:top-24">
+        <section aria-label="Product Images" className="space-y-4 md:sticky md:top-24">
           <div className="aspect-square bg-muted/30 rounded-2xl flex flex-col items-center justify-center border border-border/50 shadow-sm relative overflow-hidden bg-white">
              {product.image_urls && product.image_urls.length > 0 ? (
                <Image 
@@ -98,11 +98,11 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
               ))}
             </div>
           )}
-        </div>
+        </section>
 
         {/* Details Column */}
-        <div className="flex flex-col">
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-2 text-foreground leading-tight">{product.name}</h1>
+        <section aria-labelledby="product-details" className="flex flex-col">
+          <h1 id="product-details" className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-2 text-foreground leading-tight">{product.name}</h1>
           <p className="text-muted-foreground mb-6 font-mono text-[10px] xs:text-xs bg-muted/50 w-fit px-2 py-1 rounded font-bold uppercase tracking-wider">{t("product.sku")}: {product.sku}</p>
           
           <div className="mb-8">
@@ -272,7 +272,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
             </AccordionItem>
           </Accordion>
 
-        </div>
+        </section>
       </div>
 
       {relatedProducts && relatedProducts.length > 0 && (
@@ -312,6 +312,6 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
       <div className="mt-20">
         <ProductSEO />
       </div>
-    </div>
+    </article>
   );
 }
