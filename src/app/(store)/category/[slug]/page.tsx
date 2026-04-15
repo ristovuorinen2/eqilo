@@ -106,10 +106,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                     <Clock className="w-3.5 h-3.5" /> {t("product.standard_shipping")}
                   </div>
                   <div className="w-full flex items-center justify-between mt-1">
-                    <div className="font-extrabold text-2xl tracking-tight text-foreground flex items-baseline gap-1">
-                      {formatPrice(product.price)} €
-                      <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{t("product.incl_vat")} {product.tax_rate || 25.5}%</span>
-                    </div>
+                    <PriceDisplay price={product.price} taxRate={product.tax_rate} size="lg" align="left" hideDetails />
                     <Badge variant="outline" className="font-semibold border-primary/20 bg-primary/5 text-primary">{t("shop.in_stock")}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 w-full mt-2">
