@@ -34,6 +34,18 @@ export default function SportPage({ params }: { params: Promise<{ slug: string }
     }
   };
 
+  const getSportImage = (slug: string) => {
+    switch (slug) {
+      case 'equestrian': return 'https://images.unsplash.com/photo-1553531087-b25a0b9a68ab?q=80&w=1200&auto=format&fit=crop';
+      case 'agility': return 'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?q=80&w=1200&auto=format&fit=crop';
+      case 'athletics': return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop';
+      case 'skiing': return 'https://images.unsplash.com/photo-1551524164-687a55209e82?q=80&w=1200&auto=format&fit=crop';
+      case 'motorsports': return 'https://images.unsplash.com/photo-1541348263662-e068c28dd6b8?q=80&w=1200&auto=format&fit=crop';
+      case 'cycling': return 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop';
+      default: return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop';
+    }
+  };
+
   return (
     <div className="container py-10 md:py-16 max-w-4xl mx-auto text-foreground">
       <Link href="/sports" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary mb-8 transition-colors">
@@ -41,14 +53,14 @@ export default function SportPage({ params }: { params: Promise<{ slug: string }
         {lang === "FI" ? "Kaikki lajit" : lang === "SE" ? "Alla sporter" : "All sports"}
       </Link>
       
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-16 p-8 bg-muted/20 rounded-3xl border border-border/50 relative overflow-hidden">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10 p-8 bg-muted/20 rounded-3xl border border-border/50 relative overflow-hidden">
         <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
-        <div className="w-40 h-40 shrink-0 bg-background rounded-full flex items-center justify-center border-4 border-muted shadow-xl z-10">
+        <div className="w-32 h-32 md:w-40 md:h-40 shrink-0 bg-background rounded-full flex items-center justify-center border-4 border-muted shadow-xl z-10">
           {getSportIcon(sport.slug)}
         </div>
-        <div className="z-10 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{title}</h1>
-          <p className="text-xl text-muted-foreground">
+        <div className="z-10 text-center md:text-left flex-1">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4 leading-tight">{title}</h1>
+          <p className="text-lg md:text-xl text-muted-foreground">
             {lang === "FI" 
               ? "Ammattilaistason ratkaisut juuri teidän lajinne vaatimuksiin." 
               : lang === "SE" 
@@ -58,8 +70,22 @@ export default function SportPage({ params }: { params: Promise<{ slug: string }
         </div>
       </div>
       
+      <div className="w-full h-64 md:h-96 mb-12 rounded-3xl overflow-hidden shadow-2xl relative border border-border/50">
+        <Image 
+          src={getSportImage(sport.slug)} 
+          alt={title} 
+          fill 
+          className="object-cover" 
+          sizes="(max-width: 1200px) 100vw, 1200px" 
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-8 text-white">
+           <p className="font-bold uppercase tracking-widest text-white/80 text-sm mb-2">{lang === "FI" ? "Powered by FDS Timing" : "Powered by FDS Timing"}</p>
+        </div>
+      </div>
+
       <div 
-        className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground prose-h2:text-3xl prose-h2:font-extrabold prose-h2:tracking-tight prose-h2:text-foreground prose-p:leading-relaxed prose-li:leading-relaxed"
+        className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground [&>p]:mb-6 [&>p]:text-lg [&>h2]:text-2xl [&>h2]:md:text-3xl [&>h2]:font-extrabold [&>h2]:tracking-tight [&>h2]:text-foreground [&>h2]:mt-12 [&>h2]:mb-6 [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>li]:mb-3 [&>li]:text-lg leading-relaxed"
         dangerouslySetInnerHTML={{ __html: content }} 
       />
 
