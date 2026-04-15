@@ -2,11 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
-import { ReactQRCode } from "@lglab/react-qr-code";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { useLanguage } from "./language-provider";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const ReactQRCode = dynamic(() => import("@lglab/react-qr-code").then((mod) => mod.ReactQRCode), {
+  ssr: false,
+  loading: () => <div className="w-[160px] h-[160px] bg-muted animate-pulse rounded-md" />
+});
 
 // In a real implementation, this would be fetched from the global settings collection
 const DEFAULT_WHATSAPP_NUMBER = "+358505633097"; 
