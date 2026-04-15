@@ -1,6 +1,6 @@
 {
   "name": "eqilo",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -58,6 +58,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.3",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "tailwindcss": "^4",
