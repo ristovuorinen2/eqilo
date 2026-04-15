@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
         hostname: "firebasestorage.googleapis.com",
         pathname: "/v0/b/**",
       },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/**",
+      },
     ],
     // Optimize LCP by enabling modern AVIF formats which are 20% smaller than WebP
     formats: ['image/avif', 'image/webp'],
