@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import Link from "next/link";
 import { useCart } from "@/components/cart-provider";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { LocalizedDescription } from "@/components/LocalizedDescription";
 import { useLanguage } from "@/components/language-provider";
 import { 
@@ -36,6 +36,7 @@ interface ProductContentProps {
 export default function ProductContent({ product, relatedProducts }: ProductContentProps) {
   const { addItem } = useCart();
   const { t } = useLanguage();
+  const [isPending, startTransition] = useTransition();
   const [selectedBundleOptions, setSelectedBundleOptions] = useState<string[]>(
     product.is_bundle && product.bundle_options 
       ? product.bundle_options.filter(o => !o.is_optional).map(o => o.id)
@@ -66,15 +67,15 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
         <section aria-label="Product Images" className="space-y-4 md:sticky md:top-24">
           <div className="aspect-square bg-muted/30 rounded-2xl flex flex-col items-center justify-center border border-border/50 shadow-sm relative overflow-hidden bg-white">
              {product.image_urls && product.image_urls.length > 0 ? (
-               <Image 
-                 src={product.image_urls[0]} 
-                 alt={product.name} 
-                 fill 
-                 className="object-contain p-6 xs:p-8 mix-blend-multiply" 
+               <Image
+                 src={product.image_urls[0]}
+                 alt={product.name}
+                 fill
+                 className="object-contain p-6 xs:p-8 mix-blend-multiply"
                  priority
+                 fetchPriority="high"
                  sizes="(max-width: 768px) 100vw, 50vw"
-               />
-             ) : (
+               />             ) : (
                <>
                  <Image 
                    src="/eqilologo.webp" 
@@ -153,16 +154,20 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
           </div>
 
           <div className="space-y-4 mb-10">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="w-full text-md xs:text-lg h-14 xs:h-16 font-black shadow-xl hover:shadow-2xl transition-all rounded-2xl uppercase tracking-wider"
-              onClick={() => addItem(product.id, 1, selectedBundleOptions)}
+              disabled={isPending}
+              onClick={() => {
+                startTransition(() => {
+                  addItem(product.id, 1, selectedBundleOptions);
+                });
+              }}
             >
               <ShoppingCart className="mr-2 w-5 h-5 xs:w-6 xs:h-6" />
-              {t("product.add_to_cart")}
+              {isPending ? t("product.adding") : t("product.add_to_cart")}
             </Button>
           </div>
-
           <Accordion className="w-full" defaultValue={["description", "specs"]}>
             <AccordionItem value="description" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.description")}</AccordionTrigger>

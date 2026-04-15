@@ -1,31 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['pdfmake'],
   images: {
-    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**',
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        pathname: "/v0/b/**",
       },
     ],
+    // Optimize LCP by enabling modern AVIF formats which are 20% smaller than WebP
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
   },
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.eqilo.fi',
-          },
-        ],
-        destination: 'https://eqilo.fi/:path*',
-        permanent: true,
-      },
-    ];
-  },
+  experimental: {
+    // Enable optimizing package imports to reduce bundle size and INP
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
+  }
 };
 
 export default nextConfig;

@@ -71,7 +71,15 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
                          <div className="w-24 h-24 xs:w-44 xs:h-44 md:w-64 md:h-64 bg-muted/10 rounded-full mb-4 xs:mb-6 mt-4 flex items-center justify-center border-4 border-muted/30 relative overflow-hidden shrink-0 group hover:scale-105 transition-transform duration-500 shadow-inner">
                             {product.image_urls?.[0] ? (
                               <div className="absolute -inset-8 md:-inset-12">
-                                <Image src={product.image_urls[0]} alt={product.name} fill className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4 md:p-8" sizes="(max-width: 768px) 256px, 512px" priority={index === 0} />
+                                <Image 
+                                  src={product.image_urls[0]} 
+                                  alt={product.name} 
+                                  fill 
+                                  className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 p-4 md:p-8" 
+                                  sizes="(max-width: 400px) 150px, (max-width: 768px) 250px, 350px" 
+                                  priority={index === 0} 
+                                  fetchPriority={index === 0 ? "high" : "auto"}
+                                />
                               </div>
                             ) : (
                               <Timer className="w-16 h-16 text-primary/60" />
