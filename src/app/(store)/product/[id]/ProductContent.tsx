@@ -247,7 +247,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
                               src={embedUrl} 
                               title={video.name}
                               className="absolute top-0 left-0 w-full h-full"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allow="autoplay; fullscreen"
                               allowFullScreen
                             ></iframe>
                           </div>
@@ -300,7 +300,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
                   <div className="p-5 flex-1 flex flex-col">
                     <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors line-clamp-2 mb-2">{related.name}</h3>
                     <div className="mt-auto pt-4">
-                      <PriceDisplay price={related.price} taxRate={related.tax_rate} size="sm" align="left" />
+                      <PriceDisplay price={related.price} taxRate={related.tax_rate} size="sm" align="left" hideDetails />
                     </div>
                   </div>
                 </div>

@@ -48,13 +48,13 @@ export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md
       <div className={priceClass}>
         <span className="whitespace-nowrap">{formatPrice(price)} €</span>
         <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest whitespace-nowrap">
-          {t("product.incl_vat")} {taxRate}%
+          {t("product.incl_vat")} {String(taxRate).replace('.', ',')}%
         </span>
       </div>
       {!hideDetails && (
         <div className={detailClass}>
           <span>{t("product.net_price")}: {formatPrice(netPrice)} €</span>
-          <span>{t("product.vat_amount")} ({taxRate}%): {formatPrice(vatAmount)} €</span>
+          <span>{t("product.vat_amount")} ({String(taxRate).replace('.', ',')}%): {formatPrice(vatAmount)} €</span>
         </div>
       )}
     </div>
