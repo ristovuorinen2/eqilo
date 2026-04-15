@@ -22,10 +22,15 @@ export async function generateMetadata(
 
   const product = doc.data() as Product;
   const previousImages = (await parent).openGraph?.images || [];
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://eqilo.fi';
+  const canonicalUrl = `${baseUrl}/product/${id}`;
 
   return {
     title: product.name,
     description: product.description.substring(0, 160),
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: product.name,
       description: product.description.substring(0, 160),
