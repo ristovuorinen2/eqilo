@@ -181,13 +181,10 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
                 </Link>
                 <CardFooter className="p-6 pt-4 mt-auto flex flex-col items-start gap-5">
                   <div className="w-full h-[1px] bg-border/50 mb-1"></div>
-                  <div className="w-full flex items-end justify-between mt-1 mb-2">
-                    <div>
-                      <p className="text-xs font-bold text-muted-foreground mb-1 uppercase tracking-wider">{t("shop.price")}</p>
-                      <div className="font-extrabold text-3xl tracking-tight text-foreground flex items-baseline gap-1.5">
-                        {formatPrice(product.price)} €
-                        <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">{t("product.incl_vat")} {product.tax_rate || 25.5}%</span>
-                      </div>
+                  <div className="w-full flex flex-col sm:flex-row items-start sm:items-end justify-between mt-1 mb-2 gap-4">
+                    <div className="w-full">
+                      <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wider">{t("shop.price")}</p>
+                      <PriceDisplay price={product.price} taxRate={product.tax_rate} size="lg" align="left" className="w-full" />
                     </div>
                     <Badge variant="outline" className="font-bold border-emerald-200 bg-emerald-50 text-emerald-700 px-3 py-1">{t("shop.in_stock")}</Badge>
                   </div>
