@@ -165,7 +165,7 @@ export async function createCheckoutSession(
         lang: lang,
       },
       shipping_address_collection: {
-        allowed_countries: ["FI"], // Restrict shipping to Finland
+        allowed_countries: ["FI", "SE", "NO", "DK", "EE", "LV", "LT", "DE", "FR", "NL", "BE", "ES", "IT", "AT", "IE", "GR", "PT", "PL", "GB", "US", "CA"],
       },
       shipping_options: [
         {
@@ -175,10 +175,24 @@ export async function createCheckoutSession(
               amount: shippingCost,
               currency: "eur",
             },
-            display_name: shippingCost === 0 ? "Free Standard Shipping" : "Standard Shipping",
+            display_name: shippingCost === 0 ? "Free Standard Shipping (Finland only)" : "Standard Shipping (Finland)",
             delivery_estimate: {
               minimum: { unit: "business_day", value: 5 },
-              maximum: { unit: "business_day", value: 14 }, // 1-2 weeks
+              maximum: { unit: "business_day", value: 14 },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: {
+              amount: 0,
+              currency: "eur",
+            },
+            display_name: "Custom Postal Fee by Request (Other Countries) - Billed Separately",
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 7 },
+              maximum: { unit: "business_day", value: 21 },
             },
           },
         },

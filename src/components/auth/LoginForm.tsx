@@ -45,16 +45,31 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void }) {
     e.preventDefault();
     setError("");
     try {
+      let formattedPhone = phone.trim();
+      if (!formattedPhone.startsWith("+")) {
+        // Default to Finnish prefix if missing (for convenience)
+        formattedPhone = formattedPhone.startsWith("0") 
+          ? `+358${formattedPhone.substring(1)}` 
+          : `+${formattedPhone}`;
+      }
+
       if (typeof window !== "undefined" && !window.recaptchaVerifier) {
         window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
           size: "invisible",
         });
       }
       const appVerifier = window.recaptchaVerifier;
-      const result = await signInWithPhoneNumber(auth, phone, appVerifier);
+      const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
       setConfirmationResult(result);
       setStep("otp");
     } catch (err) {
+      console.error("Phone Auth Error:", err);
+      // Clean up the verifier if it fails so they can try again
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+        // @ts-expect-error Resetting the verifier for retry
+        window.recaptchaVerifier = undefined;
+      }
       setError(err instanceof Error ? err.message : String(err));
     }
   };
