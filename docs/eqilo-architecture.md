@@ -24,7 +24,7 @@ The webstore will serve as a foundation for long-term growth, expanding into add
 ## Technical Scope
 - **Customer Portal:** Product discovery, simple product search (utilizing native Firestore composite indexes and search limits, without external services), persistent carts saved to user accounts, mandatory account creation during the first order, Stripe checkout, and a dedicated **E-store Terms & Conditions** page which users must explicitly accept before completing a purchase.
 - **Admin Panel:** Product management (importing from Excel, plus a fully-featured Product Manager/Editor to modify descriptions, prices, and status), order/inventory management, comprehensive Sales Dashboard, Cart management (ability to view, edit, override prices, and generate shareable public cart links), and a built-in CRM to manage customers and their orders.
-- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be deployed via **Firebase App Hosting**, which provides seamless GitHub integration, global CDN edge caching, and serverless execution without manual Docker containerization. Firebase services (Firestore, Auth via email or phone number) will be used for the backend data layer.
+- **Infrastructure & Deployment:** Hosted on Google Cloud Platform (GCP). The Next.js application will be deployed via **Firebase App Hosting**, which provides seamless GitHub integration, global CDN edge caching, and serverless execution without manual Docker containerization. Firebase services (Firestore, Auth via Magic Links or Phone Number) will be used for the backend data layer.
 - **Integrations:** Stripe (Payments), Holvi.fi (Invoicing), WhatsApp (Helpdesk), Google Analytics 4 / Plausible (Analytics).
 - **Aesthetics:** Blue and white branding to match the Eqilo logo (`docs/eqilologo.jpeg`).
 - **Internationalization (i18n):** Support for Finnish (FI - Default), English (EN), and Swedish (SE).
@@ -73,7 +73,12 @@ graph TD
 - `id` (String)
 - `name` (String)
 - `description` (String)
-- `price` (Number)
+- `description_fi` (String)
+- `description_se` (String)
+- `specifications` (String)
+- `specifications_fi` (String)
+- `specifications_se` (String)
+- `price` (Number) - VAT inclusive (Gross)
 - `tax_rate` (Number) - e.g., 25.5 for Finnish general goods
 - `sku` (String)
 - `excel_ref_id` (String) - Original ID from Price List Excel
@@ -82,6 +87,9 @@ graph TD
 - `weight` (Number) - Essential for shipping calculation
 - `dimensions` (Object) - { length, width, height }
 - `image_urls` (Array of Strings)
+- `downloads` (Array of Objects) - { name, url } for PDF manuals
+- `videos` (Array of Objects) - { name, url } for YouTube tutorials
+- `box_contents` (String)
 
 **3. `orders` Collection**
 - `id` (String)
@@ -117,6 +125,7 @@ Following modern Next.js App Router best practices, data mutations and form subm
 - **Server Actions (Internal Mutations):**
   - `createCheckoutSession(cart)` - Initializes Stripe Checkout session securely on the server.
   - `generateInvoice(orderId)` - Communicates with Holvi.fi API to generate an invoice.
+  - `generateReceipt(userId, orderId)` - Dynamically generates PDF receipts ("Kuitti") for past orders.
   - `importProducts(file)` - Parses uploaded `Price List 2026 V3.0.xlsx` and updates the product catalog in Firestore.
   - `updateSettings(data)` - Updates global site settings (e.g., WhatsApp helpdesk number).
 
@@ -129,6 +138,8 @@ To build trust and provide comprehensive solutions, the platform will feature de
 - **Service Pages:** The site will include specific landing pages detailing these service offerings, built using information provided in external documents:
   - **Training and Results Service:** Detailing operations managed in the field (reference: `Results service.pdf`).
   - **Equipe Results Software:** Presenting solutions to manage equestrian shows (reference: `Equipe presentation.pdf`).
+  - **Sports Portals:** Dedicated `/sports/*` pages targeting Equestrian, Agility, Athletics, Skiing, Motorsports, and Cycling with detailed 700+ word localized SEO copy discussing why FDS Timing technology is ideal for each sport.
+  - **Legal & Compliance:** Explicit `/privacy-policy`, `/cookie-policy`, and `/terms` (Terms & Conditions) pages, fully translated, ensuring compliance with Finnish and EU e-commerce regulations.
 
 ### Store UX & Frontend Components
 Based on modern ecommerce best practices, the Customer Portal will be built utilizing **Shadcn UI**. This approach provides fully accessible, customizable React components directly in the codebase.
@@ -233,6 +244,7 @@ The Next.js App Router will follow this logical page hierarchy:
 3. ✅ **Phase 3: Customer Portal (Discovery & Services) (COMPLETE)** - Develop SEO-optimized category and product pages. Implement simple, native Firestore product search. Build the bespoke Service Pages. **Integrated Gemini 3.1 Pro for Automated technical translations and full internal hosting of all product images and documentation.**
 4. ✅ **Phase 4: Checkout, Invoicing & Notifications (COMPLETE)** - Integrate Stripe Checkout (including MobilePay/Apple Pay/Google Pay and 20 € / free over 200 € Finland shipping rules). Secure the webhook to trigger Holvi invoices and Resend order confirmations with detailed tax breakdowns.
 5. ✅ **Phase 5: Growth, SEO & Helpdesk (COMPLETE)** - Implement Dynamic SEO, Google Merchant Center XML feed, and OG image generation. Deploy the localized WhatsApp Helpdesk floating bubble. Setup automated Abandoned Cart recovery.
+6. ✅ **Phase 6: Compliance, Content & SEO Expansion (COMPLETE)** - Switch from password auth to Firebase Magic Links. Render massive 700+ word localized SEO contents. Integrate YouTube tutorials and PDF manuals mapped intelligently via Gemini 2.5 Flash. Launch dedicated `/sports` category routing. Implement PDF receipt generation ("Kuitti") and VAT-inclusive (25.5%) standardized pricing components.
 
 ## Verification & Testing
 - Unit tests for Server Actions (Stripe session creation, Holvi invoice generation mock).
