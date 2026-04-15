@@ -52,6 +52,11 @@ export function Header() {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
+                  <Link href="/sports" className={navigationMenuTriggerStyle()}>
+                    {t("nav.sports")}
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
                   <NavigationMenuTrigger className="font-bold">{t("nav.services")}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
