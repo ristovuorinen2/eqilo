@@ -1,7 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next';
-import { adminDb } from "@/lib/firebase/admin";
 import { Product } from "@/lib/types/firestore";
 import { AIProductSchema } from "@/components/seo/AIProductSchema";
+import { getProductServer } from "@/lib/actions/products-server";
 
 type Props = {
   params: Promise<{ id: string }>
@@ -13,15 +13,14 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { id } = await params;
   
-  const doc = await adminDb.collection("products").doc(id).get();
+  const product = await getProductServer(id);
   
-  if (!doc.exists) {
+  if (!product) {
     return {
       title: "Product Not Found",
     };
   }
 
-  const product = doc.data() as Product;
   const previousImages = (await parent).openGraph?.images || [];
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://eqilo.fi';
   const canonicalUrl = `${baseUrl}/product/${id}`;
@@ -50,13 +49,11 @@ export default async function ProductLayout({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params;
-  const doc = await adminDb.collection("products").doc(id).get();
+  const product = await getProductServer(id);
   
-  if (!doc.exists) {
+  if (!product) {
     return <>{children}</>;
   }
-
-  const product = doc.data() as Product;
 
   return (
     <>

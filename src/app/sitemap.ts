@@ -1,22 +1,35 @@
 import { MetadataRoute } from 'next';
+import { getProductsServer } from '@/lib/actions/products-server';
 import { adminDb } from '@/lib/firebase/admin';
 import sportsData from '@/data/sports.json';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://eqilo.fi';
 
-  // Fetch all active products
-  const productsSnap = await adminDb.collection("products").where("is_active", "==", true).get();
-  
+  // Fetch all active products using aggressive caching
+  const products = await getProductsServer();
+
   // Fetch all categories
   const categoriesSnap = await adminDb.collection("categories").get();
 
-  const productUrls: MetadataRoute.Sitemap = productsSnap.docs.map((doc) => ({
-    url: `${baseUrl}/product/${doc.id}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
+  const productUrls: MetadataRoute.Sitemap = products.map((product) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updatedAt = (product as any).updated_at;
+    let lastModified = new Date();
+    if (updatedAt) {
+      if (typeof updatedAt.toDate === 'function') {
+        lastModified = updatedAt.toDate();
+      } else if (updatedAt._seconds) {
+        lastModified = new Date(updatedAt._seconds * 1000);
+      }
+    }
+    return {
+      url: `${baseUrl}/product/${product.id}`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    };
+  });
 
   const categoryUrls: MetadataRoute.Sitemap = categoriesSnap.docs.map((doc) => ({
     url: `${baseUrl}/category/${doc.data().slug}`,

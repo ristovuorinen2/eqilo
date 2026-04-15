@@ -1,23 +1,21 @@
 import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase/admin';
+import { getProductsServer } from '@/lib/actions/products-server';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://eqilo.fi';
-  const productsSnap = await adminDb.collection("products").where("is_active", "==", true).get();
+  const products = await getProductsServer();
 
   let itemsXml = '';
 
-  for (const doc of productsSnap.docs) {
-    const product = doc.data();
-    
+  for (const product of products) {
     itemsXml += `
       <item>
-        <g:id>${product.sku || doc.id}</g:id>
+        <g:id>${product.sku || product.id}</g:id>
         <g:title>${encodeURIComponent(product.name)}</g:title>
         <g:description>${encodeURIComponent(product.description)}</g:description>
-        <g:link>${baseUrl}/product/${doc.id}</g:link>
+        <g:link>${baseUrl}/product/${product.id}</g:link>
         ${product.image_urls?.[0] ? `<g:image_link>${product.image_urls[0]}</g:image_link>` : ''}
         <g:condition>new</g:condition>
         <g:availability>${(product.inventory_count || 0) > 0 ? 'in_stock' : 'out_of_stock'}</g:availability>
