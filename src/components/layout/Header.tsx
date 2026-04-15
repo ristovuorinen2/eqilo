@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Menu, Search, User } from "lucide-react";
+import { ShoppingCart, Menu, Search, Trophy, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { 
@@ -150,6 +150,11 @@ export function Header() {
                     <Link href="/shop" className="text-xl font-bold flex items-center gap-3 py-2" prefetch={true}>
                       <div className="p-2 bg-primary/10 rounded-lg"><ShoppingCart className="w-5 h-5 text-primary" /></div>
                       {t("nav.products")}
+                    </Link>
+
+                    <Link href="/sports" className="text-xl font-bold flex items-center gap-3 py-2" prefetch={true}>
+                      <div className="p-2 bg-primary/10 rounded-lg"><Trophy className="w-5 h-5 text-primary" /></div>
+                      {t("nav.sports")}
                     </Link>
                     
                     <div className="space-y-4 pt-4 border-t">

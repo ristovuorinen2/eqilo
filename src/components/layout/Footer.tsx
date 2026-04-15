@@ -40,6 +40,9 @@ export function Footer() {
                 <Link href="/shop" className="text-muted-foreground hover:text-primary font-medium transition-colors">{t("shop.all_equipment")}</Link>
               </li>
               <li>
+                <Link href="/sports" className="text-muted-foreground hover:text-primary font-medium transition-colors">{t("nav.sports") || "Sports Categories"}</Link>
+              </li>
+              <li>
                 <Link href="/services" className="text-muted-foreground hover:text-primary font-medium transition-colors">{t("nav.services")}</Link>
               </li>
               <li>
@@ -68,6 +71,8 @@ export function Footer() {
           <p>© {new Date().getFullYear()} Eqilo Oy. {t("footer.rights")} <span className="opacity-50 ml-2">v{packageJson.version}</span></p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <span className="font-bold text-primary bg-primary/5 px-3 py-1 rounded-full border border-primary/10">{t("product.standard_shipping")}</span>
+            <Link href="/cookie-policy" className="hover:underline">{t("nav.cookie") || "Cookie Policy"}</Link>
+            <Link href="/privacy-policy" className="hover:underline">{t("nav.privacy") || "Privacy Policy"}</Link>
             <Link href="/terms" className="hover:underline">{t("nav.terms")}</Link>
           </div>
         </div>
