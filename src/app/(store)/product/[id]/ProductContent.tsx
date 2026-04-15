@@ -102,7 +102,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
         </section>
 
         {/* Details Column */}
-        <section aria-labelledby="product-details" className="flex flex-col">
+        <section aria-labelledby="product-details" className="flex flex-col min-w-0">
           <h1 id="product-details" className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-2 text-foreground leading-tight">{product.name}</h1>
           <p className="text-muted-foreground mb-6 font-mono text-[10px] xs:text-xs bg-muted/50 w-fit px-2 py-1 rounded font-bold uppercase tracking-wider">{t("product.sku")}: {product.sku}</p>
           
@@ -171,7 +171,7 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
           <Accordion className="w-full" defaultValue={["description", "specs"]}>
             <AccordionItem value="description" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.description")}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground text-sm leading-relaxed prose prose-sm dark:prose-invert font-medium">
+              <AccordionContent className="text-muted-foreground text-sm leading-relaxed prose prose-sm dark:prose-invert font-medium overflow-x-auto w-full">
                 <LocalizedDescription product={product} />
               </AccordionContent>
             </AccordionItem>
