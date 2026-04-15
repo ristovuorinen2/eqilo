@@ -39,24 +39,30 @@ export function QuoteDialog() {
     }
 
     setLoading(true);
-    const res = await generateQuote(items, details);
-    
-    if (res.success && res.pdf) {
-      toast.success("Quote generated and emailed!");
+    try {
+      const res = await generateQuote(items, details);
       
-      // Trigger download
-      const linkSource = `data:application/pdf;base64,${res.pdf}`;
-      const downloadLink = document.createElement("a");
-      const fileName = `Eqilo_Quote_${details.name.replace(/[^a-z0-9]/gi, "_")}.pdf`;
-      downloadLink.href = linkSource;
-      downloadLink.download = fileName;
-      downloadLink.click();
-      
-      setIsOpen(false);
-    } else {
-      toast.error(res.error || "Failed to generate quote");
+      if (res.success && res.pdf) {
+        toast.success("Quote generated and emailed!");
+        
+        // Trigger download
+        const linkSource = `data:application/pdf;base64,${res.pdf}`;
+        const downloadLink = document.createElement("a");
+        const fileName = `Eqilo_Quote_${details.name.replace(/[^a-z0-9]/gi, "_")}.pdf`;
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+        
+        setIsOpen(false);
+      } else {
+        toast.error(res.error || "Failed to generate quote");
+      }
+    } catch (err) {
+      console.error("Quote generation exception:", err);
+      toast.error("An unexpected error occurred while generating the quote. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

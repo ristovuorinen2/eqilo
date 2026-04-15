@@ -143,7 +143,7 @@ export async function generateQuote(
     const pdfDoc = printer.createPdfKitDocument(docDefinition);
     
     const chunks: Uint8Array[] = [];
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve) => {
       pdfDoc.on("data", (chunk: Uint8Array) => chunks.push(chunk));
       pdfDoc.on("end", async () => {
         const result = Buffer.concat(chunks);
@@ -169,7 +169,10 @@ export async function generateQuote(
 
         resolve({ success: true, pdf: base64 });
       });
-      pdfDoc.on("error", (err: Error) => reject({ success: false, error: err.message }));
+      pdfDoc.on("error", (err: Error) => {
+        console.error("PDF Stream Error:", err);
+        resolve({ success: false, error: err.message });
+      });
       pdfDoc.end();
     });
   } catch (error) {
