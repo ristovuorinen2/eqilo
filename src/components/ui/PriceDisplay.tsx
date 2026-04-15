@@ -18,8 +18,8 @@ export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md
   const netPrice = price / (1 + (taxRate / 100));
   const vatAmount = price - netPrice;
 
-  let priceClass = "font-extrabold tracking-tighter text-foreground flex items-baseline gap-1";
-  let detailClass = "text-[10px] text-muted-foreground flex flex-col uppercase tracking-widest mt-1 font-medium";
+  let priceClass = "font-extrabold tracking-tighter text-foreground flex items-baseline gap-1.5 flex-wrap";
+  let detailClass = "text-[10px] text-muted-foreground flex flex-col uppercase tracking-widest mt-1.5 font-medium gap-0.5";
 
   if (size === "sm") {
     priceClass += " text-lg";
@@ -45,7 +45,10 @@ export function PriceDisplay({ price, taxRate = 25.5, className = "", size = "md
   return (
     <div className={`flex flex-col ${align === 'right' ? 'items-end' : align === 'center' ? 'items-center' : 'items-start'} ${className}`}>
       <div className={priceClass}>
-        {formatPrice(price)} €
+        <span className="whitespace-nowrap">{formatPrice(price)} €</span>
+        <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest whitespace-nowrap">
+          {t("product.incl_vat")} {taxRate}%
+        </span>
       </div>
       <div className={detailClass}>
         <span>{t("product.net_price")}: {formatPrice(netPrice)} €</span>
