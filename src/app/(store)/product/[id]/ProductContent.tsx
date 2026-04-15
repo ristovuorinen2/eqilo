@@ -222,6 +222,43 @@ export default function ProductContent({ product, relatedProducts }: ProductCont
               </AccordionItem>
             )}
 
+            {product.videos && product.videos.length > 0 && (
+              <AccordionItem value="videos" className="border-border/50">
+                <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.videos") || "Tutorial Videos"}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground font-medium pt-2">
+                  <div className="grid gap-6">
+                    {product.videos.map((video, idx) => {
+                      const isYoutube = video.url.includes("youtube.com") || video.url.includes("youtu.be");
+                      let embedUrl = video.url;
+                      
+                      if (isYoutube) {
+                        if (video.url.includes("watch?v=")) {
+                          embedUrl = video.url.replace("watch?v=", "embed/");
+                        } else if (video.url.includes("youtu.be/")) {
+                          embedUrl = video.url.replace("youtu.be/", "youtube.com/embed/");
+                        }
+                      }
+                      
+                      return (
+                        <div key={idx} className="space-y-2">
+                          <p className="font-bold text-foreground text-sm">{video.name}</p>
+                          <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border/50 shadow-sm">
+                            <iframe 
+                              src={embedUrl} 
+                              title={video.name}
+                              className="absolute top-0 left-0 w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
             <AccordionItem value="guarantee" className="border-border/50">
               <AccordionTrigger className="text-md font-black uppercase tracking-tight py-4 hover:no-underline">{t("product.guarantee")}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground font-medium">

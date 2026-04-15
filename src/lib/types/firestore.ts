@@ -44,6 +44,7 @@ export interface Product {
   specifications_se?: string;
   box_contents?: string; // Content from fdstiming box-contents tab
   downloads?: { name: string; url: string }[]; // Content from fdstiming downloads tab
+  videos?: { name: string; url: string }[]; // Content from fdstiming tutorials
   category_id: string; // Reference to `categories` collection
   price: number;
   tax_rate: number; // e.g., 25.5 for Finnish general goods
