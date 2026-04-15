@@ -7,7 +7,7 @@ import { getOrderConfirmationEmailHtml, getAdminNotificationEmailHtml } from "@/
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
-  apiVersion: "2025-02-24.acacia" as any,
+  apiVersion: "2026-03-25.dahlia",
 }) : null;
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
@@ -33,6 +33,7 @@ export async function POST(req: Request) {
     } else {
       throw new Error("Webhook secret is missing");
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
@@ -44,14 +45,27 @@ export async function POST(req: Request) {
     const lang = (session.metadata?.lang || "FI") as "FI" | "EN" | "SE";
 
     if (orderId) {
+      // Fetch expanded session to retrieve invoice and customer details securely
+      const sessionWithInvoice = await stripe.checkout.sessions.retrieve(session.id, {
+        expand: ['invoice', 'customer']
+      });
+
+      const invoice = sessionWithInvoice.invoice as Stripe.Invoice;
+      const stripeCustomerId = sessionWithInvoice.customer as string | Stripe.Customer | Stripe.DeletedCustomer;
+      const finalCustomerId = typeof stripeCustomerId === 'string' ? stripeCustomerId : (stripeCustomerId as Stripe.Customer)?.id || null;
+
       // 1. Update order status in Firestore
       const orderRef = adminDb.collection("orders").doc(orderId);
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const shippingDetails = (session as any).shipping_details?.address;
       
       await orderRef.update({
         status: "paid",
         stripe_payment_intent: session.payment_intent as string,
+        stripe_customer_id: finalCustomerId,
+        stripe_invoice_pdf: invoice?.invoice_pdf || null,
+        stripe_hosted_invoice_url: invoice?.hosted_invoice_url || null,
         shipping_address: shippingDetails ? {
           line1: shippingDetails.line1 || "",
           line2: shippingDetails.line2 || "",

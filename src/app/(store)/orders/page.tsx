@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Order } from "@/lib/types/firestore";
 import { getUserOrders } from "@/lib/actions/orders";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   Package, 
@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/components/cart-provider";
 import { useRouter } from "next/navigation";
-import { generateReceipt } from "@/lib/actions/receipts";
+import { createCustomerPortalSession } from "@/lib/actions/billing";
 import { useAuth } from "@/components/auth-provider";
 
 const statuses = [
@@ -36,7 +36,7 @@ const statuses = [
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [generatingReceiptId, setGeneratingReceiptId] = useState<string | null>(null);
+  const [isBillingLoading, setIsBillingLoading] = useState(false);
   const { t } = useLanguage();
   const { user } = useAuth();
   const { addItem } = useCart();
@@ -51,26 +51,21 @@ export default function OrdersPage() {
     load();
   }, []);
 
-  const handleDownloadReceipt = async (orderId: string) => {
+  const handleBillingPortal = async () => {
     if (!user) return;
-    setGeneratingReceiptId(orderId);
+    setIsBillingLoading(true);
     try {
-      const result = await generateReceipt(user.uid, orderId);
-      if (result.success && result.pdf) {
-        const linkSource = `data:application/pdf;base64,${result.pdf}`;
-        const downloadLink = document.createElement("a");
-        const fileName = `Receipt_${orderId.substring(0, 8).toUpperCase()}.pdf`;
-        downloadLink.href = linkSource;
-        downloadLink.download = fileName;
-        downloadLink.click();
+      const result = await createCustomerPortalSession(user.uid);
+      if (result.success && result.url) {
+        window.location.href = result.url;
       } else {
-        alert(t("orders.receipt_error") || "Failed to generate receipt.");
+        alert(t("error.description") || "Failed to open billing portal.");
       }
     } catch (e) {
-      console.error(e);
-      alert(t("orders.receipt_error") || "Failed to generate receipt.");
+      console.error("Billing Portal Error:", e);
+      alert(t("error.description") || "Failed to open billing portal.");
     } finally {
-      setGeneratingReceiptId(null);
+      setIsBillingLoading(false);
     }
   };
 
@@ -91,9 +86,20 @@ export default function OrdersPage() {
 
   return (
     <div className="container py-10 md:py-16 max-w-5xl">
-      <div className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">{t("nav.my_orders")}</h1>
-        <p className="text-muted-foreground">{t("orders.description")}</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">{t("nav.my_orders")}</h1>
+          <p className="text-muted-foreground">{t("orders.description")}</p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={handleBillingPortal} 
+          disabled={isBillingLoading}
+          className="font-bold border-primary/20 hover:bg-primary/5 shadow-sm"
+        >
+          {isBillingLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <CreditCard className="w-4 h-4 mr-2" />}
+          Manage Billing & Invoices
+        </Button>
       </div>
 
       {orders.length === 0 ? (
@@ -120,6 +126,7 @@ export default function OrdersPage() {
                      </div>
                      <div>
                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t("orders.date")}</p>
+                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                        <p className="text-sm font-bold">{new Date(order.created_at as any).toLocaleDateString()}</p>
                      </div>
                      <div>
@@ -226,19 +233,19 @@ export default function OrdersPage() {
                   </div>
                   
                   <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row gap-4 items-center justify-between">
-                    <Button 
-                      variant="outline" 
-                      className="w-full sm:w-auto font-bold"
-                      onClick={() => handleDownloadReceipt(order.id)}
-                      disabled={generatingReceiptId === order.id}
-                    >
-                      {generatingReceiptId === order.id ? (
-                        <Clock className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <FileDown className="w-4 h-4 mr-2" />
-                      )}
-                      {t("orders.download_receipt") || "Download Receipt"}
-                    </Button>
+                    {order.stripe_invoice_pdf ? (
+                      <a href={order.stripe_invoice_pdf} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
+                        <Button variant="outline" className="w-full sm:w-auto font-bold">
+                          <FileDown className="w-4 h-4 mr-2" />
+                          {t("orders.download_invoice") || "Download Invoice"}
+                        </Button>
+                      </a>
+                    ) : (
+                      <div className="text-xs text-muted-foreground italic flex items-center">
+                        <Clock className="w-3 h-3 mr-1" />
+                        Invoice processing...
+                      </div>
+                    )}
                     <Button 
                       className="w-full sm:w-auto font-bold"
                       onClick={() => handleReorder(order)}

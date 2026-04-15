@@ -91,6 +91,9 @@ export interface Order {
   tracking_url?: string;
   courier?: string;
   stripe_payment_intent?: string;
+  stripe_customer_id?: string;
+  stripe_invoice_pdf?: string;
+  stripe_hosted_invoice_url?: string;
   holvi_invoice_id?: string;
   created_at: Date | import('firebase/firestore').Timestamp; // Timestamp
 }

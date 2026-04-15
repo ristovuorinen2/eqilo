@@ -9,7 +9,7 @@ import { OrderConfirmationEmail } from "@/components/emails/OrderConfirmationEma
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
-  apiVersion: "2026-03-25.dahlia" as "2026-03-25.dahlia",
+  apiVersion: "2026-03-25.dahlia" as const,
 }) : null;
 
 export async function createCheckoutSession(
@@ -59,7 +59,9 @@ export async function createCheckoutSession(
     let subtotal = 0;
     let tax_total = 0;
     const tax_map: Record<number, number> = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const line_items: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const orderItems: any[] = [];
 
     for (const item of cartItems) {
@@ -153,6 +155,8 @@ export async function createCheckoutSession(
     const stripeSession = await stripe.checkout.sessions.create({
       mode: "payment",
       invoice_creation: { enabled: true },
+      tax_id_collection: { enabled: true },
+      customer_creation: 'always',
       payment_method_types: ['card', 'mobilepay'],
       line_items,
       client_reference_id: userId,
