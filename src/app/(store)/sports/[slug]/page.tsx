@@ -36,11 +36,11 @@ export default function SportPage({ params }: { params: Promise<{ slug: string }
 
   const getSportImage = (slug: string) => {
     switch (slug) {
-      case 'equestrian': return 'https://images.unsplash.com/photo-1553531087-b25a0b9a68ab?q=80&w=1200&auto=format&fit=crop';
+      case 'equestrian': return 'https://images.unsplash.com/photo-1598974357801-cbca100e65d3?q=80&w=1200&auto=format&fit=crop';
       case 'agility': return 'https://images.unsplash.com/photo-1581753418434-51c11169a3c1?q=80&w=1200&auto=format&fit=crop';
       case 'athletics': return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop';
-      case 'skiing': return 'https://images.unsplash.com/photo-1551524164-687a55209e82?q=80&w=1200&auto=format&fit=crop';
-      case 'motorsports': return 'https://images.unsplash.com/photo-1541348263662-e068c28dd6b8?q=80&w=1200&auto=format&fit=crop';
+      case 'skiing': return 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?q=80&w=1200&auto=format&fit=crop';
+      case 'motorsports': return 'https://images.unsplash.com/photo-1548504240-3dd72f99dc72?q=80&w=1200&auto=format&fit=crop';
       case 'cycling': return 'https://images.unsplash.com/photo-1541625602330-2277a4c46182?q=80&w=1200&auto=format&fit=crop';
       default: return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop';
     }
