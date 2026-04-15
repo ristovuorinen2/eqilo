@@ -37,7 +37,7 @@ export default function SportPage({ params }: { params: Promise<{ slug: string }
   const getSportImage = (slug: string) => {
     switch (slug) {
       case 'equestrian': return 'https://images.unsplash.com/photo-1553531087-b25a0b9a68ab?q=80&w=1200&auto=format&fit=crop';
-      case 'agility': return 'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?q=80&w=1200&auto=format&fit=crop';
+      case 'agility': return 'https://images.unsplash.com/photo-1581753418434-51c11169a3c1?q=80&w=1200&auto=format&fit=crop';
       case 'athletics': return 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop';
       case 'skiing': return 'https://images.unsplash.com/photo-1551524164-687a55209e82?q=80&w=1200&auto=format&fit=crop';
       case 'motorsports': return 'https://images.unsplash.com/photo-1541348263662-e068c28dd6b8?q=80&w=1200&auto=format&fit=crop';
