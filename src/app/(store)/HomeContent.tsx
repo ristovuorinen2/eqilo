@@ -51,7 +51,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
             </div>
             
             {/* Visual Carousel for the hero */}
-            <div className="mx-auto w-full max-w-lg aspect-square xs:aspect-video lg:aspect-square flex items-center justify-center relative">
+            <div className="mx-auto w-full max-w-lg aspect-square xs:aspect-video lg:aspect-square flex items-center justify-center relative min-w-0">
                {/* Decorative background for mobile */}
                <div className="absolute inset-0 bg-primary-foreground/5 rounded-full blur-3xl lg:hidden"></div>
               
