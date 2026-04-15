@@ -29,7 +29,7 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
           <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center min-w-0">
             <div className="flex flex-col justify-center space-y-4 text-center lg:text-left min-w-0">
               <div className="space-y-3 min-w-0">
-                <h1 className="text-3xl font-extrabold tracking-tighter xs:text-4xl sm:text-5xl xl:text-6xl/none break-all sm:break-words hyphens-auto max-w-full">
+                <h1 className="text-3xl font-extrabold tracking-tighter xs:text-4xl sm:text-5xl xl:text-6xl/none break-words max-w-full">
                   {t("home.hero.title")}
                 </h1>
                 <p className="max-w-[600px] mx-auto lg:mx-0 text-primary-foreground/90 text-sm xs:text-base md:text-xl">
