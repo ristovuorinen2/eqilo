@@ -1,13 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { PackageOpen, Clock, Tag, ShoppingCart, Check } from "lucide-react";
+import { Clock, Tag, ShoppingCart, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/components/cart-provider";
-import { useState } from "react";
 import { Product } from "@/lib/types/firestore";
 import { LocalizedDescription } from "@/components/LocalizedDescription";
 import { useLanguage } from "@/components/language-provider";
@@ -17,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { useQueryState, parseAsString } from "nuqs";
 import { motion, AnimatePresence } from "framer-motion";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
-import { formatPrice } from "@/lib/utils";
 import { SEOContent as ShopSEO } from "@/components/seo/ShopSEO";
 
 interface ShopContentProps {
@@ -26,7 +24,7 @@ interface ShopContentProps {
 
 export default function ShopContent({ initialProducts }: ShopContentProps) {
   const { addItem } = useCart();
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useQueryState("category", parseAsString.withDefault("all"));
 
   const activeProducts = initialProducts.filter(p => {
@@ -141,9 +139,9 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="h-full flex flex-col"
+                  className="flex flex-col"
                 >
-                  <Card className="flex flex-col flex-1 overflow-hidden transition-all hover:shadow-xl border-border/50 hover:border-primary/40 group bg-card text-card-foreground h-full">
+                  <Card className="flex flex-col flex-1 overflow-hidden transition-all hover:shadow-xl border-border/50 hover:border-primary/40 group bg-card text-card-foreground">
                 <Link href={`/product/${product.id}`} className="flex-1 flex flex-col min-h-0">
                   <div className="w-full aspect-square bg-muted/10 flex flex-col items-center justify-center p-6 relative group-hover:bg-muted/30 transition-colors bg-white border-b border-border/50 shrink-0">
                     {product.image_urls && product.image_urls.length > 0 ? (
@@ -184,7 +182,7 @@ export default function ShopContent({ initialProducts }: ShopContentProps) {
                   <div className="w-full flex flex-col sm:flex-row items-start sm:items-end justify-between mt-1 mb-2 gap-4">
                     <div className="w-full">
                       <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wider">{t("shop.price")}</p>
-                      <PriceDisplay price={product.price} taxRate={product.tax_rate} size="lg" align="left" className="w-full" />
+                      <PriceDisplay price={product.price} taxRate={product.tax_rate} size="lg" align="left" className="w-full" hideDetails />
                     </div>
                     <Badge variant="outline" className="font-bold border-emerald-200 bg-emerald-50 text-emerald-700 px-3 py-1">{t("shop.in_stock")}</Badge>
                   </div>

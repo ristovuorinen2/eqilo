@@ -10,13 +10,10 @@ import { Product } from "@/lib/types/firestore";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
-import { formatPrice } from "@/lib/utils";
 
 interface HomeContentProps {
   featuredProducts: Product[];
 }
-
-import { SEOContent as HomeSEO } from "@/components/seo/HomeSEO";
 
 export default function HomeContent({ featuredProducts }: HomeContentProps) {
   const { t } = useLanguage();
@@ -29,10 +26,10 @@ export default function HomeContent({ featuredProducts }: HomeContentProps) {
       {/* Hero Section */}
       <section className="w-full bg-primary text-primary-foreground py-12 xs:py-16 md:py-32 overflow-hidden">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
-            <div className="flex flex-col justify-center space-y-4 text-center lg:text-left">
-              <div className="space-y-3">
-                <h1 className="text-3xl font-extrabold tracking-tighter xs:text-4xl sm:text-5xl xl:text-6xl/none break-words hyphens-auto max-w-full overflow-hidden">
+          <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center min-w-0">
+            <div className="flex flex-col justify-center space-y-4 text-center lg:text-left min-w-0">
+              <div className="space-y-3 min-w-0">
+                <h1 className="text-3xl font-extrabold tracking-tighter xs:text-4xl sm:text-5xl xl:text-6xl/none break-all sm:break-words hyphens-auto max-w-full">
                   {t("home.hero.title")}
                 </h1>
                 <p className="max-w-[600px] mx-auto lg:mx-0 text-primary-foreground/90 text-sm xs:text-base md:text-xl">

@@ -13,7 +13,6 @@ import { useLanguage } from "@/components/language-provider";
 import { useEffect, useState, use } from "react";
 import { getProducts } from "@/lib/actions/admin";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
-import { formatPrice } from "@/lib/utils";
 
 import { SEOContent as CategorySEO } from "@/components/seo/CategorySEO";
 
@@ -21,7 +20,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
   const { addItem } = useCart();
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +72,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((product) => (
-              <Card key={product.id} className="flex flex-col h-full overflow-hidden transition-all hover:shadow-lg border-border/50 hover:border-primary/30 group">
+              <Card key={product.id} className="flex flex-col overflow-hidden transition-all hover:shadow-lg border-border/50 hover:border-primary/30 group">
                 <Link href={`/product/${product.id}`} className="flex-1 flex flex-col min-h-0">
                   <div className="w-full aspect-square bg-muted/30 flex flex-col items-center justify-center p-6 relative group-hover:bg-muted/50 transition-colors bg-white shrink-0">
                     {product.image_urls && product.image_urls.length > 0 ? (

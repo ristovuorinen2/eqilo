@@ -1,6 +1,7 @@
 "use server";
 
-const PdfPrinter = require("pdfmake");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const PdfPrinter = require("pdfmake/js/Printer").default;
 import { Order, Product } from "../types/firestore";
 import { adminDb } from "../firebase/admin";
 import path from "path";
@@ -58,6 +59,7 @@ export async function generateReceipt(
       content: [
         { text: "EQILO.FI - RECEIPT / KUITTI", style: "header" },
         { text: `Receipt No: ${orderId.substring(0, 8).toUpperCase()}`, alignment: "right" },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         { text: `Date: ${new Date(orderData.created_at as any).toLocaleDateString('fi-FI')}`, alignment: "right", margin: [0, 0, 0, 20] },
 
         {

@@ -1,6 +1,7 @@
 "use server";
 
-const PdfPrinter = require("pdfmake");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const PdfPrinter = require("pdfmake/js/Printer").default;
 
 import { CartItem, Product } from "../types/firestore";
 import { adminDb } from "../firebase/admin";
@@ -51,6 +52,7 @@ export async function generateQuote(
     // 2. Define PDF Document
     const printer = new PdfPrinter(fonts);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const docDefinition: any = {
       content: [
         { text: "EQILO.FI - QUOTE", style: "header" },
@@ -141,9 +143,9 @@ export async function generateQuote(
     // 3. Generate PDF and return as base64
     const pdfDoc = printer.createPdfKitDocument(docDefinition);
     
-    const chunks: any[] = [];
+    const chunks: Uint8Array[] = [];
     return new Promise((resolve, reject) => {
-      pdfDoc.on("data", (chunk: any) => chunks.push(chunk));
+      pdfDoc.on("data", (chunk: Uint8Array) => chunks.push(chunk));
       pdfDoc.on("end", async () => {
         const result = Buffer.concat(chunks);
         const base64 = result.toString("base64");
