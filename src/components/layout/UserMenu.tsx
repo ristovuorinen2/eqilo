@@ -209,7 +209,7 @@ export function UserMenu() {
                     />
                     <p className="text-xs text-muted-foreground mt-1">{t("auth.phone_note")}</p>
                   </div>
-                  <div id="recaptcha-container"></div>
+                  <div id="recaptcha-container-usermenu"></div>
                   <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
                     {t("auth.send_code")}
                   </Button>
