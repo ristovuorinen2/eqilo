@@ -84,8 +84,13 @@ export function UserMenu() {
           : `+${formattedPhone}`;
       }
 
-      if (typeof window !== "undefined" && !window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+      if (typeof window !== "undefined") {
+        if (window.recaptchaVerifier) {
+          try { window.recaptchaVerifier.clear(); } catch(e) { console.error(e); }
+          // @ts-expect-error Resetting the verifier for retry
+          window.recaptchaVerifier = undefined;
+        }
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container-usermenu", {
           size: "invisible",
         });
       }
