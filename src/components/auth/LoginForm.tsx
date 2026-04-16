@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { auth } from "@/lib/firebase/client";
 import { 
   sendSignInLinkToEmail,
@@ -23,6 +23,7 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void }) {
   const [error, setError] = useState("");
   const [linkSent, setLinkSent] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const recaptchaRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<"input" | "otp">("input");
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -59,9 +60,13 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void }) {
           // @ts-expect-error Resetting
           window.recaptchaVerifier = undefined;
         }
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container-login", {
-          size: "invisible",
-        });
+        if (recaptchaRef.current) {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, recaptchaRef.current, {
+            size: "invisible",
+          });
+        } else {
+          throw new Error("Recaptcha container is missing from the DOM.");
+        }
       }
       const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
@@ -128,7 +133,7 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void }) {
                   />
                   <p className="text-xs text-muted-foreground mt-1">{t("auth.phone_note")}</p>
                 </div>
-                <div id="recaptcha-container"></div>
+                <div ref={recaptchaRef}></div>
                 <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
                   {t("auth.send_code")}
                 </Button>

@@ -9,7 +9,7 @@ import {
   signInWithPhoneNumber,
   ConfirmationResult
 } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   User, 
   LogOut, 
@@ -54,6 +54,7 @@ export function UserMenu() {
   const [error, setError] = useState("");
   const [linkSent, setLinkSent] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const recaptchaRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<"input" | "otp">("input");
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -90,9 +91,13 @@ export function UserMenu() {
           // @ts-expect-error Resetting the verifier for retry
           window.recaptchaVerifier = undefined;
         }
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container-usermenu", {
-          size: "invisible",
-        });
+        if (recaptchaRef.current) {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, recaptchaRef.current, {
+            size: "invisible",
+          });
+        } else {
+          throw new Error("Recaptcha container is missing from the DOM.");
+        }
       }
       const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
@@ -214,7 +219,7 @@ export function UserMenu() {
                     />
                     <p className="text-xs text-muted-foreground mt-1">{t("auth.phone_note")}</p>
                   </div>
-                  <div id="recaptcha-container-usermenu"></div>
+                  <div ref={recaptchaRef}></div>
                   <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
                     {t("auth.send_code")}
                   </Button>
