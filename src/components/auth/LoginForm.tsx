@@ -133,13 +133,11 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void }) {
                   />
                   <p className="text-xs text-muted-foreground mt-1">{t("auth.phone_note")}</p>
                 </div>
-                <div ref={recaptchaRef}></div>
                 <Button type="submit" className="w-full h-12 text-lg font-bold shadow-md">
                   {t("auth.send_code")}
                 </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleVerifyCode} className="space-y-4">
+                </form>
+                ) : (              <form onSubmit={handleVerifyCode} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="otp">{t("auth.sms_code")}</Label>
                   <Input
@@ -198,6 +196,7 @@ export function LoginForm({ onSuccess }: { onSuccess?: () => void }) {
             )}
           </TabsContent>
         </Tabs>
+        <div ref={recaptchaRef}></div>
       </div>
     </div>
   );

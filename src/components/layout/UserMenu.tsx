@@ -284,6 +284,8 @@ export function UserMenu() {
               )}
             </TabsContent>
           </Tabs>
+          {/* Invisible Recaptcha must remain in the DOM at all times */}
+          <div ref={recaptchaRef}></div>
         </div>
       </DialogContent>
     </Dialog>
