@@ -92,6 +92,7 @@ export function UserMenu() {
           window.recaptchaVerifier = undefined;
         }
         if (recaptchaRef.current) {
+          recaptchaRef.current.innerHTML = ''; // Force clear DOM to prevent argument-error
           window.recaptchaVerifier = new RecaptchaVerifier(auth, recaptchaRef.current, {
             size: "invisible",
           });
